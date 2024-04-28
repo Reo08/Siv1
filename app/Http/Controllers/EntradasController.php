@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EntradasExport;
 use App\Models\Categorias;
 use App\Models\Entradas;
 use App\Models\Importes;
 use App\Models\Productos;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EntradasController extends Controller
 {
     public function index() {
         $entradas = Entradas::leftjoin('productos','entradas.id_producto','=','productos.id_producto')
         ->leftjoin('categorias','productos.id_categoria','=','categorias.id_categoria')
-        ->select('entradas.*','entradas.created_at as created','entradas.updated_at as updated', 'productos.*', 'categorias.*')->distinct()->orderBy('id_entrada', 'desc')->paginate(15);
+        ->leftjoin('usuarios','entradas.identificacion','=','usuarios.identificacion')
+        ->select('entradas.*','entradas.created_at as created','entradas.updated_at as updated', 'productos.*', 'categorias.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_entrada', 'desc')->paginate(15);
         return view('entradas.inde',compact('entradas'));
     }
     public function create(){
@@ -45,7 +49,7 @@ class EntradasController extends Controller
             $nuevaEntrada->precio_compra_entrada = $request->precio_compra;
             $nuevaEntrada->precio_venta_entrada = $request->precio_venta;
             $nuevaEntrada->fecha_entrada = $request->fecha_entrada;
-            //$nuevaEntrada->identificacion = "12345"; //IMPORTANTE: Poner la identificacion de la sesion del usuario
+            $nuevaEntrada->identificacion = Auth::user()->identificacion; //IMPORTANTE: Poner la identificacion de la sesion del usuario
             $nuevaEntrada->save();
 
             $nuevoImporte = new Importes();
@@ -141,5 +145,9 @@ class EntradasController extends Controller
         $importe->save();
         $id->delete();
         return redirect()->route('entradas.index');
+    }
+
+    public function export(){
+        return Excel::download(new EntradasExport, 'entradas.xlsx');
     }
 }

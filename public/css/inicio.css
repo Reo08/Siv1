@@ -25,11 +25,25 @@
     font-size: 2rem;
     color: #fff;
     background-color: var(--color-oscuro2);
-    transition: transform .3s ease, color .3s ease;
+    transition: transform .3s ease, color .3s ease, font-weight .3s ease;
 }
-.sec-inicio a:hover {
+.sec-inicio a:hover:not(.importe_pagado, .ganancias){
     transform: scale(1.1);
     color: var(--letra-dorada);
+}
+.sec-inicio .importe_pagado {
+    background-color: var(--letra-dorada);
+}
+.sec-inicio .importe_pagado:hover {
+    transform: scale(1.1);
+    font-weight: bold;
+}
+.sec-inicio .ganancias {
+    background-color: var(--letra-dorada);
+}
+.sec-inicio .ganancias:hover {
+    transform: scale(1.1);
+    font-weight: bold;
 }
 @media screen and (min-height: 640px) {
     .sec-inicio {

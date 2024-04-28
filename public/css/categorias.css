@@ -26,6 +26,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+    position: relative;
 }
 .cont-categorias > a {
     width: 150px;
@@ -43,6 +44,12 @@
 }
 .cont-categorias > a:hover {
     background-color: rgb(253, 205, 71);
+}
+.cont-categorias > .btn-exportar {
+    width: 100px;
+    position: absolute;
+    top: 10px;
+    left: 170px;
 }
 .cont-categorias input {
     width: 80%;

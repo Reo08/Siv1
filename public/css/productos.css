@@ -25,6 +25,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+    position: relative;
 }
 .cont-productos > a {
     width: 150px;
@@ -42,6 +43,12 @@
 }
 .cont-productos > a:hover {
     background-color: rgb(253, 205, 71);
+}
+.cont-productos > .btn-exportar {
+    width: 100px;
+    position: absolute;
+    top: 10px;
+    left: 170px;
 }
 .cont-productos select {
     width: 40%;

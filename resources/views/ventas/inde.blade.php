@@ -10,6 +10,7 @@
     <h2>Lista de ventas</h2>
     <div class="cont-ventas">
         <a href="{{route('ventas.create')}}">Agregar venta</a>
+        <a class="btn-exportar" href="{{route('ventas.export')}}">Exportar</a>
         <div class="cont-inputs">
             <select name="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
@@ -52,7 +53,7 @@
                     <td class="td-texto-center">{{$venta->nombre_categoria}}</td>
                     <td class="td-texto-center">{{$venta->cantidad}}</td>
                     <td class="td-texto-center">{{$venta->precio_venta}}</td>
-                    <td class="td-texto-center">Poner el nombre del usuario</td>
+                    <td class="td-texto-center">{{$venta->nombre_usuario}}</td>
                     <td>{{$venta->fecha_venta}}</td>
                     <td>{{$venta->created}}</td>
                     <td>{{$venta->updated}}</td>

@@ -22,6 +22,10 @@ Route::middleware('auth')->group(function(){
 
     Route::controller(InicioController::class)->group(function(){
         Route::get('inicio', 'index')->name('inicio.index');
+        
+        Route::get('exportar-importes', 'exportImportes')->name('inicio.exportImportes');
+        Route::get('exportar-ganancias','exportGanancias')->name('inicio.exportGanancias');
+        Route::get('exportar-perdidas','exportPerdidas')->name('inicio.exportPerdidas');
     });
     
     Route::controller(ProveedoresController::class)->group(function(){
@@ -31,6 +35,8 @@ Route::middleware('auth')->group(function(){
         Route::get('proveedores/{id}/editar-proveedor','edit')->name('proveedores.edit');
         Route::put('proveedores/{id}', 'update')->name('proveedores.update');
         Route::delete('proveedores/{id}', 'destroy')->name('proveedores.destroy');
+
+        Route::get('exportar-proveedores', 'export')->name('proveedores.export');
     });
     
     Route::controller(CategoriasController::class)->group(function(){
@@ -40,6 +46,8 @@ Route::middleware('auth')->group(function(){
         Route::get('categorias/{id}/actualizar-categoria','edit')->name('categorias.edit');
         Route::put('categorias/{id}', 'update')->name('categorias.update');
         Route::delete('categorias/{id}', 'destroy')->name('categorias.delete');
+
+        Route::get('exportar-categorias', 'export')->name('categorias.export');
     });
     
     Route::controller(ProductosController::class)->group(function(){
@@ -49,6 +57,8 @@ Route::middleware('auth')->group(function(){
         Route::get('productos/{id}/editar-producto','edit')->name('productos.edit');
         Route::put('productos/{id}', 'update')->name('productos.update');
         Route::delete('productos/{id}', 'destroy')->name('productos.delete');
+
+        Route::get('exportar-productos', 'export')->name('productos.export');
     });
     
     Route::controller(EntradasController::class)->group(function(){
@@ -65,6 +75,8 @@ Route::middleware('auth')->group(function(){
         Route::get('entradas-stock/{id}/editar-cantidad', 'editCantidad')->name('entradas.edit.cantidad');
         Route::put('entradas-stock/{id}/editar-cantidad', 'updateCantidad')->name('entradas.update.cantidad');
         Route::delete('entradas-stock/{id}', 'destroy')->name('entradas.delete');
+
+        Route::get('exportar-entradas','export')->name('entradas.export');
     });
     
     Route::controller(VentasController::class)->group(function(){
@@ -76,6 +88,8 @@ Route::middleware('auth')->group(function(){
     
         Route::post('ventas', 'store')->name('ventas.store');
         Route::delete('ventas/{id}', 'destroy')->name('ventas.delete');
+
+        Route::get('exportar-ventas', 'export')->name('ventas.export');
     });
     
     Route::controller(PerdidasController::class)->group(function(){
@@ -87,6 +101,8 @@ Route::middleware('auth')->group(function(){
     
         Route::post('perdidas', 'store')->name('perdidas.store');
         Route::delete('perdidas/{id}', 'destroy')->name('perdidas.delete');
+
+        Route::get('exportar-perdidas', 'export')->name('perdidas.export');
     });
     
     
@@ -99,6 +115,8 @@ Route::middleware('auth')->group(function(){
         Route::put('usuarios/{identificacion}', 'update')->name('usuarios.update');
 
         Route::delete('usuarios/{identificacion}', 'destroy')->name('usuarios.delete');
+
+        Route::get('exportar-usuarios','export')->name('usuarios.export');
     });
 
     // Tengo que empezar a hacer la programacion de las busquedas
@@ -107,4 +125,6 @@ Route::middleware('auth')->group(function(){
         Route::put('configuraciones/{identificacion}', 'update')->name('configuraciones.update');
         Route::get('madeby', 'hello')->name('helloword');
     });
+
+    
 });

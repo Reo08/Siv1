@@ -11,6 +11,7 @@
         <h2>Lista de categorias</h2>
         <div class="cont-categorias">
             <a href="{{route('categorias.create')}}">Nueva categoria</a>
+            <a class="btn-exportar" href="{{route('categorias.export')}}">Exportar</a>
             <input type="text" name="buscar_categorias" placeholder="Buscar por nombre">
             <div class="cont-tabla-categorias">
                 <table>

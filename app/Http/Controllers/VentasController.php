@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VentasExport;
 use App\Models\Categorias;
 use App\Models\Entradas;
 use App\Models\Ganancias;
@@ -9,6 +10,8 @@ use App\Models\Productos;
 use App\Models\Proveedor;
 use App\Models\SalidasVentas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VentasController extends Controller
 {
@@ -16,7 +19,8 @@ class VentasController extends Controller
         $ventas = SalidasVentas::leftjoin('productos','salidas_ventas.id_producto','=','productos.id_producto')
         ->leftjoin('categorias','productos.id_categoria','=','categorias.id_categoria')
         ->leftjoin('proveedor','productos.id_proveedor','=','proveedor.id_proveedor')
-        ->select('salidas_ventas.*','salidas_ventas.created_at as created','salidas_ventas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*')->distinct()->orderBy('id_salida_venta', 'desc')->paginate(15);
+        ->leftjoin('usuarios','salidas_ventas.identificacion','=','usuarios.identificacion')
+        ->select('salidas_ventas.*','salidas_ventas.created_at as created','salidas_ventas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_salida_venta', 'desc')->paginate(15);
         return view('ventas.inde',compact('ventas'));
         // return view('ventas.inde');
     }
@@ -55,7 +59,7 @@ class VentasController extends Controller
             $nuevaVenta->precio_venta = $request->precio_venta;
             $nuevaVenta->precio_compra = $entrada->precio_compra_entrada;
             $nuevaVenta->fecha_venta = $request->fecha_venta;
-            // $nuevaVenta->identificacion = "12345";//IMPORTANTE: Poner la identificacion de la sesion del usuario
+            $nuevaVenta->identificacion = Auth::user()->identificacion;//IMPORTANTE: Poner la identificacion de la sesion del usuario
             $nuevaVenta->save();
 
             $entrada->cantidad_entrada = $entrada->cantidad_entrada - $request->cantidad_venta;
@@ -81,5 +85,10 @@ class VentasController extends Controller
         $entradas->save();
         $id->delete();
         return redirect()->route('ventas.index');
+    }
+
+
+    public function export(){
+        return Excel::download( new VentasExport, 'ventas.xlsx');
     }
 }

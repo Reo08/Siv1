@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductosExport;
 use App\Models\Categorias;
 use App\Models\Productos;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductosController extends Controller
 {
@@ -69,5 +71,9 @@ class ProductosController extends Controller
     public function destroy(Productos $id){
         $id->delete();
         return redirect()->route('productos.index');
+    }
+
+    public function export(){
+        return Excel::download(new ProductosExport, 'productos.xlsx');
     }
 }

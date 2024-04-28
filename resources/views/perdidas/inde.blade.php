@@ -10,6 +10,7 @@
     <h2>Lista de pérdidas</h2>
     <div class="cont-perdidas">
         <a href="{{route('perdidas.create')}}">Agregar pérdida</a>
+        <a class="btn-exportar" href="{{route('perdidas.export')}}">Exportar</a>
         <div class="cont-inputs">
             <select name="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
@@ -52,7 +53,7 @@
                         <td class="td-texto-center">{{$perdida->nombre_categoria}}</td>
                         <td class="td-texto-center">{{$perdida->cantidad}}</td>
                         <td class="td-texto-center">{{$perdida->precio_compra}}</td>
-                        <td class="td-texto-center">Leyder Fabian restrepo Otalora</td>
+                        <td class="td-texto-center">{{$perdida->nombre_usuario}}</td>
                         <td>{{$perdida->fecha_perdida}}</td>
                         <td>{{$perdida->created}}</td>
                         <td>{{$perdida->updated}}</td>

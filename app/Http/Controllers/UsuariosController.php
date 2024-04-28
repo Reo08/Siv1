@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UsuariosController extends Controller
 {
@@ -71,5 +73,10 @@ class UsuariosController extends Controller
         $usuario = User::where('identificacion','=',$identificacion)->first();
         $usuario->delete();
         return redirect()->route('usuarios.index')->with('alert', 'Usuario eliminado con exito');
+    }
+
+    public function export(){
+        // 
+        return Excel::download(new UserExport, 'usuarios.xlsx');
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CategoriasExport;
 use App\Models\Categorias;
 use App\Models\Importes;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoriasController extends Controller
 {
@@ -48,5 +50,9 @@ class CategoriasController extends Controller
     public function destroy(Categorias $id){
         $id->delete();
         return redirect()->route('categorias.index');
+    }
+
+    public function export(){
+        return Excel::download(new CategoriasExport, 'categorias.xlsx');
     }
 }

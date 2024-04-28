@@ -10,6 +10,7 @@
     <h2>Usuarios</h2>
     <div class="cont-usuarios">
         <a href="{{route('usuarios.create')}}">Agregar usuario</a>
+        <a class="btn-exportar" href="{{route('usuarios.export')}}">Exportar</a>
         <div class="cont-inputs">
             <input type="text" name="buscar_nombre" placeholder="Buscar por nombre">
             <input type="text" name="buscar_correo" placeholder="Buscar por correo">

@@ -10,6 +10,7 @@
     <h2>Lista de productos</h2>
     <div class="cont-productos">
         <a href="{{route('productos.create')}}">Nuevo Producto</a>
+        <a class="btn-exportar" href="{{route('productos.export')}}">Exportar</a>
         <div class="cont-inputs">
             <select name="buscar_categoria">
                 <option value="">Filtrar por categoria</option>

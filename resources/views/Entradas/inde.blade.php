@@ -10,6 +10,7 @@
     <h2>Lista de existencias</h2>
     <div class="cont-entradas">
         <a href="{{route('entradas.create')}}">Agregar existencia</a>
+        <a class="btn-exportar" href="{{route('entradas.export')}}">Exportar</a>
         <div class="cont-inputs">
             <select name="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
@@ -59,7 +60,7 @@
                     <td class="td-texto-center">{{$entrada->cantidad_entrada}}</td>
                     <td class="td-texto-center">{{$entrada->precio_compra_entrada}}</td>
                     <td class="td-texto-center">{{$entrada->precio_venta_entrada}}</td>
-                    <td class="td-texto-center">Poner el nombre del usuario</td>
+                    <td class="td-texto-center">{{$entrada->nombre_usuario}}</td>
                     <td>{{$entrada->fecha_entrada}}</td>
                     <td>{{$entrada->created}}</td>
                     <td>{{$entrada->updated}}</td>

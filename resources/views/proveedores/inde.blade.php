@@ -10,6 +10,7 @@
     <h2>Lista de proveedores</h2>
     <div class="cont-proveedores">
         <a href="{{route('proveedores.create')}}">Agregar Proveedor</a>
+        <a class="btn-exportar" href="{{route('proveedores.export')}}">Exportar</a>
         <input type="text" name="buscar_proveedor" placeholder="Buscar por nombre">
         <div class="cont-tabla-proveedores">
             <table>

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PerdidasExport;
 use App\Models\Categorias;
 use App\Models\Entradas;
 use App\Models\Perdidas;
 use App\Models\Productos;
 use App\Models\SalidasPerdidas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PerdidasController extends Controller
 {
@@ -15,7 +18,8 @@ class PerdidasController extends Controller
         $perdidas = SalidasPerdidas::leftjoin('productos','salidas_perdidas.id_producto','=','productos.id_producto')
         ->leftjoin('categorias','productos.id_categoria','=','categorias.id_categoria')
         ->leftjoin('proveedor','productos.id_proveedor','=','proveedor.id_proveedor')
-        ->select('salidas_perdidas.*','salidas_perdidas.created_at as created','salidas_perdidas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*')->distinct()->orderBy('id_salida_perdida', 'desc')->paginate(15);
+        ->leftjoin('usuarios','salidas_perdidas.identificacion','=','usuarios.identificacion')
+        ->select('salidas_perdidas.*','salidas_perdidas.created_at as created','salidas_perdidas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_salida_perdida', 'desc')->paginate(15);
         return view('perdidas.inde', compact('perdidas'));
     }
     public function create(){
@@ -49,7 +53,7 @@ class PerdidasController extends Controller
             $nuevaPerdida->cantidad = $request->cantidad_perdida;
             $nuevaPerdida->precio_compra = $request->precio_compra;
             $nuevaPerdida->fecha_perdida = $request->fecha_perdida;
-            // $nuevaPerdida->identificacion = "12345";//IMPORTANTE: Poner la identificacion de la sesion del usuario
+            $nuevaPerdida->identificacion = Auth::user()->identificacion;//IMPORTANTE: Poner la identificacion de la sesion del usuario
             $nuevaPerdida->save();
 
             $entrada->cantidad_entrada = $entrada->cantidad_entrada - $request->cantidad_perdida;
@@ -72,5 +76,9 @@ class PerdidasController extends Controller
         $entradas->save();
         $id->delete();
         return redirect()->route('perdidas.index');
+    }
+
+    public function export(){
+        return Excel::download(new PerdidasExport, 'perdidas.xlsx');
     }
 }

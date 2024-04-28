@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProveedoresExport;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProveedoresController extends Controller
 {
@@ -59,5 +61,9 @@ class ProveedoresController extends Controller
     public function destroy(Proveedor $id){
         $id->delete();
         return redirect()->route('proveedores.index');
+    }
+
+    public function export(){
+        return Excel::download(new ProveedoresExport, 'proveedores.xlsx');
     }
 }
