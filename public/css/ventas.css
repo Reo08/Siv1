@@ -1,0 +1,193 @@
+:root {
+    --color-oscuro1: #0E1126;
+    --color-oscuro2: #0D1E40;
+    --color-azul: #144673;
+    --color-claro1: #177DA6;
+    --color-claro2: #45A9BF;
+    --letra-dorada: rgb(255, 187, 0);
+}
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+.sec-ventas {
+    min-height: 80.3vh;
+}
+.sec-ventas h2 {
+    font-size: 2.5rem;
+}
+.cont-ventas {
+    width: 100%;
+    min-height: 60vh;
+    background-color: #fff;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+.cont-ventas > a {
+    width: 170px;
+    height: 40px;
+    margin-bottom: 20px;
+    background-color: var(--letra-dorada);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: background-color .3s ease;
+}
+.cont-ventas > a:hover {
+    background-color: rgb(253, 205, 71);
+}
+.cont-ventas select {
+    width: 30%;
+    min-width: 230px;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1.6rem;
+    margin-right: 15px;
+}
+.cont-ventas select:focus {
+    outline: 3px solid var(--letra-dorada);
+}
+.cont-ventas input {
+    width: 30%;
+    min-width: 230px;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    border: none;
+    border: 1px solid #535353;
+    outline: none;
+    font-size: 1.6rem;
+}
+.cont-ventas input:focus {
+    outline: 3px solid var(--letra-dorada);
+}
+
+.cont-tabla-ventas {
+    width: 100%;
+    margin-top: 20px;
+    overflow: auto;
+}
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+
+.cont-tabla-ventas::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.cont-tabla-ventas::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+.cont-tabla-ventas::-webkit-scrollbar-button:increment,.cont-tabla-ventas::-webkit-scrollbar-button {
+    display: none;
+} 
+
+.cont-tabla-ventas::-webkit-scrollbar:horizontal {
+    height: 15px;
+}
+
+.cont-tabla-ventas::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.cont-tabla-ventas::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+
+/* ----- fin estilos del scroll ------- */
+
+.cont-tabla-ventas table {
+    border-collapse: collapse;
+    width: 1500px;
+}
+.cont-tabla-ventas tr, td {
+    border: 1px solid #000;
+    width: 100px;
+}
+.cont-tabla-ventas th {
+    height: 50px;
+    border: 1px solid #000;
+    color: #fff;
+    background-color: var(--color-oscuro1);
+}
+.cont-tabla-ventas .tr {
+    height: 30px;
+}
+.cont-tabla-ventas .tr:hover {
+    background-color: var(--letra-dorada);
+}
+.cont-tabla-ventas .td-menos {
+    width: 45px;
+}
+.cont-tabla-ventas td {
+    text-align: center;
+}
+.cont-tabla-ventas .td-texto-center {
+    text-align: start;
+    padding: 0px 5px;
+}
+.cont-tabla-ventas .segundaColumna {
+    width: 300px;
+}
+.cont-tabla-ventas .terceraColumna {
+    width: 180px;
+}
+.cont-tabla-ventas .sextaColumna {
+    width: 200px;
+}
+
+/*--------- botontes de la tabla------------- */
+.btn-agregar-tabla {
+    border: 1px solid #fff;
+    color: #fff;
+    text-decoration: none;
+    background-color: var(--letra-dorada);
+    padding: 4px 8px;
+    font-size: 1.6rem;
+    border-radius: 7px;
+}
+.btn-editar-tabla {
+    color: #fff;
+    text-decoration: none;
+    background-color: var(--color-claro1);
+    padding: 4px 8px;
+    font-size: 1.6rem;
+    border-radius: 7px;
+}
+.btn-eliminar-tabla {
+    color: #fff;
+    font-size: 1.6rem;
+    background-color: rgb(245, 2, 2);
+    border: none;
+    padding: 4px 8px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+
+@media screen and (min-height: 640px) {
+    .sec-ventas {
+        min-height: 86vh;
+    }
+}
+@media screen and (min-height: 800px) {
+    .sec-ventas {
+        min-height: 90vh;
+    }
+}
+@media screen and (min-height: 1000px) {
+    .sec-ventas {
+        min-height: 93vh;
+    }
+}

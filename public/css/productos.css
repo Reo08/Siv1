@@ -1,0 +1,184 @@
+:root {
+    --color-oscuro1: #0E1126;
+    --color-oscuro2: #0D1E40;
+    --color-azul: #144673;
+    --color-claro1: #177DA6;
+    --color-claro2: #45A9BF;
+    --letra-dorada: rgb(255, 187, 0);
+}
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+.sec-productos {
+    min-height: 80.3vh;
+}
+.sec-productos h2 {
+    font-size: 2.5rem;
+}
+.cont-productos {
+    width: 100%;
+    min-height: 60vh;
+    background-color: #fff;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+.cont-productos > a {
+    width: 150px;
+    height: 40px;
+    margin-bottom: 20px;
+    background-color: var(--letra-dorada);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: background-color .3s ease;
+}
+.cont-productos > a:hover {
+    background-color: rgb(253, 205, 71);
+}
+.cont-productos select {
+    width: 40%;
+    min-width: 230px;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1.6rem;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+.cont-productos select:focus {
+    outline: 3px solid var(--letra-dorada);
+}
+.cont-productos input {
+    width: 40%;
+    min-width: 230px;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+    border: 1px solid #535353;
+    outline: none;
+    font-size: 1.6rem;
+}
+.cont-productos input:focus {
+    outline: 3px solid var(--letra-dorada);
+}
+
+.cont-tabla-productos {
+    width: 100%;
+    margin-top: 20px;
+    overflow: auto;
+}
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+
+.cont-tabla-productos::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.cont-tabla-productos::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+.cont-tabla-productos::-webkit-scrollbar-button:increment,.cont-tabla-productos::-webkit-scrollbar-button {
+    display: none;
+} 
+
+.cont-tabla-productos::-webkit-scrollbar:horizontal {
+    height: 15px;
+}
+
+.cont-tabla-productos::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.cont-tabla-productos::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+
+/* ----- fin estilos del scroll ------- */
+
+.cont-tabla-productos table {
+    border-collapse: collapse;
+    width: 1304px;
+}
+.cont-tabla-productos tr, td {
+    border: 1px solid #000;
+    width: 100px;
+}
+.cont-tabla-productos th {
+    height: 50px;
+    border: 1px solid #000;
+    color: #fff;
+    background-color: var(--color-oscuro1);
+}
+.cont-tabla-productos .tr {
+    height: 30px;
+}
+.cont-tabla-productos .tr:hover {
+    background-color: var(--letra-dorada);
+}
+.cont-tabla-productos td {
+    text-align: center;
+}
+.cont-tabla-productos .td-texto-center {
+    text-align: start;
+    padding: 0px 5px;
+}
+.cont-tabla-productos .segundaColumna {
+    width: 270px;
+}
+.cont-tabla-productos .terceraColumna{
+    width: 250px;
+}
+.cont-tabla-productos .cuartaColumna {
+    width: 260px;
+}
+.cont-tabla-productos .quintaColumna {
+    width: 600px;
+}
+
+/*--------- botontes de la tabla------------- */
+.btn-editar-tabla {
+    color: #fff;
+    text-decoration: none;
+    background-color: var(--color-claro1);
+    padding: 4px 8px;
+    font-size: 1.6rem;
+    border-radius: 7px;
+}
+.btn-eliminar-tabla {
+    color: #fff;
+    font-size: 1.6rem;
+    background-color: rgb(245, 2, 2);
+    border: none;
+    padding: 4px 8px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+
+@media screen and (min-height: 640px) {
+    .sec-productos {
+        min-height: 86vh;
+    }
+}
+@media screen and (min-height: 800px) {
+    .sec-productos {
+        min-height: 90vh;
+    }
+}
+@media screen and (min-height: 1000px) {
+    .sec-productos {
+        min-height: 93vh;
+    }
+}

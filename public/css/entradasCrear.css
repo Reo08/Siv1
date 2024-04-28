@@ -1,0 +1,166 @@
+:root {
+    --color-oscuro1: #0E1126;
+    --color-oscuro2: #0D1E40;
+    --color-azul: #144673;
+    --color-claro1: #177DA6;
+    --color-claro2: #45A9BF;
+    --letra-dorada: rgb(255, 187, 0);
+}
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.sec-crear-entrada {
+    min-height: 80.3vh;
+}
+.sec-crear-entrada h2 {
+    font-size: 2.5rem;
+}
+
+.btn-atras {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 35px;
+    width: 100px;
+    height: 50px;
+    clip-path: polygon(40% 0%, 40% 20%, 100% 20%, 100% 80%, 40% 80%, 40% 100%, 0% 50%);
+    background-color: rgb(248, 34, 34);
+    color: #fff;
+    font-weight: bold;
+    font-size: 2rem;
+    text-decoration: none;
+    transition: background-color .3s ease;
+}
+
+.btn-atras:hover {
+    background-color: rgb(253, 67, 67);
+}
+
+.cont-form {
+    width: 100%;
+    min-height: 70vh;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form_aggExistencia {
+    min-width: 300px;
+    width: 40%;
+    height: auto;
+    padding: 20px;
+    padding-top: 100px;
+    border: 1px solid #000;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.form_aggExistencia legend {
+    height: 100px;
+    background-color: var(--color-oscuro1);
+    color: #fff;
+    font-size: 2.2rem;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form_aggExistencia label {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.form_aggExistencia select {
+    min-width: 230px;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: 1px solid #5d5d5d;
+    font-size: 1.6rem;
+
+}
+
+.form_aggExistencia select:focus {
+    outline: 3px solid var(--letra-dorada);
+}
+.form_aggExistencia input {
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+    border: 1px solid #535353;
+    outline: none;
+    font-size: 1.6rem;
+}
+.form_aggExistencia input:focus {
+    outline: 3px solid var(--letra-dorada);
+}
+.form_aggExistencia .cont-btns {
+    margin-top: 35px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cont-btns button {
+    width: 130px;
+    height: 40px;
+    font-size: 1.8rem;
+    background-color: rgb(248, 34, 34);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color .3s ease;
+}
+.cont-btns button:hover {
+    background-color: rgb(253, 67, 67);
+}
+.cont-btns button:first-child {
+    margin-right: 15px;
+    background-color: var(--letra-dorada);
+}
+.cont-btns button:first-child:hover {
+    background-color: rgb(255, 204, 65);
+
+}
+.cont-btns a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 130px;
+    height: 40px;
+    font-size: 1.8rem;
+    background-color: rgb(248, 34, 34);
+    border-radius: 10px;
+    color: #fff;
+}
+.cont-btns a:hover {
+    background-color: rgb(253, 67, 67);
+}
+
+@media screen and (min-height: 640px) {
+    .sec-crear-entrada {
+        min-height: 86vh;
+    }
+}
+@media screen and (min-height: 800px) {
+    .sec-crear-entrada {
+        min-height: 90vh;
+    }
+}
+@media screen and (min-height: 1000px) {
+    .sec-crear-entrada {
+        min-height: 93vh;
+    }
+}
