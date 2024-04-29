@@ -30,14 +30,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categorias as $categoria)
+                        @forelse ($categorias as $categoria)
                         <tr class="tr">
                             <td>{{$categoria->id_categoria}}</td>
                             <td class="td-texto-center nombre">{{$categoria->nombre_categoria}}</td>
                             <td><a href="{{route('categorias.edit', $categoria->id_categoria)}}" class="btn-editar-tabla">Editar</a></td>
                             <td><form class="form_eliminar" action="{{route('categorias.delete', $categoria->id_categoria)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr class="tr">
+                            
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

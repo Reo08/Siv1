@@ -49,7 +49,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($perdidas as $perdida)
+                @forelse ($perdidas as $perdida)
                     <tr class="tr">
                         <td class="td-menos">{{$perdida->id_salida_perdida}}</td>
                         <td class="td-texto-center nombre">{{$perdida->nombre_producto}}</td>
@@ -62,7 +62,9 @@
                         <td>{{$perdida->updated}}</td>
                         <td><form class="form_eliminar" action="{{route('perdidas.delete', $perdida->id_salida_perdida)}}" method="POST">@csrf @method('delete') <button class="btn-eliminar-tabla">Eliminar</button></form></td>
                     </tr>
-                @endforeach
+                @empty
+                <tr class="tr"></tr>
+                @endforelse
                 </tbody>
             </table>
         </div>

@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($proveedores as $proveedor)
+                    @forelse ($proveedores as $proveedor)
                     <tr class="tr">
                         <td class="td-menos">{{$proveedor->id_proveedor}}</td>
                         <td class="td-texto-center nombre">{{$proveedor->nombre_proveedor}}</td>
@@ -45,7 +45,11 @@
                         <td><a href="{{route('proveedores.edit', $proveedor->id_proveedor)}}" class="btn-editar-tabla">Editar</a></td>
                         <td><form class="form_eliminar" action="{{route('proveedores.destroy',$proveedor->id_proveedor)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr class="tr">
+                        
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

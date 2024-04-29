@@ -46,7 +46,7 @@
                         <th>Precio de compra / u</th>
                         <th>Precio de venta / u</th>
                         <th>Entrada por</th>
-                        <th>Fecha de entrada</th>
+                        <th>Fecha de ingreso</th>
                         <th>Fecha de registro</th>
                         <th>Fecha actualizada</th>
                         <th>Agregar</th>
@@ -55,7 +55,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($entradas as $entrada)
+                @forelse ($entradas as $entrada)
                 <tr class="tr">
                     <td class="td-menos">{{$entrada->id_entrada}}</td>
                     <td class="td-texto-center nombre">{{$entrada->nombre_producto}}</td>
@@ -70,8 +70,10 @@
                     <td><a href="{{route('entradas.edit.cantidad', $entrada->id_entrada)}}" class="btn-agregar-tabla">Agregar</a></td>
                     <td><a href="{{route('entradas.edit', $entrada->id_entrada)}}" class="btn-editar-tabla">Editar</a></td>
                     <td><form class="form_eliminar" action="{{route('entradas.delete', $entrada->id_entrada)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
-                </tr>                    
-                @endforeach
+                </tr>
+                @empty
+                <tr class="tr"></tr>                    
+                @endforelse
                 </tbody>
             </table>
         </div>

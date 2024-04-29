@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($productos as $producto)
+                    @forelse ($productos as $producto)
                     <tr class="tr">
                         <td>{{$producto->id_producto}}</td>
                         <td class="td-texto-center nombre">{{$producto->nombre_producto}}</td>
@@ -53,7 +53,9 @@
                         <td><a href="{{route('productos.edit', $producto->id_producto)}}" class="btn-editar-tabla">Editar</a></td>
                         <td><form class="form_eliminar" action="{{route('productos.delete',$producto->id_producto)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr class="tr"></tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

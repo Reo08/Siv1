@@ -36,7 +36,7 @@
             <div class="nav-item-cont {{ request()->routeIs('usuarios.*') ? '' : 'desactive' }}" >
                 <a href="{{route('usuarios.index')}}" class="{{request()->routeIs('usuarios.*')?'active': ''}}">usuarios</a>
             </div>
-            <div class="nav-item {{ request()->routeIs('configuraciones.*') ? 'active' : '' }}" ><img src="/img/icono_configuracion.png" alt=""> Configuraciones <span class="{{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }} nav-span" ><</span></div>
+            <div class="nav-item {{ request()->routeIs('configuraciones.*') ? 'active' : '' }}" ><img src="/img/icono_configurar.png" alt=""> Configuraciones <span class="{{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }}" >
                 <a href="{{route('configuraciones.edit')}}" class="{{request()->routeIs('configuraciones.*')?'active': ''}}">Cambiar contraseña</a>
             </div>

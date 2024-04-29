@@ -26,13 +26,13 @@ class ProveedoresController extends Controller
             'telefono_proveedor' => "required|numeric",
             'direccion_proveedor' => "required"
         ]);
-        $buscarCorreo = User::where('correo_proveedor','=',$request->correo_proveedor)->get();
+        $buscarCorreo = User::where('correo','=',$request->correo_proveedor)->get();
         if(count($buscarCorreo) > 0){
-            return redirect()->route('proveedores.index')->with('alert','El correo ya se encuentra registrado');
+            return redirect()->route('proveedores.index')->with('alert','El correo ya se encuentra registrado.');
         }
-        $buscarNombre = User::where('nombre_proveedor','=',$request->nombre_proveedor)->get();
+        $buscarNombre = User::where('nombre','=',$request->nombre_proveedor)->get();
         if(count($buscarNombre) > 0){
-            return redirect()->route('proveedores.index')->with('alert','El nombre del proveedor ya esta registrado');
+            return redirect()->route('proveedores.index')->with('alert','El nombre del proveedor ya esta registrado.');
         }
 
 
@@ -43,7 +43,7 @@ class ProveedoresController extends Controller
         $nuevoProveedor->correo_proveedor = $request->correo_proveedor;
         $nuevoProveedor->save();
 
-        return redirect()->route('proveedores.index')->with('alert','Se ha agregado el proveedor con exito.');
+        return redirect()->route('proveedores.index')->with('alert','Se ha agregado el proveedor con éxito.');
     }
     public function edit(Proveedor $id){
         return view('proveedores.actualizar',compact('id'));
