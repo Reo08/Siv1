@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ProveedoresExport;
 use App\Models\Proveedor;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -20,11 +21,21 @@ class ProveedoresController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'nombre_proveedor' => "required",
-            'correo_proveedor' => "required",
-            'telefono_proveedor' => "required",
+            'nombre_proveedor' => "required|max:100",
+            'correo_proveedor' => "required|email",
+            'telefono_proveedor' => "required|numeric",
             'direccion_proveedor' => "required"
         ]);
+        $buscarCorreo = User::where('correo_proveedor','=',$request->correo_proveedor)->get();
+        if(count($buscarCorreo) > 0){
+            return redirect()->route('proveedores.index')->with('alert','El correo ya se encuentra registrado');
+        }
+        $buscarNombre = User::where('nombre_proveedor','=',$request->nombre_proveedor)->get();
+        if(count($buscarNombre) > 0){
+            return redirect()->route('proveedores.index')->with('alert','El nombre del proveedor ya esta registrado');
+        }
+
+
         $nuevoProveedor = new Proveedor();
         $nuevoProveedor->nombre_proveedor = $request->nombre_proveedor;
         $nuevoProveedor->direccion_proveedor = $request->direccion_proveedor;
@@ -32,9 +43,7 @@ class ProveedoresController extends Controller
         $nuevoProveedor->correo_proveedor = $request->correo_proveedor;
         $nuevoProveedor->save();
 
-        // $proveedores = Proveedor::orderBy('id_proveedor', 'desc')->paginate(15);
-        // return redirect()->route('proveedores.index', compact('proveedores'));
-        return redirect()->route('proveedores.index');
+        return redirect()->route('proveedores.index')->with('alert','Se ha agregado el proveedor con exito.');
     }
     public function edit(Proveedor $id){
         return view('proveedores.actualizar',compact('id'));
@@ -42,9 +51,9 @@ class ProveedoresController extends Controller
 
     public function update(Request $request,Proveedor $id){
         $request->validate([
-            'nombre_proveedor' => "required",
-            'correo_proveedor' => "required",
-            'telefono_proveedor' => "required",
+            'nombre_proveedor' => "required|max:100",
+            'correo_proveedor' => "required|email",
+            'telefono_proveedor' => "required|numeric",
             'direccion_proveedor' => "required"
         ]);
 
@@ -54,8 +63,6 @@ class ProveedoresController extends Controller
         $id->correo_proveedor = $request->correo_proveedor;
         $id->save();
 
-        // $proveedores = Proveedor::orderBy('id_proveedor', 'desc')->paginate(15);
-        // return redirect()->route('proveedores.index', compact('proveedores'));
         return redirect()->route('proveedores.index');
     }
     public function destroy(Proveedor $id){

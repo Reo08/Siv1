@@ -44,7 +44,15 @@ class PerdidasController extends Controller
     public function store(Request $request){
         $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->get();
 
-        if(count($entrada) != 0){//Esta validacion es por que si va a hacer una venta y no hay una existencia en entrada.
+        $request->validate([
+            "sec_categoria" => "required",
+            "sec_producto" => "required",
+            "fecha_perdida" => "required",
+            "precio_compra" => "required|numeric",
+            "cantidad_perdida" => "required|numeric"
+        ]);
+
+        if(count($entrada) != 0){//Esta validacion es por que si va a hacer una perdida y no hay una existencia en entrada.
             $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->first();
             if($request->cantidad_perdida > $entrada->cantidad_entrada){
                 return redirect()->route('ventas.index')->with('alert','La cantidad que quiere registrar como pérdida es mayor a la cantidad que tiene en existencias');
@@ -65,7 +73,7 @@ class PerdidasController extends Controller
             $perdida->total_perdida = $request->cantidad_perdida * $request->precio_compra;
             $perdida->save();
     
-            return redirect()->route('perdidas.index');
+            return redirect()->route('perdidas.index')->with('alert','Se ha agregado la pérdida con exito.');
         }else {
             return redirect()->route('perdidas.index')->with("alert","No hay una existencia creada de este producto en Entradas.");
         }

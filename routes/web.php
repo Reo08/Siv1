@@ -25,7 +25,6 @@ Route::middleware('auth')->group(function(){
         
         Route::get('exportar-importes', 'exportImportes')->name('inicio.exportImportes');
         Route::get('exportar-ganancias','exportGanancias')->name('inicio.exportGanancias');
-        Route::get('exportar-perdidas','exportPerdidas')->name('inicio.exportPerdidas');
     });
     
     Route::controller(ProveedoresController::class)->group(function(){

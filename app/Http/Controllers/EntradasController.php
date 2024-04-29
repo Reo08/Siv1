@@ -40,6 +40,14 @@ class EntradasController extends Controller
 
     public function store(Request $request){
         // return $importe[0]->precio_compra === intval($request->precio_compra) ? "son iguales" : "no son iguales";
+        $request->validate([
+            "sec_categoria" => "required",
+            "sec_producto" => "required",
+            "fecha_entrada" => "required",
+            "precio_compra" => "required|numeric",
+            "precio_venta" => "required|numeric",
+            "cantidad" => "required|numeric"
+        ]);
         $verificarExistencia = Entradas::where('id_producto', '=', intval($request->sec_producto))->get();
         if(count($verificarExistencia) > 0){
             return redirect()->route('entradas.index')->with('alert', 'El producto ya se encuentra registrado');
@@ -59,7 +67,7 @@ class EntradasController extends Controller
             $nuevoImporte->cantidad_importe = $request->cantidad;
             $nuevoImporte->precio_compra = $request->precio_compra;
             $nuevoImporte->save();
-            return redirect()->route('entradas.index');
+            return redirect()->route('entradas.index')->with('alert','Se ha agregado la existencia con exito.');
         }
 
     }
@@ -78,6 +86,12 @@ class EntradasController extends Controller
         // return $entradas;
     }
     public function update(Request $request,Entradas $id){
+        $request->validate([
+            "fecha_entrada" => "required",
+            "precio_compra" => "required|numeric",
+            "precio_venta" => "required|numeric",
+            "cantidad" => "required|numeric"
+        ]);
 
         if($request->precio_compra != $id->precio_compra_entrada){
             $importe =  Importes::where('id_entrada','=',$id->id_entrada)->where('id_producto','=',$id->id_producto)->where('precio_compra','=',$id->precio_compra_entrada)->first();
@@ -91,6 +105,8 @@ class EntradasController extends Controller
             $nuevoImporte->cantidad_importe = $id->cantidad_entrada;
             $nuevoImporte->precio_compra = $request->precio_compra;
             $nuevoImporte->save();
+
+            return redirect()->route('entradas.index')->with('alert','Se ha actualizado la existencia con exito.');
         }
 
 
@@ -101,7 +117,7 @@ class EntradasController extends Controller
         //$nuevaEntrada->identificacion = "12345"; //IMPORTANTE: Poner la identificacion de la sesion del usuario
         $id->save();
 
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('alert','Se ha actualizado la existencia con exito.');
     }
     public function editCantidad($id){
         $entradas = Entradas::leftjoin('productos','entradas.id_producto','=','productos.id_producto')
@@ -115,17 +131,22 @@ class EntradasController extends Controller
     public function updateCantidad(Request $request,Entradas $id){
         $importe = Importes::where('id_producto','=', $id->id_producto)->where('id_entrada','=',$id->id_entrada)->where('precio_compra','=',$id->precio_compra_entrada)->first();
 
+        $request->validate([
+            "sec_operacion" => "required",
+            "cantidad_entrada" => "required|numeric",
+        ]);
+
         if($request->sec_operacion == 1){
             $importe->cantidad_importe = $importe->cantidad_importe + $request->cantidad_entrada;
             $importe->save();
             $id->cantidad_entrada = $id->cantidad_entrada + $request->cantidad_entrada;
             $id->save();
 
-            return redirect()->route('entradas.index')->with('alert','Existencias agregadas con exito');
+            return redirect()->route('entradas.index')->with('alert','Existencias agregadas con exito.');
 
         }else if($request->sec_operacion == 0){
             if($request->cantidad_entrada > $id->cantidad_entrada){
-                return redirect()->route('entradas.index')->with('alert','La cantidad que quiere eliminar es mayor a la cantidad que tiene en existencias');
+                return redirect()->route('entradas.index')->with('alert','La cantidad que quiere eliminar es mayor a la cantidad que tiene en existencias.');
             }else {
                 $id->cantidad_entrada = $id->cantidad_entrada - $request->cantidad_entrada;
                 $id->save();
@@ -133,7 +154,7 @@ class EntradasController extends Controller
                 $importe->cantidad_importe = $importe->cantidad_importe - $request->cantidad_entrada;
                 $importe->save();
 
-                return redirect()->route('entradas.index')->with('alert','Existencias eliminadas con exito');
+                return redirect()->route('entradas.index')->with('alert','Existencias eliminadas con exito.');
             }
         }
         

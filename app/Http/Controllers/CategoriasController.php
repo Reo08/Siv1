@@ -20,10 +20,21 @@ class CategoriasController extends Controller
     }
 
     public function store(Request $request){
+
+        $request->validate([
+            "nombre_categoria" => "required|max:120"
+        ]);
+        
+        $nombreCategoria = Categorias::where('nombre_categoria','=',$request->nombre_categoria)->get();
+        if(count($nombreCategoria)>0){
+            return redirect()->route('categorias.index')->with('alert','La categoria ya existe.');
+        }
+
         $nuevaCategoria = new Categorias();
         $nuevaCategoria->nombre_categoria = $request->nombre_categoria;
         $nuevaCategoria->save();
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('alert',' La categoria se creo con exito.');
+
     }
 
     public function edit(Categorias $id){

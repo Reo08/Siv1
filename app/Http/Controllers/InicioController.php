@@ -67,10 +67,4 @@ class InicioController extends Controller
     public function exportGanancias(){
         return Excel::download(new GananciasExport, 'ganancias.xlsx');
     }
-
-
-
-    public function exportPerdidas(){
-
-    }
 }

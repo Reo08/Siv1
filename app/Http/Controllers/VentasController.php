@@ -49,10 +49,18 @@ class VentasController extends Controller
     public function store(Request $request){
         $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->get();
 
+        $request->validate([
+            "sec_categoria" => "required",
+            "sec_producto" => "required",
+            "fecha_venta" => "required",
+            "precio_venta" => "required|numeric",
+            "cantidad_venta" => "required|numeric"
+        ]);
+
         if(count($entrada) != 0){//Esta validacion es por que si va a hacer una venta y no hay una existencia en entrada.
             $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->first();
             if($request->cantidad_venta > $entrada->cantidad_entrada){
-                return redirect()->route('ventas.index')->with('alert','La cantidad que quiere vender es mayor a la cantidad que tiene en existencias');
+                return redirect()->route('ventas.index')->with('alert','La cantidad que quiere vender es mayor a la cantidad que tiene en existencias.');
             }
             $nuevaVenta = new SalidasVentas();
             $nuevaVenta->id_producto = intval($request->sec_producto);
@@ -72,7 +80,7 @@ class VentasController extends Controller
             $nuevaGanancia->total_ganancia =  ($request->cantidad_venta * $request->precio_venta) - ($request->cantidad_venta * $entrada->precio_compra_entrada);
             $nuevaGanancia->save();
     
-            return redirect()->route('ventas.index');
+            return redirect()->route('ventas.index')->with('alert','Se ha agregado la venta con exito.');
         }else {
             return redirect()->route('ventas.index')->with("alert","No hay una existencia creada de este producto en Entradas.");
         }

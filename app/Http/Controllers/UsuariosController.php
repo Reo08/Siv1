@@ -20,18 +20,25 @@ class UsuariosController extends Controller
 
     public function store(Request $request){
         $buscarUsuario = User::where('identificacion','=',$request->identificacion)->get();
+        $request->validate([
+            "rol" => "required",
+            "nombre" => "required|max:50",
+            "identificacion" => "required|max:20",
+            "correo" => "required|email",
+            "contrasena" => "required|min:4"
+        ]);
         if(count($buscarUsuario)>0){
             $buscarUsuario2 = User::where('correo','=',$request->correo)->get();
             if(count($buscarUsuario2)>0){
-                return redirect()->route('usuarios.index')->with('alert','La identificacion y el correo ya estan registrados en un usuario ya existente');
+                return redirect()->route('usuarios.index')->with('alert','La identificación y el correo ya están registrados en un usuario ya existente.');
             }else {
-                return redirect()->route('usuarios.index')->with('alert','La identificacion ya esta registrada en un usuario ya existente');
+                return redirect()->route('usuarios.index')->with('alert','La identificación ya está registrada en un usuario ya existente.');
             }
             
         }else{
             $buscarUsuario2 = User::where('correo','=',$request->correo)->get();
             if(count($buscarUsuario2)>0){
-                return redirect()->route('usuarios.index')->with('alert','El correo ya esta registrado en un usuario ya existente');
+                return redirect()->route('usuarios.index')->with('alert','El correo ya está registrado en un usuario ya existente.');
             }
         }
 
@@ -42,7 +49,7 @@ class UsuariosController extends Controller
         $nuevoUsuario->contrasena = Hash::make($request->contrasena);
         $nuevoUsuario->rol = intval($request->rol) === 0 ? 'Empleado': 'Administrador';
         $nuevoUsuario->save();
-        return redirect()->route('usuarios.index');
+        return redirect()->route('usuarios.index')->with('alert','Se ha agregado el usuario con éxito.');
     }
 
     public function edit($identificacion){
@@ -52,7 +59,12 @@ class UsuariosController extends Controller
     }
     public function update(Request $request, $identificacion){
         $usuario = User::where('identificacion','=',$identificacion)->first();
-
+        $request->validate([
+            "rol" => "required",
+            "nombre" => "required|max:50",
+            "identificacion" => "required|max:20",
+            "correo" => "required|email"
+        ]);
         $usuario->identificacion = $request->identificacion;
         $usuario->nombre = $request->nombre;
         $usuario->correo = $request->correo;
@@ -60,12 +72,12 @@ class UsuariosController extends Controller
         if($request->contrasena1 && $request->contrasena2){
             $usuario->contrasena = Hash::make($request->contrasena1);
             $usuario->save();
-            return redirect()->route('usuarios.index')->with('alert', 'Usuario actualizado con exito');
+            return redirect()->route('usuarios.index')->with('alert', 'Usuario actualizado con éxito.');
         }else if($request->contrasena1 || $request->contrasena2){
             return redirect()->route('usuarios.index')->with('alert', 'Falta llenar un campo de contraseña.');
         }else{
             $usuario->save();
-            return redirect()->route('usuarios.index')->with('alert', 'Usuario actualizado con exito');
+            return redirect()->route('usuarios.index')->with('alert', 'Usuario actualizado con éxito.');
         }
     }
 
