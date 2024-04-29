@@ -12,10 +12,13 @@
         <a href="{{route('entradas.create')}}">Agregar existencia</a>
         <a class="btn-exportar" href="{{route('entradas.export')}}">Exportar</a>
         <div class="cont-inputs">
-            <select name="buscar_categoria">
+            <select name="buscar_categoria" class="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
+            @foreach ($categorias as $categoria)
+                <option value="{{$categoria->nombre_categoria}}">{{$categoria->nombre_categoria}}</option>
+            @endforeach
             </select>
-            <input type="text" name="buscar_productos" placeholder="Buscar por producto">
+            <input type="text" name="buscar_productos" class="buscar_producto" placeholder="Buscar por producto">
         </div>
         <div class="cont-tabla-entradas">
             <table>
@@ -55,8 +58,8 @@
                 @foreach ($entradas as $entrada)
                 <tr class="tr">
                     <td class="td-menos">{{$entrada->id_entrada}}</td>
-                    <td class="td-texto-center">{{$entrada->nombre_producto}}</td>
-                    <td class="td-texto-center">{{$entrada->nombre_categoria}}</td>
+                    <td class="td-texto-center nombre">{{$entrada->nombre_producto}}</td>
+                    <td class="td-texto-center categoria">{{$entrada->nombre_categoria}}</td>
                     <td class="td-texto-center">{{$entrada->cantidad_entrada}}</td>
                     <td class="td-texto-center">{{$entrada->precio_compra_entrada}}</td>
                     <td class="td-texto-center">{{$entrada->precio_venta_entrada}}</td>

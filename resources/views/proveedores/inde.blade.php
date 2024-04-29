@@ -11,7 +11,7 @@
     <div class="cont-proveedores">
         <a href="{{route('proveedores.create')}}">Agregar Proveedor</a>
         <a class="btn-exportar" href="{{route('proveedores.export')}}">Exportar</a>
-        <input type="text" name="buscar_proveedor" placeholder="Buscar por nombre">
+        <input type="text" name="buscar_nombre" class="buscar_nombre" placeholder="Buscar por nombre">
         <div class="cont-tabla-proveedores">
             <table>
                 <colgroup>
@@ -38,7 +38,7 @@
                     @foreach ($proveedores as $proveedor)
                     <tr class="tr">
                         <td class="td-menos">{{$proveedor->id_proveedor}}</td>
-                        <td class="td-texto-center">{{$proveedor->nombre_proveedor}}</td>
+                        <td class="td-texto-center nombre">{{$proveedor->nombre_proveedor}}</td>
                         <td class="td-texto-center">{{$proveedor->correo_proveedor}}</td>
                         <td class="td-texto-center">{{$proveedor->telefono_proveedor}}</td>
                         <td class="td-texto-center">{{$proveedor->direccion_proveedor}}</td>

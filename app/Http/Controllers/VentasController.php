@@ -21,7 +21,8 @@ class VentasController extends Controller
         ->leftjoin('proveedor','productos.id_proveedor','=','proveedor.id_proveedor')
         ->leftjoin('usuarios','salidas_ventas.identificacion','=','usuarios.identificacion')
         ->select('salidas_ventas.*','salidas_ventas.created_at as created','salidas_ventas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_salida_venta', 'desc')->paginate(15);
-        return view('ventas.inde',compact('ventas'));
+        $categorias = Categorias::all();
+        return view('ventas.inde',compact('ventas','categorias'));
         // return view('ventas.inde');
     }
     public function create(){

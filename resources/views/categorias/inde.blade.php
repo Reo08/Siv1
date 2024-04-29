@@ -12,7 +12,7 @@
         <div class="cont-categorias">
             <a href="{{route('categorias.create')}}">Nueva categoria</a>
             <a class="btn-exportar" href="{{route('categorias.export')}}">Exportar</a>
-            <input type="text" name="buscar_categorias" placeholder="Buscar por nombre">
+            <input type="text" name="buscar_categorias" class="buscar_categoria" placeholder="Buscar por nombre">
             <div class="cont-tabla-categorias">
                 <table>
                     <colgroup>
@@ -33,7 +33,7 @@
                         @foreach ($categorias as $categoria)
                         <tr class="tr">
                             <td>{{$categoria->id_categoria}}</td>
-                            <td class="td-texto-center">{{$categoria->nombre_categoria}}</td>
+                            <td class="td-texto-center nombre">{{$categoria->nombre_categoria}}</td>
                             <td><a href="{{route('categorias.edit', $categoria->id_categoria)}}" class="btn-editar-tabla">Editar</a></td>
                             <td><form class="form_eliminar" action="{{route('categorias.delete', $categoria->id_categoria)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
                         </tr>

@@ -12,10 +12,13 @@
         <a href="{{route('productos.create')}}">Nuevo Producto</a>
         <a class="btn-exportar" href="{{route('productos.export')}}">Exportar</a>
         <div class="cont-inputs">
-            <select name="buscar_categoria">
+            <select name="buscar_categoria" class="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
+            @foreach ($categorias as $categoria)
+                <option value="{{$categoria->nombre_categoria}}">{{$categoria->nombre_categoria}}</option>
+            @endforeach
             </select>
-            <input type="text" name="buscar_productos" placeholder="Buscar por nombre">
+            <input type="text" name="buscar_productos" class="buscar_producto" placeholder="Buscar por nombre">
         </div>
         <div class="cont-tabla-productos">
             <table>
@@ -43,8 +46,8 @@
                     @foreach ($productos as $producto)
                     <tr class="tr">
                         <td>{{$producto->id_producto}}</td>
-                        <td class="td-texto-center">{{$producto->nombre_producto}}</td>
-                        <td class="td-texto-center">{{$producto->categoria}}</td>
+                        <td class="td-texto-center nombre">{{$producto->nombre_producto}}</td>
+                        <td class="td-texto-center categoria">{{$producto->categoria}}</td>
                         <td class="td-texto-center">{{$producto->nombre_proveedor}}</td>
                         <td class="td-texto-center">{{$producto->detalles_producto}}</td>
                         <td><a href="{{route('productos.edit', $producto->id_producto)}}" class="btn-editar-tabla">Editar</a></td>

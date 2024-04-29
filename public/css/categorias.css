@@ -150,7 +150,11 @@
     cursor: pointer;
 }
 
-
+/* --script-- */
+.addFiltrar{
+    display: none;
+}
+/* --fin script-- */
 
 
 

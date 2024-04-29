@@ -20,7 +20,8 @@ class PerdidasController extends Controller
         ->leftjoin('proveedor','productos.id_proveedor','=','proveedor.id_proveedor')
         ->leftjoin('usuarios','salidas_perdidas.identificacion','=','usuarios.identificacion')
         ->select('salidas_perdidas.*','salidas_perdidas.created_at as created','salidas_perdidas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_salida_perdida', 'desc')->paginate(15);
-        return view('perdidas.inde', compact('perdidas'));
+        $categorias = Categorias::all();
+        return view('perdidas.inde', compact('perdidas','categorias'));
     }
     public function create(){
         $categorias = Categorias::all();

@@ -15,7 +15,8 @@ class ProductosController extends Controller
         $productos = Productos::leftjoin('categorias', 'productos.id_categoria', '=', 'categorias.id_categoria')
         ->leftjoin('proveedor', 'productos.id_proveedor', '=', 'proveedor.id_proveedor')
         ->select('productos.*', 'categorias.nombre_categoria as categoria', 'proveedor.nombre_proveedor as nombre_proveedor')->orderBy('id_producto','desc')->paginate(15);
-        return view('productos.inde', compact('productos'));
+        $categorias = Categorias::all();
+        return view('productos.inde', compact('productos', 'categorias'));
     }
     public function create(){
         $categorias = Categorias::all();

@@ -160,6 +160,11 @@
     cursor: pointer;
 }
 
+/* --script-- */
+.addFiltrar{
+    display: none;
+}
+/* --fin script-- */
 
 @media screen and (min-height: 640px) {
     .sec-proveedores {

@@ -58,6 +58,7 @@
     border-radius: 10px;
     outline: none;
     font-size: 1.6rem;
+    border: 1px solid #5a5a5a;
     margin-right: 15px;
     margin-bottom: 15px;
 }
@@ -172,6 +173,12 @@
     border-radius: 7px;
     cursor: pointer;
 }
+
+/* --script-- */
+.addFiltrar{
+    display: none;
+}
+/* --fin script-- */
 
 
 @media screen and (min-height: 640px) {

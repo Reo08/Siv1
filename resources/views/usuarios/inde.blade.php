@@ -12,8 +12,8 @@
         <a href="{{route('usuarios.create')}}">Agregar usuario</a>
         <a class="btn-exportar" href="{{route('usuarios.export')}}">Exportar</a>
         <div class="cont-inputs">
-            <input type="text" name="buscar_nombre" placeholder="Buscar por nombre">
-            <input type="text" name="buscar_correo" placeholder="Buscar por correo">
+            <input type="text" name="buscar_nombre" class="buscar_nombre" placeholder="Buscar por nombre">
+            <input type="text" name="buscar_correo" class="buscar_correo" placeholder="Buscar por correo">
         </div>
         <div class="cont-tabla-usuarios">
             <table>
@@ -39,8 +39,8 @@
                 @foreach ($usuarios as $usuario)
                     <tr class="tr">
                         <td class="td-texto-center">{{$usuario->identificacion}}</td>
-                        <td class="td-texto-center">{{$usuario->nombre}}</td>
-                        <td class="td-texto-center">{{$usuario->correo}}</td>
+                        <td class="td-texto-center nombre">{{$usuario->nombre}}</td>
+                        <td class="td-texto-center correo">{{$usuario->correo}}</td>
                         <td class="td-texto-center">{{$usuario->rol}}</td>
                         <td><a href="{{route('usuarios.edit',$usuario->identificacion)}}" class="btn-editar-tabla">Editar</a></td>
                         <td><form class="form_eliminar" action="{{route('usuarios.delete', $usuario->identificacion)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
