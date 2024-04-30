@@ -76,6 +76,7 @@ nav {
     width: 56%;
     margin: 0 auto;
     height: 80px;
+    justify-content: center;
 }
 nav .leading-5 {
     font-size: 1.6rem;
@@ -204,7 +205,9 @@ main {
     nav {
         width: 71%;
     }
+
 }
+
 
 @media screen and (max-width: 500px) {
     body {
@@ -227,4 +230,145 @@ main {
     .btn-cerrar-menu{
         display: block;
     }
+}
+
+
+
+/* ---------tailwind -------- */
+@media screen and (min-width: 640px) {
+    p.text-sm.text-gray-700.leading-5{
+        display: none;
+    }
+    div.flex-1 {
+        display: none;
+    }
+    span.shadow-sm {
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+    }
+    span.rounded-md{
+        border-radius: 0.4rem;
+    }
+    span.px-2.py-2.font-medium.bg-white.border.border-gray-300.cursor-default.dark\:bg-gray-800.dark\:border-gray-600 {
+        padding: 2px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        background-color: white;
+        border: 1px solid rgba(209, 213, 219, 1);
+        cursor: default;
+        border-top-left-radius: 0.4rem;
+    }
+
+    span.px-4.py-2.font-medium.bg-white.border.border-gray-300.cursor-default.dark\:bg-gray-800.dark\:border-gray-600  {
+        padding: 3px 7px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        background-color: white;
+        border: 1px solid rgba(209, 213, 219, 1);
+        cursor: default;
+        border-top-left-radius: 0.4rem;
+    }
+
+    a.px-4.py-2.font-medium.text-gray-700.bg-white.border.border-gray-300 {
+        padding: 7px 10px;
+        margin-left: -1px;
+        font-weight: 500;
+        color: rgba(112, 112, 112, 1); /* text-gray-700 */
+        background-color: white; /* bg-white */
+        border: 1px solid rgba(209, 213, 219, 1); /* border border-gray-300 */
+        transition: all 0.15s ease-in-out; /* transition ease-in-out duration-150 */
+      
+        &:hover {
+          color: rgba(85, 85, 85, 1); /* hover:text-gray-500 */
+        }
+      
+        &:focus {
+          z-index: 10;
+          outline: none;
+          box-shadow: 0 0 0 1px rgba(209, 213, 219, 1); /* focus:ring ring-gray-300 */
+          border-color: rgba(59, 130, 246, 1); /* focus:border-blue-300 */
+        }
+      
+        &:active {
+          background-color: rgba(243, 244, 246, 1); /* active:bg-gray-100 */
+          color: rgba(112, 112, 112, 1); /* active:text-gray-700 */
+        }
+      
+        @media (prefers-color-scheme: dark) {
+          background-color: #333; /* dark:bg-gray-800 */
+          border-color: #444; /* dark:border-gray-600 */
+          color: rgba(158, 158, 158, 1); /* dark:text-gray-400 */
+          &:hover {
+            color: rgba(102, 102, 102, 1); /* dark:hover:text-gray-300 */
+          }
+          &:active {
+            background-color: #555; /* dark:active:bg-gray-700 */
+          }
+          &:focus {
+            border-color: rgba(82, 140, 255, 1); /* dark:focus:border-blue-800 */
+          }
+        }
+    }
+
+    a.px-2.py-2.font-medium.text-gray-500.bg-white.border.border-gray-300 {
+        padding: 2px 10px;
+        margin-left: -1px;
+        font-weight: 500;
+        color: rgba(112, 112, 112, 1); /* text-gray-700 */
+        background-color: white; /* bg-white */
+        border: 1px solid rgba(209, 213, 219, 1); /* border border-gray-300 */
+        transition: all 0.15s ease-in-out; /* transition ease-in-out duration-150 */
+      
+        &:hover {
+          color: rgba(85, 85, 85, 1); /* hover:text-gray-500 */
+        }
+      
+        &:focus {
+          z-index: 10;
+          outline: none;
+          box-shadow: 0 0 0 1px rgba(209, 213, 219, 1); /* focus:ring ring-gray-300 */
+          border-color: rgba(59, 130, 246, 1); /* focus:border-blue-300 */
+        }
+      
+        &:active {
+          background-color: rgba(243, 244, 246, 1); /* active:bg-gray-100 */
+          color: rgba(112, 112, 112, 1); /* active:text-gray-700 */
+        }
+      
+        @media (prefers-color-scheme: dark) {
+          background-color: #333; /* dark:bg-gray-800 */
+          border-color: #444; /* dark:border-gray-600 */
+          color: rgba(158, 158, 158, 1); /* dark:text-gray-400 */
+          &:hover {
+            color: rgba(102, 102, 102, 1); /* dark:hover:text-gray-300 */
+          }
+          &:active {
+            background-color: #555; /* dark:active:bg-gray-700 */
+          }
+          &:focus {
+            border-color: rgba(82, 140, 255, 1); /* dark:focus:border-blue-800 */
+          }
+        }
+    }
+}
+@media screen and (max-width: 641px) {
+    div.flex-1.justify-between  {
+        flex-grow: 0;
+    }
+    span.px-4.py-2.font-medium.border.border-gray-300.cursor-default.border-gray-300.cursor-default {
+        padding: 10px 10px;
+        font-weight: 500;
+        border: 1px solid rgba(209, 213, 219, 1); /* border border-gray-300 */
+        cursor: default;
+        margin-right: 10px;
+    }
+    a.px-4.py-2.font-medium.text-gray-700.bg-white.border.border-gray-300 {
+        padding: 10px 10px;
+        margin-left: 3px; /* ml-3 */
+        font-weight: 500; /* font-medium */
+        /* color: rgba(112, 112, 112, 1); text-gray-700 */
+        background-color: white; /* bg-white */
+        border: 1px solid rgba(0, 0, 0); /* border border-gray-300 */
+        transition: all 0.15s ease-in-out; /* transition ease-in-out duration-150 */
+      
+    } 
 }

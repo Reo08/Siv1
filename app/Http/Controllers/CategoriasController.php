@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class CategoriasController extends Controller
 {
     public function index() {
-        $categorias = Categorias::orderBy('id_categoria', 'desc')->paginate(15);
+        $categorias = Categorias::orderBy('id_categoria', 'desc')->paginate(25);
         return view('categorias.inde', ['categorias'=> $categorias]);
     }
 

@@ -32,10 +32,12 @@
                 <a href="{{route('ventas.index')}}" class="{{request()->routeIs('ventas.*')?'active': ''}}">Ventas</a>
                 <a href="{{route('perdidas.index')}}" class="{{request()->routeIs('perdidas.*')?'active': ''}}">Pérdidas</a>
             </div>
+            @if (Auth::user()->rol === "administrador")
             <div class="nav-item {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" ><img src="/img/icono_gestion-de-usuarios.png" alt=""> Gestion de usuarios <span class="{{ request()->routeIs('usuarios.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('usuarios.*') ? '' : 'desactive' }}" >
                 <a href="{{route('usuarios.index')}}" class="{{request()->routeIs('usuarios.*')?'active': ''}}">usuarios</a>
-            </div>
+            </div> 
+            @endif
             <div class="nav-item {{ request()->routeIs('configuraciones.*') ? 'active' : '' }}" ><img src="/img/icono_configurar.png" alt=""> Configuraciones <span class="{{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }}" >
                 <a href="{{route('configuraciones.edit')}}" class="{{request()->routeIs('configuraciones.*')?'active': ''}}">Cambiar contraseña</a>

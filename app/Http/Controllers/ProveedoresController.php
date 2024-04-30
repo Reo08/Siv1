@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class ProveedoresController extends Controller
 {
     public function index(){
-        $proveedores = Proveedor::orderBy('id_proveedor', 'desc')->paginate(15);
+        $proveedores = Proveedor::orderBy('id_proveedor', 'desc')->paginate(25);
         return view('proveedores.inde', compact('proveedores'));
     }
     public function create(){

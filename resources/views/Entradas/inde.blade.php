@@ -10,7 +10,9 @@
     <h2>Lista de existencias</h2>
     <div class="cont-entradas">
         <a href="{{route('entradas.create')}}">Agregar existencia</a>
+        @if (Auth::user()->rol === "administrador")
         <a class="btn-exportar" href="{{route('entradas.export')}}">Exportar</a>
+        @endif
         <div class="cont-inputs">
             <select name="buscar_categoria" class="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
@@ -50,8 +52,10 @@
                         <th>Fecha de registro</th>
                         <th>Fecha actualizada</th>
                         <th>Agregar</th>
+                        @if (Auth::user()->rol === "administrador")
                         <th>Editar</th>
                         <th>Eliminar</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -68,8 +72,10 @@
                     <td>{{$entrada->created}}</td>
                     <td>{{$entrada->updated}}</td>
                     <td><a href="{{route('entradas.edit.cantidad', $entrada->id_entrada)}}" class="btn-agregar-tabla">Agregar</a></td>
+                    @if (Auth::user()->rol === "administrador")
                     <td><a href="{{route('entradas.edit', $entrada->id_entrada)}}" class="btn-editar-tabla">Editar</a></td>
                     <td><form class="form_eliminar" action="{{route('entradas.delete', $entrada->id_entrada)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                    @endif
                 </tr>
                 @empty
                 <tr class="tr"></tr>                    

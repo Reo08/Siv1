@@ -10,7 +10,9 @@
     <h2>Lista de ventas</h2>
     <div class="cont-ventas">
         <a href="{{route('ventas.create')}}">Agregar venta</a>
+        @if (Auth::user()->rol === "administrador")
         <a class="btn-exportar" href="{{route('ventas.export')}}">Exportar</a>
+        @endif
         <div class="cont-inputs">
             <select name="buscar_categoria" class="buscar_categoria">
                 <option value="">Filtrar por categoria</option>
@@ -45,7 +47,9 @@
                         <th>Fecha de venta</th>
                         <th>Fecha de registro</th>
                         <th>Fecha actualizada</th>
+                        @if (Auth::user()->rol === "administrador")
                         <th>Eliminar</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -60,7 +64,9 @@
                     <td>{{$venta->fecha_venta}}</td>
                     <td>{{$venta->created}}</td>
                     <td>{{$venta->updated}}</td>
+                    @if (Auth::user()->rol === "administrador")
                     <td><form class="form_eliminar" action="{{route('ventas.delete', $venta->id_salida_venta)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                    @endif
                 </tr>
                 @empty
                 <tr class="tr"></tr> 

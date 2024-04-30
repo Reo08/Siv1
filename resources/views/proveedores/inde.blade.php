@@ -10,7 +10,10 @@
     <h2>Lista de proveedores</h2>
     <div class="cont-proveedores">
         <a href="{{route('proveedores.create')}}">Agregar Proveedor</a>
-        <a class="btn-exportar" href="{{route('proveedores.export')}}">Exportar</a>
+        @if (Auth::user()->rol === "administrador")
+            <a class="btn-exportar" href="{{route('proveedores.export')}}">Exportar</a>            
+        @endif
+        
         <input type="text" name="buscar_nombre" class="buscar_nombre" placeholder="Buscar por nombre">
         <div class="cont-tabla-proveedores">
             <table>
@@ -30,8 +33,10 @@
                         <th>Correo</th>
                         <th>Telefono</th>
                         <th>Direccion</th>
+                        @if (Auth::user()->rol === "administrador")
                         <th>Editar</th>
                         <th>Eliminar</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -42,8 +47,10 @@
                         <td class="td-texto-center">{{$proveedor->correo_proveedor}}</td>
                         <td class="td-texto-center">{{$proveedor->telefono_proveedor}}</td>
                         <td class="td-texto-center">{{$proveedor->direccion_proveedor}}</td>
+                        @if (Auth::user()->rol === "administrador")
                         <td><a href="{{route('proveedores.edit', $proveedor->id_proveedor)}}" class="btn-editar-tabla">Editar</a></td>
                         <td><form class="form_eliminar" action="{{route('proveedores.destroy',$proveedor->id_proveedor)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                        @endif
                     </tr>
                     @empty
                     <tr class="tr">

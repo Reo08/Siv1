@@ -14,7 +14,7 @@ class ProductosController extends Controller
     public function index(){
         $productos = Productos::leftjoin('categorias', 'productos.id_categoria', '=', 'categorias.id_categoria')
         ->leftjoin('proveedor', 'productos.id_proveedor', '=', 'proveedor.id_proveedor')
-        ->select('productos.*', 'categorias.nombre_categoria as categoria', 'proveedor.nombre_proveedor as nombre_proveedor')->orderBy('id_producto','desc')->paginate(15);
+        ->select('productos.*', 'categorias.nombre_categoria as categoria', 'proveedor.nombre_proveedor as nombre_proveedor')->orderBy('id_producto','desc')->paginate(25);
         $categorias = Categorias::all();
         return view('productos.inde', compact('productos', 'categorias'));
     }
