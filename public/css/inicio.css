@@ -49,6 +49,9 @@
     .sec-inicio {
         min-height: 86vh;
     }
+    .sec-inicio a {
+        font-size: 1.5rem;
+    }
 }
 @media screen and (min-height: 800px) {
     .sec-inicio {

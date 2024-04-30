@@ -4,6 +4,7 @@
     --color-azul: #144673;
     --color-claro1: #177DA6;
     --color-claro2: #45A9BF;
+    --letra-dorada: rgb(255, 187, 0);
 }
 
 * {
@@ -17,28 +18,27 @@ html {
     font-family:sans-serif;
 }
 main {
-    background-image: url('/img/montana_fondo.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
     height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: var(--color-azul);
 }
 form {
     min-width: 320px;
     width: 45%;
-    height: 260px;
+    height: auto;
     border: 3px solid #fff;
     border-radius: 10px;
-    backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-shadow: 0px 7px 13px 1px #000;
+}
+form ul li {
+    color: rgb(255 102 102);
 }
 form input {
     height: 40px;
@@ -48,7 +48,7 @@ form input {
 
 }
 form input:focus {
-    outline: 3px solid var(--color-claro2);
+    outline: 3px solid var(--letra-dorada);
 }
 form button {
     min-width: 100px;
@@ -57,6 +57,7 @@ form button {
     border-radius: 10px;
     margin: 0px auto;
     margin-top: 30px;
+    margin-bottom: 12px;
     background-color: var(--color-claro2);
     color: #fff;
     transition: background-color .5s ease;

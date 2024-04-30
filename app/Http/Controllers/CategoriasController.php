@@ -63,7 +63,7 @@ class CategoriasController extends Controller
         $nuevaCategoria = new Categorias();
         $nuevaCategoria->nombre_categoria = $request->nombre_categoria;
         $nuevaCategoria->save();
-        return redirect()->route('categorias.index')->with('alert',' La categoria se creo con exito.');
+        return redirect()->route('categorias.index')->with('alert','Se ha agregado la categoria con exito.');
 
     }
 
@@ -75,7 +75,7 @@ class CategoriasController extends Controller
         // $importes = Importes::where('id_categoria','=',$id->id_categoria)->get();
 
         $request->validate([
-            'nombre_categoria'=> 'required|max:20'
+            'nombre_categoria'=> 'required|max:120'
         ]);
 
         $id->nombre_categoria = limpiar_cadena($request->nombre_categoria);
@@ -86,11 +86,11 @@ class CategoriasController extends Controller
         //     $importe->save();
         // }
 
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('alert','Se ha actualizado la categoria con éxito.');
     }
     public function destroy(Categorias $id){
         $id->delete();
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('alert','Se ha eliminado la categoria con éxito.');
     }
 
     public function export(){

@@ -39,5 +39,5 @@
 @endsection
 
 @section('scripts')
-    <script src="/js/entradas.crear.js"></script>
+
 @endsection

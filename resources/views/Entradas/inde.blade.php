@@ -47,7 +47,7 @@
                         <th>Cantidad</th>
                         <th>Precio de compra / u</th>
                         <th>Precio de venta / u</th>
-                        <th>Entrada por</th>
+                        <th>Registrado por</th>
                         <th>Fecha de ingreso</th>
                         <th>Fecha de registro</th>
                         <th>Fecha actualizada</th>

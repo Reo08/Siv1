@@ -95,11 +95,11 @@ class ProveedoresController extends Controller
         $id->correo_proveedor = limpiar_cadena($request->correo_proveedor);
         $id->save();
 
-        return redirect()->route('proveedores.index');
+        return redirect()->route('proveedores.index')->with('alert','Se ha actualizado el proveedor con éxito.');
     }
     public function destroy(Proveedor $id){
         $id->delete();
-        return redirect()->route('proveedores.index');
+        return redirect()->route('proveedores.index')->with('alert','Se ha eliminado el proveedor con éxito.');
     }
 
     public function export(){

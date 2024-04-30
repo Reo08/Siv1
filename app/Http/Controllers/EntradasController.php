@@ -80,7 +80,7 @@ class EntradasController extends Controller
         ]);
         $verificarExistencia = Entradas::where('id_producto', '=', intval(limpiar_cadena($request->sec_producto)))->get();
         if(count($verificarExistencia) > 0){
-            return redirect()->route('entradas.index')->with('alert', 'El producto ya se encuentra registrado');
+            return redirect()->route('entradas.index')->with('alert', 'El producto ya se encuentra registrado.');
         }else {
             $nuevaEntrada = new Entradas();
             $nuevaEntrada->id_producto = intval(limpiar_cadena($request->sec_producto));
@@ -97,7 +97,7 @@ class EntradasController extends Controller
             $nuevoImporte->cantidad_importe = limpiar_cadena($request->cantidad);
             $nuevoImporte->precio_compra = limpiar_cadena($request->precio_compra);
             $nuevoImporte->save();
-            return redirect()->route('entradas.index')->with('alert','Se ha agregado la existencia con exito.');
+            return redirect()->route('entradas.index')->with('alert','Se ha agregado la existencia con éxito.');
         }
 
     }
@@ -120,7 +120,6 @@ class EntradasController extends Controller
             "fecha_entrada" => "required",
             "precio_compra" => "required|numeric",
             "precio_venta" => "required|numeric",
-            "cantidad" => "required|numeric"
         ]);
 
         if($request->precio_compra != $id->precio_compra_entrada){
@@ -135,8 +134,7 @@ class EntradasController extends Controller
             $nuevoImporte->cantidad_importe = $id->cantidad_entrada;
             $nuevoImporte->precio_compra = limpiar_cadena($request->precio_compra);
             $nuevoImporte->save();
-
-            return redirect()->route('entradas.index')->with('alert','Se ha actualizado la existencia con exito.');
+            // return redirect()->route('entradas.index')->with('alert','Se ha actualizado la existencia con éxito.');
         }
 
 
@@ -172,7 +170,7 @@ class EntradasController extends Controller
             $id->cantidad_entrada = $id->cantidad_entrada + intval(limpiar_cadena($request->cantidad_entrada));
             $id->save();
 
-            return redirect()->route('entradas.index')->with('alert','Existencias agregadas con exito.');
+            return redirect()->route('entradas.index')->with('alert','Existencias agregadas con éxito.');
 
         }else if($request->sec_operacion == 0){
             if($request->cantidad_entrada > $id->cantidad_entrada){
@@ -196,7 +194,7 @@ class EntradasController extends Controller
         $importe->cantidad_importe = $importe->cantidad_importe - $id->cantidad_entrada;
         $importe->save();
         $id->delete();
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('alert','Se ha eliminado el resgistro de la existencia con éxito.');
     }
 
     public function export(){

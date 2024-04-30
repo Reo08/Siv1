@@ -103,7 +103,7 @@ class PerdidasController extends Controller
             $perdida->total_perdida = $request->cantidad_perdida * $request->precio_compra;
             $perdida->save();
     
-            return redirect()->route('perdidas.index')->with('alert','Se ha agregado la pérdida con exito.');
+            return redirect()->route('perdidas.index')->with('alert','Se ha agregado la pérdida con éxito.');
         }else {
             return redirect()->route('perdidas.index')->with("alert","No hay una existencia creada de este producto en Entradas.");
         }
@@ -113,8 +113,11 @@ class PerdidasController extends Controller
         $entradas = Entradas::where('id_producto','=',$id->id_producto)->first();
         $entradas->cantidad_entrada = $entradas->cantidad_entrada + $id->cantidad;
         $entradas->save();
+        if($id->precio_compra != $entradas->precio_compra_entrada){
+            return redirect()->route('perdidas.index')->with('alert','La venta no se puede eliminar, ya que el precio de compra es diferente al actual.');
+        }
         $id->delete();
-        return redirect()->route('perdidas.index');
+        return redirect()->route('perdidas.index')->with('alert','Se ha eliminado la perdida con éxito.');
     }
 
     public function export(){

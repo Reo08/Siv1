@@ -79,7 +79,7 @@ class ProductosController extends Controller
         $productoNuevo->id_proveedor = $proveedores->id_proveedor;
         $productoNuevo->save();
 
-        return redirect()->route('productos.index')->with('alert','Se ha agregado el producto con exito.');
+        return redirect()->route('productos.index')->with('alert','Se ha agregado el producto con éxito.');
     }
 
     public function edit(Productos $id){
@@ -107,12 +107,12 @@ class ProductosController extends Controller
         $id->id_categoria = limpiar_cadena($request->select_categoria);
         $id->id_proveedor = limpiar_cadena($request->select_proveedor);
         $id->save();
-        return redirect()->route('productos.index')->with('alert','Producto actualizado');
+        return redirect()->route('productos.index')->with('alert','Se ha actualizado el producto con éxito.');
     }
 
     public function destroy(Productos $id){
         $id->delete();
-        return redirect()->route('productos.index');
+        return redirect()->route('productos.index')->with('alert','Se ha eliminado el producto con éxito.');
     }
 
     public function export(){
