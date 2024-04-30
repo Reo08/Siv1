@@ -12,6 +12,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
+function limpiar_cadena($cadena){
+    $cadena= trim($cadena);
+    $cadena=stripslashes($cadena);
+    $cadena=str_ireplace("<script>","",$cadena);
+    $cadena=str_ireplace("</script>","",$cadena);
+    $cadena=str_ireplace("<script src","",$cadena);
+    $cadena=str_ireplace("<script type=","",$cadena);
+    $cadena=str_ireplace("SELECT * FROM","",$cadena);
+    $cadena=str_ireplace("DELETE FROM","",$cadena);
+    $cadena=str_ireplace("INSERT INTO","",$cadena);
+    $cadena=str_ireplace("DROP TABLE","",$cadena);
+    $cadena=str_ireplace("DROP DATABASE","",$cadena);
+    $cadena=str_ireplace("TRUNCATE TABLE","",$cadena);
+    $cadena=str_ireplace("SHOW TABLES","",$cadena);
+    $cadena=str_ireplace("SHOW DATABSES","",$cadena);
+    $cadena=str_ireplace("<?php","",$cadena);
+    $cadena=str_ireplace("?>","",$cadena);
+    $cadena=str_ireplace("--","",$cadena);
+    $cadena=str_ireplace("^","",$cadena);
+    $cadena=str_ireplace("<","",$cadena);
+    $cadena=str_ireplace("[","",$cadena);
+    $cadena=str_ireplace("]","",$cadena);
+    $cadena=str_ireplace("==","",$cadena);
+    $cadena=str_ireplace(";","",$cadena);
+    $cadena=str_ireplace("::","",$cadena);
+    $cadena=trim($cadena);
+    $cadena=stripslashes($cadena);
+    return $cadena;
+}
+
 class EntradasController extends Controller
 {
     public function index() {
@@ -48,24 +78,24 @@ class EntradasController extends Controller
             "precio_venta" => "required|numeric",
             "cantidad" => "required|numeric"
         ]);
-        $verificarExistencia = Entradas::where('id_producto', '=', intval($request->sec_producto))->get();
+        $verificarExistencia = Entradas::where('id_producto', '=', intval(limpiar_cadena($request->sec_producto)))->get();
         if(count($verificarExistencia) > 0){
             return redirect()->route('entradas.index')->with('alert', 'El producto ya se encuentra registrado');
         }else {
             $nuevaEntrada = new Entradas();
-            $nuevaEntrada->id_producto = intval($request->sec_producto);
-            $nuevaEntrada->cantidad_entrada = $request->cantidad;
-            $nuevaEntrada->precio_compra_entrada = $request->precio_compra;
-            $nuevaEntrada->precio_venta_entrada = $request->precio_venta;
-            $nuevaEntrada->fecha_entrada = $request->fecha_entrada;
+            $nuevaEntrada->id_producto = intval(limpiar_cadena($request->sec_producto));
+            $nuevaEntrada->cantidad_entrada = limpiar_cadena($request->cantidad);
+            $nuevaEntrada->precio_compra_entrada = limpiar_cadena($request->precio_compra);
+            $nuevaEntrada->precio_venta_entrada = limpiar_cadena($request->precio_venta);
+            $nuevaEntrada->fecha_entrada = limpiar_cadena($request->fecha_entrada);
             $nuevaEntrada->identificacion = Auth::user()->identificacion; //IMPORTANTE: Poner la identificacion de la sesion del usuario
             $nuevaEntrada->save();
 
             $nuevoImporte = new Importes();
             $nuevoImporte->id_entrada = $nuevaEntrada->id_entrada;
-            $nuevoImporte->id_producto = intval($request->sec_producto);
-            $nuevoImporte->cantidad_importe = $request->cantidad;
-            $nuevoImporte->precio_compra = $request->precio_compra;
+            $nuevoImporte->id_producto = intval(limpiar_cadena($request->sec_producto));
+            $nuevoImporte->cantidad_importe = limpiar_cadena($request->cantidad);
+            $nuevoImporte->precio_compra = limpiar_cadena($request->precio_compra);
             $nuevoImporte->save();
             return redirect()->route('entradas.index')->with('alert','Se ha agregado la existencia con exito.');
         }
@@ -103,17 +133,17 @@ class EntradasController extends Controller
             $nuevoImporte->id_entrada = $id->id_entrada;
             $nuevoImporte->id_producto = $id->id_producto;
             $nuevoImporte->cantidad_importe = $id->cantidad_entrada;
-            $nuevoImporte->precio_compra = $request->precio_compra;
+            $nuevoImporte->precio_compra = limpiar_cadena($request->precio_compra);
             $nuevoImporte->save();
 
             return redirect()->route('entradas.index')->with('alert','Se ha actualizado la existencia con exito.');
         }
 
 
-        $id->id_producto = intval($request->id_producto);
-        $id->precio_compra_entrada = $request->precio_compra;
-        $id->precio_venta_entrada = $request->precio_venta;
-        $id->fecha_entrada = $request->fecha_entrada;
+        $id->id_producto = intval(limpiar_cadena($request->id_producto));
+        $id->precio_compra_entrada = limpiar_cadena($request->precio_compra);
+        $id->precio_venta_entrada = limpiar_cadena($request->precio_venta);
+        $id->fecha_entrada = limpiar_cadena($request->fecha_entrada);
         //$nuevaEntrada->identificacion = "12345"; //IMPORTANTE: Poner la identificacion de la sesion del usuario
         $id->save();
 
@@ -137,9 +167,9 @@ class EntradasController extends Controller
         ]);
 
         if($request->sec_operacion == 1){
-            $importe->cantidad_importe = $importe->cantidad_importe + $request->cantidad_entrada;
+            $importe->cantidad_importe = $importe->cantidad_importe + intval(limpiar_cadena($request->cantidad_entrada));
             $importe->save();
-            $id->cantidad_entrada = $id->cantidad_entrada + $request->cantidad_entrada;
+            $id->cantidad_entrada = $id->cantidad_entrada + intval(limpiar_cadena($request->cantidad_entrada));
             $id->save();
 
             return redirect()->route('entradas.index')->with('alert','Existencias agregadas con exito.');
@@ -148,10 +178,10 @@ class EntradasController extends Controller
             if($request->cantidad_entrada > $id->cantidad_entrada){
                 return redirect()->route('entradas.index')->with('alert','La cantidad que quiere eliminar es mayor a la cantidad que tiene en existencias.');
             }else {
-                $id->cantidad_entrada = $id->cantidad_entrada - $request->cantidad_entrada;
+                $id->cantidad_entrada = $id->cantidad_entrada - intval(limpiar_cadena($request->cantidad_entrada));
                 $id->save();
 
-                $importe->cantidad_importe = $importe->cantidad_importe - $request->cantidad_entrada;
+                $importe->cantidad_importe = $importe->cantidad_importe - intval(limpiar_cadena($request->cantidad_entrada));
                 $importe->save();
 
                 return redirect()->route('entradas.index')->with('alert','Existencias eliminadas con exito.');

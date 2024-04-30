@@ -13,6 +13,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
+function limpiar_cadena($cadena){
+    $cadena= trim($cadena);
+    $cadena=stripslashes($cadena);
+    $cadena=str_ireplace("<script>","",$cadena);
+    $cadena=str_ireplace("</script>","",$cadena);
+    $cadena=str_ireplace("<script src","",$cadena);
+    $cadena=str_ireplace("<script type=","",$cadena);
+    $cadena=str_ireplace("SELECT * FROM","",$cadena);
+    $cadena=str_ireplace("DELETE FROM","",$cadena);
+    $cadena=str_ireplace("INSERT INTO","",$cadena);
+    $cadena=str_ireplace("DROP TABLE","",$cadena);
+    $cadena=str_ireplace("DROP DATABASE","",$cadena);
+    $cadena=str_ireplace("TRUNCATE TABLE","",$cadena);
+    $cadena=str_ireplace("SHOW TABLES","",$cadena);
+    $cadena=str_ireplace("SHOW DATABSES","",$cadena);
+    $cadena=str_ireplace("<?php","",$cadena);
+    $cadena=str_ireplace("?>","",$cadena);
+    $cadena=str_ireplace("--","",$cadena);
+    $cadena=str_ireplace("^","",$cadena);
+    $cadena=str_ireplace("<","",$cadena);
+    $cadena=str_ireplace("[","",$cadena);
+    $cadena=str_ireplace("]","",$cadena);
+    $cadena=str_ireplace("==","",$cadena);
+    $cadena=str_ireplace(";","",$cadena);
+    $cadena=str_ireplace("::","",$cadena);
+    $cadena=trim($cadena);
+    $cadena=stripslashes($cadena);
+    return $cadena;
+}
+
 class VentasController extends Controller
 {
     public function index(){
@@ -47,7 +77,7 @@ class VentasController extends Controller
     }
 
     public function store(Request $request){
-        $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->get();
+        $entrada = Entradas::where('id_producto','=',intval(limpiar_cadena($request->sec_producto)))->get();
 
         $request->validate([
             "sec_categoria" => "required",
@@ -58,25 +88,25 @@ class VentasController extends Controller
         ]);
 
         if(count($entrada) != 0){//Esta validacion es por que si va a hacer una venta y no hay una existencia en entrada.
-            $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->first();
+            $entrada = Entradas::where('id_producto','=',intval(limpiar_cadena($request->sec_producto)))->first();
             if($request->cantidad_venta > $entrada->cantidad_entrada){
                 return redirect()->route('ventas.index')->with('alert','La cantidad que quiere vender es mayor a la cantidad que tiene en existencias.');
             }
             $nuevaVenta = new SalidasVentas();
-            $nuevaVenta->id_producto = intval($request->sec_producto);
-            $nuevaVenta->cantidad = $request->cantidad_venta;
-            $nuevaVenta->precio_venta = $request->precio_venta;
+            $nuevaVenta->id_producto = intval(limpiar_cadena($request->sec_producto));
+            $nuevaVenta->cantidad = limpiar_cadena($request->cantidad_venta);
+            $nuevaVenta->precio_venta = limpiar_cadena($request->precio_venta);
             $nuevaVenta->precio_compra = $entrada->precio_compra_entrada;
-            $nuevaVenta->fecha_venta = $request->fecha_venta;
+            $nuevaVenta->fecha_venta = limpiar_cadena($request->fecha_venta);
             $nuevaVenta->identificacion = Auth::user()->identificacion;//IMPORTANTE: Poner la identificacion de la sesion del usuario
             $nuevaVenta->save();
 
-            $entrada->cantidad_entrada = $entrada->cantidad_entrada - $request->cantidad_venta;
+            $entrada->cantidad_entrada = $entrada->cantidad_entrada - intval(limpiar_cadena($request->cantidad_venta));
             $entrada->save();
 
             $nuevaGanancia = new Ganancias();
             $nuevaGanancia->id_salida_venta = $nuevaVenta->id_salida_venta;
-            $nuevaGanancia->total_venta = $request->cantidad_venta * $request->precio_venta;
+            $nuevaGanancia->total_venta = limpiar_cadena($request->cantidad_venta) * limpiar_cadena($request->precio_venta);
             $nuevaGanancia->total_ganancia =  ($request->cantidad_venta * $request->precio_venta) - ($request->cantidad_venta * $entrada->precio_compra_entrada);
             $nuevaGanancia->save();
     

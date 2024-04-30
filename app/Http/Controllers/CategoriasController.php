@@ -8,6 +8,36 @@ use App\Models\Importes;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
+function limpiar_cadena($cadena){
+    $cadena= trim($cadena);
+    $cadena=stripslashes($cadena);
+    $cadena=str_ireplace("<script>","",$cadena);
+    $cadena=str_ireplace("</script>","",$cadena);
+    $cadena=str_ireplace("<script src","",$cadena);
+    $cadena=str_ireplace("<script type=","",$cadena);
+    $cadena=str_ireplace("SELECT * FROM","",$cadena);
+    $cadena=str_ireplace("DELETE FROM","",$cadena);
+    $cadena=str_ireplace("INSERT INTO","",$cadena);
+    $cadena=str_ireplace("DROP TABLE","",$cadena);
+    $cadena=str_ireplace("DROP DATABASE","",$cadena);
+    $cadena=str_ireplace("TRUNCATE TABLE","",$cadena);
+    $cadena=str_ireplace("SHOW TABLES","",$cadena);
+    $cadena=str_ireplace("SHOW DATABSES","",$cadena);
+    $cadena=str_ireplace("<?php","",$cadena);
+    $cadena=str_ireplace("?>","",$cadena);
+    $cadena=str_ireplace("--","",$cadena);
+    $cadena=str_ireplace("^","",$cadena);
+    $cadena=str_ireplace("<","",$cadena);
+    $cadena=str_ireplace("[","",$cadena);
+    $cadena=str_ireplace("]","",$cadena);
+    $cadena=str_ireplace("==","",$cadena);
+    $cadena=str_ireplace(";","",$cadena);
+    $cadena=str_ireplace("::","",$cadena);
+    $cadena=trim($cadena);
+    $cadena=stripslashes($cadena);
+    return $cadena;
+}
+
 class CategoriasController extends Controller
 {
     public function index() {
@@ -25,7 +55,7 @@ class CategoriasController extends Controller
             "nombre_categoria" => "required|max:120"
         ]);
         
-        $nombreCategoria = Categorias::where('nombre_categoria','=',$request->nombre_categoria)->get();
+        $nombreCategoria = Categorias::where('nombre_categoria','=',limpiar_cadena($request->nombre_categoria))->get();
         if(count($nombreCategoria)>0){
             return redirect()->route('categorias.index')->with('alert','La categoria ya existe.');
         }
@@ -42,19 +72,19 @@ class CategoriasController extends Controller
     }
     public function update(Request $request, Categorias $id){
 
-        $importes = Importes::where('id_categoria','=',$id->id_categoria)->get();
+        // $importes = Importes::where('id_categoria','=',$id->id_categoria)->get();
 
         $request->validate([
             'nombre_categoria'=> 'required|max:20'
         ]);
 
-        $id->nombre_categoria = $request->nombre_categoria;
+        $id->nombre_categoria = limpiar_cadena($request->nombre_categoria);
         $id->save();
 
-        foreach ($importes as $importe) {
-            $importe->nombre_categoria = $id->nombre_categoria;
-            $importe->save();
-        }
+        // foreach ($importes as $importe) {
+        //     $importe->nombre_categoria = $id->nombre_categoria;
+        //     $importe->save();
+        // }
 
         return redirect()->route('categorias.index');
     }

@@ -8,6 +8,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
+function limpiar_cadena($cadena){
+    $cadena= trim($cadena);
+    $cadena=stripslashes($cadena);
+    $cadena=str_ireplace("<script>","",$cadena);
+    $cadena=str_ireplace("</script>","",$cadena);
+    $cadena=str_ireplace("<script src","",$cadena);
+    $cadena=str_ireplace("<script type=","",$cadena);
+    $cadena=str_ireplace("SELECT * FROM","",$cadena);
+    $cadena=str_ireplace("DELETE FROM","",$cadena);
+    $cadena=str_ireplace("INSERT INTO","",$cadena);
+    $cadena=str_ireplace("DROP TABLE","",$cadena);
+    $cadena=str_ireplace("DROP DATABASE","",$cadena);
+    $cadena=str_ireplace("TRUNCATE TABLE","",$cadena);
+    $cadena=str_ireplace("SHOW TABLES","",$cadena);
+    $cadena=str_ireplace("SHOW DATABSES","",$cadena);
+    $cadena=str_ireplace("<?php","",$cadena);
+    $cadena=str_ireplace("?>","",$cadena);
+    $cadena=str_ireplace("--","",$cadena);
+    $cadena=str_ireplace("^","",$cadena);
+    $cadena=str_ireplace("<","",$cadena);
+    $cadena=str_ireplace("[","",$cadena);
+    $cadena=str_ireplace("]","",$cadena);
+    $cadena=str_ireplace("==","",$cadena);
+    $cadena=str_ireplace(";","",$cadena);
+    $cadena=str_ireplace("::","",$cadena);
+    $cadena=trim($cadena);
+    $cadena=stripslashes($cadena);
+    return $cadena;
+}
+
 class UsuariosController extends Controller
 {
     public function index() {
@@ -19,7 +49,7 @@ class UsuariosController extends Controller
     }
 
     public function store(Request $request){
-        $buscarUsuario = User::where('identificacion','=',$request->identificacion)->get();
+        $buscarUsuario = User::where('identificacion','=',limpiar_cadena($request->identificacion))->get();
         $request->validate([
             "rol" => "required",
             "nombre" => "required|max:50",
@@ -28,7 +58,7 @@ class UsuariosController extends Controller
             "contrasena" => "required|min:4"
         ]);
         if(count($buscarUsuario)>0){
-            $buscarUsuario2 = User::where('correo','=',$request->correo)->get();
+            $buscarUsuario2 = User::where('correo','=',limpiar_cadena($request->correo))->get();
             if(count($buscarUsuario2)>0){
                 return redirect()->route('usuarios.index')->with('alert','La identificación y el correo ya están registrados en un usuario ya existente.');
             }else {
@@ -36,7 +66,7 @@ class UsuariosController extends Controller
             }
             
         }else{
-            $buscarUsuario2 = User::where('correo','=',$request->correo)->get();
+            $buscarUsuario2 = User::where('correo','=',limpiar_cadena($request->correo))->get();
             if(count($buscarUsuario2)>0){
                 return redirect()->route('usuarios.index')->with('alert','El correo ya está registrado en un usuario ya existente.');
             }
@@ -44,9 +74,9 @@ class UsuariosController extends Controller
 
         $nuevoUsuario = new User();
         $nuevoUsuario->identificacion = $request->identificacion;
-        $nuevoUsuario->nombre = $request->nombre;
+        $nuevoUsuario->nombre = limpiar_cadena($request->nombre);
         $nuevoUsuario->correo = $request->correo;
-        $nuevoUsuario->contrasena = Hash::make($request->contrasena);
+        $nuevoUsuario->contrasena = Hash::make(limpiar_cadena($request->contrasena));
         $nuevoUsuario->rol = intval($request->rol) === 0 ? 'Empleado': 'Administrador';
         $nuevoUsuario->save();
         return redirect()->route('usuarios.index')->with('alert','Se ha agregado el usuario con éxito.');
@@ -58,7 +88,7 @@ class UsuariosController extends Controller
         return view('usuarios.actualizar', compact('usuario'));
     }
     public function update(Request $request, $identificacion){
-        $usuario = User::where('identificacion','=',$identificacion)->first();
+        $usuario = User::where('identificacion','=',limpiar_cadena($identificacion))->first();
         $request->validate([
             "rol" => "required",
             "nombre" => "required|max:50",
@@ -66,11 +96,11 @@ class UsuariosController extends Controller
             "correo" => "required|email"
         ]);
         $usuario->identificacion = $request->identificacion;
-        $usuario->nombre = $request->nombre;
-        $usuario->correo = $request->correo;
+        $usuario->nombre = limpiar_cadena($request->nombre);
+        $usuario->correo = limpiar_cadena($request->correo);
 
-        if($request->contrasena1 && $request->contrasena2){
-            $usuario->contrasena = Hash::make($request->contrasena1);
+        if(limpiar_cadena($request->contrasena1) && limpiar_cadena($request->contrasena2)){
+            $usuario->contrasena = Hash::make(limpiar_cadena($request->contrasena1));
             $usuario->save();
             return redirect()->route('usuarios.index')->with('alert', 'Usuario actualizado con éxito.');
         }else if($request->contrasena1 || $request->contrasena2){

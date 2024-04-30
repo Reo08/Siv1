@@ -12,6 +12,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
+function limpiar_cadena($cadena){
+    $cadena= trim($cadena);
+    $cadena=stripslashes($cadena);
+    $cadena=str_ireplace("<script>","",$cadena);
+    $cadena=str_ireplace("</script>","",$cadena);
+    $cadena=str_ireplace("<script src","",$cadena);
+    $cadena=str_ireplace("<script type=","",$cadena);
+    $cadena=str_ireplace("SELECT * FROM","",$cadena);
+    $cadena=str_ireplace("DELETE FROM","",$cadena);
+    $cadena=str_ireplace("INSERT INTO","",$cadena);
+    $cadena=str_ireplace("DROP TABLE","",$cadena);
+    $cadena=str_ireplace("DROP DATABASE","",$cadena);
+    $cadena=str_ireplace("TRUNCATE TABLE","",$cadena);
+    $cadena=str_ireplace("SHOW TABLES","",$cadena);
+    $cadena=str_ireplace("SHOW DATABSES","",$cadena);
+    $cadena=str_ireplace("<?php","",$cadena);
+    $cadena=str_ireplace("?>","",$cadena);
+    $cadena=str_ireplace("--","",$cadena);
+    $cadena=str_ireplace("^","",$cadena);
+    $cadena=str_ireplace("<","",$cadena);
+    $cadena=str_ireplace("[","",$cadena);
+    $cadena=str_ireplace("]","",$cadena);
+    $cadena=str_ireplace("==","",$cadena);
+    $cadena=str_ireplace(";","",$cadena);
+    $cadena=str_ireplace("::","",$cadena);
+    $cadena=trim($cadena);
+    $cadena=stripslashes($cadena);
+    return $cadena;
+}
+
 class PerdidasController extends Controller
 {
     public function index(){
@@ -42,7 +72,7 @@ class PerdidasController extends Controller
     }
     
     public function store(Request $request){
-        $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->get();
+        $entrada = Entradas::where('id_producto','=',intval(limpiar_cadena($request->sec_producto)))->get();
 
         $request->validate([
             "sec_categoria" => "required",
@@ -59,9 +89,9 @@ class PerdidasController extends Controller
             }
             $nuevaPerdida = new SalidasPerdidas();
             $nuevaPerdida->id_producto = intval($request->sec_producto);
-            $nuevaPerdida->cantidad = $request->cantidad_perdida;
-            $nuevaPerdida->precio_compra = $request->precio_compra;
-            $nuevaPerdida->fecha_perdida = $request->fecha_perdida;
+            $nuevaPerdida->cantidad = limpiar_cadena($request->cantidad_perdida);
+            $nuevaPerdida->precio_compra = limpiar_cadena($request->precio_compra);
+            $nuevaPerdida->fecha_perdida = limpiar_cadena($request->fecha_perdida);
             $nuevaPerdida->identificacion = Auth::user()->identificacion;//IMPORTANTE: Poner la identificacion de la sesion del usuario
             $nuevaPerdida->save();
 

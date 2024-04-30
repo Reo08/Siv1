@@ -9,6 +9,36 @@ use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
+function limpiar_cadena($cadena){
+    $cadena= trim($cadena);
+    $cadena=stripslashes($cadena);
+    $cadena=str_ireplace("<script>","",$cadena);
+    $cadena=str_ireplace("</script>","",$cadena);
+    $cadena=str_ireplace("<script src","",$cadena);
+    $cadena=str_ireplace("<script type=","",$cadena);
+    $cadena=str_ireplace("SELECT * FROM","",$cadena);
+    $cadena=str_ireplace("DELETE FROM","",$cadena);
+    $cadena=str_ireplace("INSERT INTO","",$cadena);
+    $cadena=str_ireplace("DROP TABLE","",$cadena);
+    $cadena=str_ireplace("DROP DATABASE","",$cadena);
+    $cadena=str_ireplace("TRUNCATE TABLE","",$cadena);
+    $cadena=str_ireplace("SHOW TABLES","",$cadena);
+    $cadena=str_ireplace("SHOW DATABSES","",$cadena);
+    $cadena=str_ireplace("<?php","",$cadena);
+    $cadena=str_ireplace("?>","",$cadena);
+    $cadena=str_ireplace("--","",$cadena);
+    $cadena=str_ireplace("^","",$cadena);
+    $cadena=str_ireplace("<","",$cadena);
+    $cadena=str_ireplace("[","",$cadena);
+    $cadena=str_ireplace("]","",$cadena);
+    $cadena=str_ireplace("==","",$cadena);
+    $cadena=str_ireplace(";","",$cadena);
+    $cadena=str_ireplace("::","",$cadena);
+    $cadena=trim($cadena);
+    $cadena=stripslashes($cadena);
+    return $cadena;
+}
+
 class ProductosController extends Controller
 {
     public function index(){
@@ -34,17 +64,17 @@ class ProductosController extends Controller
             'detalles_producto' => 'required|max:250'
         ]);
 
-        $categorias = Categorias::where('nombre_categoria', '=', "$request->select_categoria")->first();
-        $proveedores = Proveedor::where('nombre_proveedor', '=', "$request->select_proveedor")->first();
+        $categorias = Categorias::where('nombre_categoria', '=', limpiar_cadena($request->select_categoria))->first();
+        $proveedores = Proveedor::where('nombre_proveedor', '=', limpiar_cadena($request->select_proveedor))->first();
 
-        $nombreProducto = Productos::where('nombre_producto','=',$request->nombre_producto)->get();
+        $nombreProducto = Productos::where('nombre_producto','=',limpiar_cadena($request->nombre_producto))->get();
         if(count($nombreProducto)>0){
             return redirect()->route('productos.index')->with('alert','El nombre ya esta registrado en un producto exitente.');
         }
 
         $productoNuevo = new Productos();
-        $productoNuevo->nombre_producto = $request->nombre_producto;
-        $productoNuevo->detalles_producto = $request->detalles_producto;
+        $productoNuevo->nombre_producto = limpiar_cadena($request->nombre_producto);
+        $productoNuevo->detalles_producto = limpiar_cadena($request->detalles_producto);
         $productoNuevo->id_categoria = $categorias->id_categoria;
         $productoNuevo->id_proveedor = $proveedores->id_proveedor;
         $productoNuevo->save();
@@ -72,10 +102,10 @@ class ProductosController extends Controller
             'detalles_producto' => 'required|max:250'
         ]);
 
-        $id->nombre_producto = $request->nombre_producto;
-        $id->detalles_producto = $request->detalles_producto;
-        $id->id_categoria = $request->select_categoria;
-        $id->id_proveedor = $request->select_proveedor;
+        $id->nombre_producto = limpiar_cadena($request->nombre_producto);
+        $id->detalles_producto = limpiar_cadena($request->detalles_producto);
+        $id->id_categoria = limpiar_cadena($request->select_categoria);
+        $id->id_proveedor = limpiar_cadena($request->select_proveedor);
         $id->save();
         return redirect()->route('productos.index')->with('alert','Producto actualizado');
     }
