@@ -41,6 +41,9 @@
             <div class="nav-item {{ request()->routeIs('configuraciones.*') ? 'active' : '' }}" ><img src="/img/icono_configurar.png" alt=""> Configuraciones <span class="{{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('configuraciones.*') ? '' : 'desactive' }}" >
                 <a href="{{route('configuraciones.edit')}}" class="{{request()->routeIs('configuraciones.*')?'active': ''}}">Cambiar contraseña</a>
+                @if (Auth::user()->rol === "administrador")
+                <form class="form_reset" action="{{route('reset.delete')}}" method="POST">@csrf @method('delete')<button>Reset</button></form>
+                @endif
             </div>
         </div>
         <button class="btn-cerrar-menu">x</button>
@@ -49,14 +52,15 @@
         <div class="cont-menu">
             <img src="/img/menu.png" alt="menu">
         </div>
-        <div class="cont-logo">
+        {{-- <div class="cont-logo">
             <img src="" alt="Logo">
-        </div>
+        </div> --}}
         <form class="form_cerrar_sesion" action="{{route('cerrarSesion')}}" method="POST">@csrf <button><img src="/img/salida.png" alt="salida"></button></form>
     </header>
     <main>
         @yield('contenido')
     </main>
+    <button class="btn_scroll active">⬆</button>
     @yield('scripts')
     <script src="/js/menu_navegacion.js"></script>
     <script src="/js/menu_hamburguesa.js"></script>

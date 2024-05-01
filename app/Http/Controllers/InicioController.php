@@ -12,6 +12,7 @@ use App\Models\Productos;
 use App\Models\Proveedor;
 use App\Models\SalidasVentas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class InicioController extends Controller
@@ -62,9 +63,15 @@ class InicioController extends Controller
     }
 
     public function exportImportes(){
-        return Excel::download(new ImportesExport, 'importes.xlsx');
+        if(Auth::user()->rol === "administrador"){
+            return Excel::download(new ImportesExport, 'importes.xlsx');
+        }
+        return redirect()->route('inicio.index');
     }
     public function exportGanancias(){
-        return Excel::download(new GananciasExport, 'ganancias.xlsx');
+        if(Auth::user()->rol === "administrador"){
+            return Excel::download(new GananciasExport, 'ganancias.xlsx');
+        }
+        return redirect()->route('inicio.index');
     }
 }

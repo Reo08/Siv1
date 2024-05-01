@@ -8,6 +8,7 @@ use App\Http\Controllers\InicioController;
 use App\Http\Controllers\PerdidasController;
 use App\Http\Controllers\ProductosController;
 use App\Http\Controllers\ProveedoresController;
+use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\VentasController;
@@ -125,5 +126,8 @@ Route::middleware('auth')->group(function(){
         Route::get('madeby', 'hello')->name('helloword');
     });
 
+    Route::controller(ResetController::class)->group(function(){
+        Route::delete('reset-bd', 'destroy')->name('reset.delete');
+    });
     
 });

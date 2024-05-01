@@ -13,7 +13,7 @@ class Categorias extends Model
     protected $primaryKey = "id_categoria";
     protected $guarded = [];
 
-    protected function nombre(): Attribute 
+    protected function nombreCategoria(): Attribute 
     {
         return new Attribute(
             get: function($value){

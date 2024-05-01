@@ -24,4 +24,16 @@ class Productos extends Model
             }
         );
     }
+
+    protected function detallesProducto(): Attribute
+    {
+        return new Attribute(
+            get: function($value){
+                return ucfirst($value);
+            },
+            set: function($value){
+                return strtolower($value);
+            }
+        );
+    }
 }

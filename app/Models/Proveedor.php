@@ -14,13 +14,21 @@ class Proveedor extends Model
     protected $guarded = [];
 
 
-    protected function nombre(): Attribute
+    protected function nombreProveedor(): Attribute
     {
         return new Attribute(
             get: function($value){
                 return ucfirst($value);
             },
             set: function($value){
+                return strtolower($value);
+            }
+        );
+    }
+    protected function correoProveedor(): Attribute
+    {
+        return new Attribute(
+            set:function($value){
                 return strtolower($value);
             }
         );

@@ -171,6 +171,10 @@ nav .leading-5 {
 .nav-item-cont a:hover {
     color: var(--letra-dorada);
 }
+.form_reset {
+    color: #bb0303;
+    font-weight: bold;
+}
 nav img {
     filter: invert(100%);
 }
@@ -193,6 +197,25 @@ main {
     background-color: #f1f1f1;
     padding: 20px;
 }
+
+.btn_scroll {
+    position: fixed;
+    bottom: 20px;
+    right: 15px;
+    z-index: 12;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    font-size: 3rem;
+    opacity: 1;
+    visibility: visible;
+    transition: visibility.5s ease, opacity.5s ease;
+}
+.btn_scroll.active {
+    opacity: 0;
+    visibility: hidden;
+}
+
 @media screen and (max-width: 1020px) {
     body {
         grid-template-columns: 40% 60%;
