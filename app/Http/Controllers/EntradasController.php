@@ -55,7 +55,7 @@ class EntradasController extends Controller
     public function create(){
         $categorias = Categorias::all();
 
-        return view('entradas.crear', ["categorias" => $categorias]);
+        return view('Entradas.crear', ["categorias" => $categorias]);
     }
     public function productosCategoria($id){
         $productos = Productos::where('id_categoria','=', $id)->get();
@@ -112,7 +112,7 @@ class EntradasController extends Controller
         // $proveedores = Proveedor::all();
 
         // return view('entradas.actualizar', compact('entradas','categorias','productos','proveedores'));
-        return view('entradas.actualizar', compact('entradas'));
+        return view('Entradas.actualizar', compact('entradas'));
         // return $entradas;
     }
     public function update(Request $request,Entradas $id){
@@ -153,7 +153,7 @@ class EntradasController extends Controller
         ->leftjoin('proveedor','productos.id_proveedor','=','proveedor.id_proveedor')
         ->select('entradas.*', 'productos.*', 'categorias.*','proveedor.*')->where('id_entrada','=',"$id")->distinct()->first();
 
-        return view('entradas.actualizarCantidad', compact('entradas'));
+        return view('Entradas.actualizarCantidad', compact('entradas'));
         // return $entradas;
     }
     public function updateCantidad(Request $request,Entradas $id){
