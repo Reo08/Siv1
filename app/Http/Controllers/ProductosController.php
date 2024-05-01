@@ -64,8 +64,8 @@ class ProductosController extends Controller
             'detalles_producto' => 'required|max:250'
         ]);
 
-        $categorias = Categorias::where('nombre_categoria', '=', strval(limpiar_cadena($request->select_categoria)))->first();
-        $proveedores = Proveedor::where('nombre_proveedor', '=', strval(limpiar_cadena($request->select_proveedor)))->first();
+        $categorias = Categorias::where('nombre_categoria', '=', strtolower(strval(limpiar_cadena($request->select_categoria))))->first();
+        $proveedores = Proveedor::where('nombre_proveedor', '=', strtolower(strval(limpiar_cadena($request->select_proveedor))))->first();
 
         $nombreProducto = Productos::where('nombre_producto','=',limpiar_cadena($request->nombre_producto))->get();
         if(count($nombreProducto)>0){
