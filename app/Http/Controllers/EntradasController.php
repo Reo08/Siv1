@@ -50,7 +50,7 @@ class EntradasController extends Controller
         ->leftjoin('usuarios','entradas.identificacion','=','usuarios.identificacion')
         ->select('entradas.*','entradas.created_at as created','entradas.updated_at as updated', 'productos.*', 'categorias.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_entrada', 'desc')->paginate(20);
         $categorias = Categorias::all();
-        return view('entradas.inde',compact('entradas', 'categorias'));
+        return view('Entradas.inde',compact('entradas', 'categorias'));
     }
     public function create(){
         $categorias = Categorias::all();
