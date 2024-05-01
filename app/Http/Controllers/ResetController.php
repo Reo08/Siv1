@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorias;
+use App\Models\Entradas;
 use App\Models\Ganancias;
 use App\Models\Importes;
 use App\Models\Perdidas;
@@ -24,6 +25,9 @@ class ResetController extends Controller
         });
         Productos::all()->each(function ($producto){
             $producto->delete();
+        });
+        Entradas::all()->each(function ($entrada){
+            $entrada->delete();
         });
         SalidasVentas::all()->each(function ($ventas){
             $ventas->delete();
@@ -55,6 +59,7 @@ class ResetController extends Controller
         DB::statement('ALTER TABLE categorias AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE proveedor AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE productos AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE entradas AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE salidas_ventas AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE salidas_perdidas AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE importes_pagados AUTO_INCREMENT = 1');
