@@ -71,6 +71,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 .form_aggExistencia label {
     font-size: 1.8rem;
