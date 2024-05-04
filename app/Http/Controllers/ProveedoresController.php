@@ -58,11 +58,11 @@ class ProveedoresController extends Controller
             'direccion_proveedor' => "required"
         ]);
 
-        $buscarCorreo = User::where('correo','=',limpiar_cadena($request->correo_proveedor))->get();
+        $buscarCorreo = Proveedor::where('correo_proveedor','=',limpiar_cadena($request->correo_proveedor))->get();
         if(count($buscarCorreo) > 0){
             return redirect()->route('proveedores.index')->with('alert','El correo ya se encuentra registrado.');
         }
-        $buscarNombre = User::where('nombre','=',limpiar_cadena($request->nombre_proveedor))->get();
+        $buscarNombre = Proveedor::where('nombre_proveedor','=',limpiar_cadena($request->nombre_proveedor))->get();
         if(count($buscarNombre) > 0){
             return redirect()->route('proveedores.index')->with('alert','El nombre del proveedor ya esta registrado.');
         }
