@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = "usuarios";
-    protected $primaryKey = "identificacion";
+    protected $primaryKey = "id_usuario";
     protected $guarded = [];
 
     public function getNombreAttribute($value){
@@ -32,7 +32,6 @@ class User extends Authenticatable
         'correo',
         'contrasena',
         'rol',
-        'identificacion'
     ];
 
     /**

@@ -10,7 +10,7 @@ class Productos extends Model
 {
     use HasFactory;
     protected $table = 'productos';
-    protected $primaryKey = 'id_producto';
+    protected $primaryKey = 'referencia';
     protected $guarded = [];
 
     protected function nombreProducto(): Attribute
@@ -25,7 +25,7 @@ class Productos extends Model
         );
     }
 
-    protected function detallesProducto(): Attribute
+    protected function descripcionProducto(): Attribute
     {
         return new Attribute(
             get: function($value){

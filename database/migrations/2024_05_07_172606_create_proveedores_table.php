@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('nit_proveedor')->primary();
             $table->string('nombre_proveedor');
             $table->string('telefono');
-            $table->string('correo')->unique();
+            $table->string('correo_proveedor')->nullable();
             $table->timestamps();
         });
     }

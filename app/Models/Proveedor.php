@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Proveedor extends Model
 {
     use HasFactory;
-    protected $table = 'proveedor';
-    protected $primaryKey = 'id_proveedor';
+    protected $table = 'proveedores';
+    protected $primaryKey = 'nit_proveedor';
     protected $guarded = [];
 
 
