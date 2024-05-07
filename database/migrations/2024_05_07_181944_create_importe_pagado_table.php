@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('importes_pagados', function (Blueprint $table) {
+        Schema::create('importe_pagado', function (Blueprint $table) {
             $table->id('id_importe');
-            $table->unsignedInteger('id_entrada');
-            $table->unsignedInteger('id_producto');
+            $table->integer('id_entrada');
+            $table->string('referencia');
             $table->integer('cantidad_importe');
-            $table->integer('precio_compra');
-            $table->foreign('id_producto')->references('id_producto')->on('productos')->onDelete('cascade');
+            $table->integer('precio_compra_u');
+            $table->foreign('referencia')->references('referencia')->on('productos')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('importes_pagados');
+        Schema::dropIfExists('importe_pagado');
     }
 };

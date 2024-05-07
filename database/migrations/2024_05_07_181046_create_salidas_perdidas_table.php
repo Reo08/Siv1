@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('salidas_perdidas', function (Blueprint $table) {
             $table->increments('id_salida_perdida');
-            $table->unsignedInteger('id_producto');
+            $table->string('referencia');
             $table->integer('cantidad');
-            $table->integer('precio_compra');
-            $table->string('identificacion')->nullable();
+            $table->integer('precio_compra_u');
+            $table->unsignedInteger('id_usuario');
             $table->string('fecha_perdida');
-            $table->foreign('id_producto')->references('id_producto')->on('productos')->onDelete('cascade');
-            $table->foreign('identificacion')->references('identificacion')->on('usuarios');
+            $table->foreign('referencia')->references('referencia')->on('productos')->onDelete('cascade');
+            $table->foreign('id_usuario')->references('id_usuario')->on('usuarios')->onDelete('cascade');
             $table->timestamps();
         });
     }
