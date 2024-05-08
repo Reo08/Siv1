@@ -20,6 +20,7 @@
         </div>
         <div class="nav">
             <a href="{{route('inicio.index')}}" class="{{request()->routeIs('inicio.*')?'active': ''}}"><img src="/img/icono_inicio.png" alt="icono_inicio"> Inicio</a>
+            <a href="{{route('clientes.index')}}" class="{{request()->routeIs('clientes.*')?'active': ''}}"><img src="/img/personas.png" alt="icono_clientes"> Clientes</a>
             <div class="nav-item {{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? 'active' : '' }} "><img src="/img/icono_gestion-de-productos.png" alt=""> Gestion de productos <span class="{{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? '' : 'desactive' }}" >
                 <a href="{{route('proveedores.index')}}" class="{{request()->routeIs('proveedores.*')?'active': ''}}">Proveedores</a>

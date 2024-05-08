@@ -15,7 +15,6 @@ class UsuariosSeeder extends Seeder
     public function run(): void
     {
         $usuarioPredeterminado =  new User();
-        $usuarioPredeterminado->identificacion = "123456789";
         $usuarioPredeterminado->nombre = "Administrador";
         $usuarioPredeterminado->correo = "sistemainventario2024@gmail.com";
         $usuarioPredeterminado->contrasena = Hash::make('12345');//asi se pone para utilizar bycript

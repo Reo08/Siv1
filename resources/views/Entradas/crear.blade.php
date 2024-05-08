@@ -2,7 +2,7 @@
 
 @section('titulo', 'Entradas')
 @section('links')
-    <link rel="stylesheet" href="/css/entradasCrear.css">
+    <link rel="stylesheet" href="/css/clientesCrear.css">
 @endsection
 
 @section('contenido')

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ConfiguracionesController;
 use App\Http\Controllers\EntradasController;
 use App\Http\Controllers\HomeController;
@@ -26,6 +27,15 @@ Route::middleware('auth')->group(function(){
         
         Route::get('exportar-importes', 'exportImportes')->name('inicio.exportImportes');
         Route::get('exportar-ganancias','exportGanancias')->name('inicio.exportGanancias');
+    });
+
+    Route::controller(ClientesController::class)->group(function(){
+        Route::get('clientes','index')->name('clientes.index');
+        Route::get('clientes/agregar-cliente', 'create')->name('clientes.create');
+        Route::post('clientes', 'store')->name('clientes.store');
+        Route::get('clientes/{nit}/editar-cliente','edit')->name('clientes.edit');
+        Route::put('clientes/{nit}', 'update')->name('clientes.update');
+        Route::delete('clientes/{nit}', 'destroy')->name('clientes.destroy');
     });
     
     Route::controller(ProveedoresController::class)->group(function(){

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('cantidad_orden');
             $table->string('estado_pedido');
             $table->string('cantidad_elaborada');
-            $table->strgin('cantidad_entregada');
+            $table->string('cantidad_entregada');
             $table->string('nit_cedula');
             $table->unsignedInteger('id_usuario');
             $table->string('aplica_iva');
