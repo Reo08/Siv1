@@ -42,7 +42,7 @@ class ProveedoresController extends Controller
 {
 
     public function index(){
-        $proveedores = Proveedor::orderBy('id_proveedor', 'desc')->paginate(25);
+        $proveedores = Proveedor::paginate(25);
         return view('proveedores.inde', compact('proveedores'));
     }
     public function create(){
@@ -52,26 +52,27 @@ class ProveedoresController extends Controller
     public function store(Request $request){
 
         $request->validate([
+            'nit_proveedor' => 'required|max:20',
             'nombre_proveedor' => "required|max:100",
             'correo_proveedor' => "required|email",
             'telefono_proveedor' => "required|numeric",
-            'direccion_proveedor' => "required"
         ]);
 
+        $buscarNit = Proveedor::where('nit_proveedor','=',limpiar_cadena($request->nit_proveedor))->get();
+        if(count($buscarNit) > 0){
+            return redirect()->route('proveedores.index')->with('alert','El nit del proveedor ya esta registrado.');
+        }
         $buscarCorreo = Proveedor::where('correo_proveedor','=',limpiar_cadena($request->correo_proveedor))->get();
         if(count($buscarCorreo) > 0){
             return redirect()->route('proveedores.index')->with('alert','El correo ya se encuentra registrado.');
         }
-        $buscarNombre = Proveedor::where('nombre_proveedor','=',strtolower(limpiar_cadena($request->nombre_proveedor)))->get();
-        if(count($buscarNombre) > 0){
-            return redirect()->route('proveedores.index')->with('alert','El nombre del proveedor ya esta registrado.');
-        }
+
 
 
         $nuevoProveedor = new Proveedor();
+        $nuevoProveedor->nit_proveedor = limpiar_cadena($request->nit_proveedor);
         $nuevoProveedor->nombre_proveedor = limpiar_cadena($request->nombre_proveedor);
-        $nuevoProveedor->direccion_proveedor = limpiar_cadena($request->direccion_proveedor);
-        $nuevoProveedor->telefono_proveedor = limpiar_cadena($request->telefono_proveedor);
+        $nuevoProveedor->telefono = strval(limpiar_cadena($request->telefono_proveedor));
         $nuevoProveedor->correo_proveedor = limpiar_cadena($request->correo_proveedor);
         $nuevoProveedor->save();
 
@@ -83,15 +84,23 @@ class ProveedoresController extends Controller
 
     public function update(Request $request,Proveedor $id){
         $request->validate([
+            'nit_proveedor' => 'required|max:20',
             'nombre_proveedor' => "required|max:100",
             'correo_proveedor' => "required|email",
             'telefono_proveedor' => "required|numeric",
-            'direccion_proveedor' => "required"
         ]);
+        $buscarNit = Proveedor::where('nit_proveedor','=',limpiar_cadena($request->nit_proveedor))->where('nit_proveedor','!=', $id->nit_proveedor)->get();
+        if(count($buscarNit) > 0){
+            return redirect()->route('proveedores.index')->with('alert','El nit del proveedor ya esta registrado.');
+        }
+        $buscarCorreo = Proveedor::where('correo_proveedor','=',limpiar_cadena($request->correo_proveedor))->where('correo_proveedor','!=',$id->correo_proveedor)->get();
+        if(count($buscarCorreo) > 0){
+            return redirect()->route('proveedores.index')->with('alert','El correo ya se encuentra registrado.');
+        }
 
+        $id->nit_proveedor = limpiar_cadena($request->nit_proveedor);
         $id->nombre_proveedor = limpiar_cadena($request->nombre_proveedor);
-        $id->direccion_proveedor = limpiar_cadena($request->direccion_proveedor);
-        $id->telefono_proveedor = limpiar_cadena($request->telefono_proveedor);
+        $id->telefono = strval(limpiar_cadena($request->telefono_proveedor));
         $id->correo_proveedor = limpiar_cadena($request->correo_proveedor);
         $id->save();
 

@@ -9,10 +9,15 @@
     <section class="sec-crear-proveedor">
         <a href="{{route('proveedores.index')}}" class="btn-atras">Atras</a>
         <div class="cont-form">
-            <form class="form_proveedor" action="{{route('proveedores.update', $id->id_proveedor)}}" method="POST">
+            <form class="form_proveedor" action="{{route('proveedores.update', $id->nit_proveedor)}}" method="POST">
                 @csrf
                 @method('put')
                 <legend>Actualizar Proveedor</legend>
+                <label for="">Nit</label>
+                <input type="text" name="nit_proveedor" id="nit_proveedor" value="{{old('nit_proveedor', $id->nit_proveedor)}}">
+                @error('nit_proveedor')
+                    <small>*{{$message}}</small>
+                @enderror
                 <label for="nombre_proveedor">Nombre proveedor</label>
                 <input type="text" name="nombre_proveedor" id="nombre_proveedor" required value="{{old('nombre_proveedor',$id->nombre_proveedor)}}">
                 @error('nombre_proveedor')
@@ -24,13 +29,8 @@
                     <small>*{{$message}}</small>
                 @enderror
                 <label for="telefono_proveedor">Telefono</label>
-                <input type="number" name="telefono_proveedor" id="telefono_proveedor" required value="{{old('telefono_proveedor', $id->telefono_proveedor)}}">
+                <input type="number" name="telefono_proveedor" id="telefono_proveedor" required value="{{old('telefono_proveedor', $id->telefono)}}">
                 @error('telefono_proveedor')
-                    <small>*{{$message}}</small>
-                @enderror
-                <label for="direccion_proveedor">Direccion</label>
-                <input type="text" name="direccion_proveedor" id="direccion_proveedor" required value="{{old('direccion', $id->direccion_proveedor)}}">
-                @error('direccion_proveedor')
                     <small>*{{$message}}</small>
                 @enderror
                 <div class="cont-btns">

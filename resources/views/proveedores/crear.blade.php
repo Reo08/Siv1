@@ -12,6 +12,11 @@
             <form class="form_proveedor" action="{{route('proveedores.store')}}" method="POST">
                 @csrf
                 <legend>Agregar Proveedor</legend>
+                <label for="nit_proveedor">Nit</label>
+                <input type="text" name="nit_proveedor" id="nit_proveedor" value="{{old('nit_proveedor')}}">
+                @error('nit_proveedor')
+                    <small>*{{$message}}</small>
+                @enderror
                 <label for="nombre_proveedor">Nombre proveedor</label>
                 <input type="text" name="nombre_proveedor" id="nombre_proveedor"  value="{{old('nombre_proveedor')}}">
                 @error('nombre_proveedor')
@@ -25,11 +30,6 @@
                 <label for="telefono_proveedor">Telefono</label>
                 <input type="number" name="telefono_proveedor" id="telefono_proveedor"  value="{{old('telefono_proveedor')}}">
                 @error('telefono_proveedor')
-                    <small>*{{$message}}</small>
-                @enderror
-                <label for="direccion_proveedor">Direccion</label>
-                <input type="text" name="direccion_proveedor" id="direccion_proveedor"  value="{{old('direccion_proveedor')}}">
-                @error('direccion_proveedor')
                     <small>*{{$message}}</small>
                 @enderror
                 <div class="cont-btns">
