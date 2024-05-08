@@ -78,6 +78,11 @@ class CategoriasController extends Controller
             'nombre_categoria'=> 'required|max:120'
         ]);
 
+        $nombreCategoria = Categorias::where('nombre_categoria','=',strtolower(limpiar_cadena($request->nombre_categoria)))->where('nombre_categoria','!=', $id->nombre_categoria)->get();
+        if(count($nombreCategoria)>0){
+            return redirect()->route('categorias.index')->with('alert','La categoria ya existe.');
+        }
+
         $id->nombre_categoria = limpiar_cadena($request->nombre_categoria);
         $id->save();
 

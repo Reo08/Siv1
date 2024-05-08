@@ -14,6 +14,9 @@
                 <legend>Agregar Categoria</legend>
                 <label for="nombre_categoria">Nombre de categoria</label>
                 <input type="text" name="nombre_categoria" id="nombre_categoria" required value="{{old('nombre_categoria')}}">
+                @error('nombre_categoria')
+                    <small>*{{$message}}</small>
+                @enderror
                 <div class="cont-btns">
                     <button>Guardar</button>
                     <a href="{{route('categorias.index')}}">Cancelar</a>
