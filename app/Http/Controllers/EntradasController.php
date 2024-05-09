@@ -146,12 +146,22 @@ class EntradasController extends Controller
             return redirect()->route('entradas.index')->with('alert', 'El producto ya se encuentra registrado.');
         }
 
+        $verificarProducto = Entradas::where('referencia','=',strval(limpiar_cadena($request->referencia)))
+        ->where('referencia','!=', $id->referencia)->get();
+        if(count($verificarProducto)>0){return redirect()->route('entradas.index')->with('alert', 'El producto ya se encuentra registrado.');}
+
         $id->referencia = $request->referencia;
         $id->costo_inversion = limpiar_cadena($request->costo_inversion);
         $id->precio_venta_distribuidor = limpiar_cadena($request->precio_venta_distribuidor);
         $id->id_usuario = Auth::user()->id_usuario;
         $id->fecha_ingreso = limpiar_cadena($request->fecha_entrada);
         $id->save();
+
+        $buscarProducto = Productos::where('referencia','=', $id->referencia);
+        $buscarProducto->nombre_producto = $request->nombre_producto;
+        $buscarProducto->descripcion_producto = limpiar_cadena($request->descripcion_producto);
+        $buscarProducto->id_categoria = intval(limpiar_cadena($request->sec_categoria));
+        $buscarProducto->save();
 
         return redirect()->route('entradas.index')->with('alert','Se ha actualizado la existencia con exito.');
 
