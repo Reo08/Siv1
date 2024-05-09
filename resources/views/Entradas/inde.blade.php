@@ -37,20 +37,19 @@
                     <col class="decimaColumna">
                     <col class="onceavaColumna">
                     <col class="doceavaColumna">
-                    <col class="treceavaColumna">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>categoria</th>
+                        <th>ID existencia</th>
+                        <th>Referencia</th>
+                        <th>Nombre producto</th>
+                        <th>Categoria</th>
+                        <th>Descripcion</th>
                         <th>Cantidad</th>
-                        <th>Precio de compra / u</th>
-                        <th>Precio de venta / u</th>
+                        <th>Costo de inversion</th>
+                        <th>Precio de venta distribuidor</th>
                         <th>Registrado por</th>
                         <th>Fecha de ingreso</th>
-                        <th>Fecha de registro</th>
-                        <th>Fecha actualizada</th>
                         <th>Agregar</th>
                         @if (Auth::user()->rol === "administrador")
                         <th>Editar</th>
@@ -62,15 +61,15 @@
                 @forelse ($entradas as $entrada)
                 <tr class="tr">
                     <td class="td-menos">{{$entrada->id_entrada}}</td>
+                    <td class="td-menos">{{$entrada->referencia}}</td>
                     <td class="td-texto-center nombre">{{$entrada->nombre_producto}}</td>
                     <td class="td-texto-center categoria">{{$entrada->nombre_categoria}}</td>
+                    <td class="td-texto-center categoria">{{$entrada->descripcion_producto}}</td>
                     <td class="td-texto-center">{{$entrada->cantidad_entrada}}</td>
-                    <td class="td-texto-center">{{$entrada->precio_compra_entrada}}</td>
-                    <td class="td-texto-center">{{$entrada->precio_venta_entrada}}</td>
+                    <td class="td-texto-center">${{$entrada->costo_inversion}}</td>
+                    <td class="td-texto-center">${{$entrada->precio_venta_distribuidor}}</td>
                     <td class="td-texto-center">{{$entrada->nombre_usuario}}</td>
-                    <td>{{$entrada->fecha_entrada}}</td>
-                    <td>{{$entrada->created}}</td>
-                    <td>{{$entrada->updated}}</td>
+                    <td>{{$entrada->fecha_ingreso}}</td>
                     <td><a href="{{route('entradas.edit.cantidad', $entrada->id_entrada)}}" class="btn-agregar-tabla">Agregar</a></td>
                     @if (Auth::user()->rol === "administrador")
                     <td><a href="{{route('entradas.edit', $entrada->id_entrada)}}" class="btn-editar-tabla">Editar</a></td>

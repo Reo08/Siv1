@@ -25,7 +25,6 @@
             <div class="nav-item-cont {{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? '' : 'desactive' }}" >
                 <a href="{{route('proveedores.index')}}" class="{{request()->routeIs('proveedores.*')?'active': ''}}">Proveedores</a>
                 <a href="{{route('categorias.index')}}"class="{{request()->routeIs('categorias.*')?'active':''}}">Categorias</a>
-                <a href="{{route('productos.index')}}"class="{{request()->routeIs('productos.*')?'active':''}}">Productos</a>
             </div>
             <div class="nav-item {{ request()->routeIs('entradas.*', 'ventas.*', 'perdidas.*') ? 'active' : '' }}" ><img src="/img/icono_gestion-de-existencias.png" alt=""> Gestion de existencias <span class="{{ request()->routeIs('entradas.*', 'ventas.*', 'perdidas.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('entradas.*', 'ventas.*', 'perdidas.*') ? '' : 'desactive' }}" >

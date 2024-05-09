@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('entradas', function (Blueprint $table) {
             $table->increments('id_entrada');
             $table->string('referencia');
-            $table->string('cantidad_entrada');
-            $table->integer('consto_inversion');
+            $table->integer('cantidad_entrada');
+            $table->integer('costo_inversion');
             $table->integer('precio_venta_distribuidor');
             $table->unsignedInteger('id_usuario');
             $table->string('fecha_ingreso');

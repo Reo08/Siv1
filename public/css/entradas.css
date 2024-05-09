@@ -148,17 +148,17 @@
     text-align: start;
     padding: 0px 5px;
 }
-.cont-tabla-entradas .segundaColumna {
+.cont-tabla-entradas .terceraColumna {
     width: 300px;
 }
-.cont-tabla-entradas .terceraColumna {
-    width: 180px;
-}
-.cont-tabla-entradas .septimaColumna {
-    width: 200px;
+.cont-tabla-entradas .quintaColumna {
+    width: 250px;
 }
 .cont-tabla-entradas .octavaColumna {
-    width: 200px;
+    width: 130px;
+}
+.cont-tabla-entradas .novenaColumna {
+    width: 180px;
 }
 
 /*--------- botontes de la tabla------------- */
