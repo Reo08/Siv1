@@ -52,7 +52,7 @@ class ProveedoresController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'nit_proveedor' => 'required|max:20',
+            'nit_proveedor' => 'required',
             'nombre_proveedor' => "required|max:100",
             'correo_proveedor' => "required|email",
             'telefono_proveedor' => "required|numeric",

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proveedores', function (Blueprint $table) {
-            $table->integer('nit_proveedor')->primary();
-            $table->string('nombre_proveedor');
-            $table->string('telefono');
-            $table->string('correo_proveedor')->nullable();
+        Schema::create('perdidas_credito', function (Blueprint $table) {
+            $table->id('id_perdida_credito');
+            $table->integer('id_factura_cliente');
+            $table->integer('total_debe');
+            $table->foreign('id_factura_cliente')->references('id_factura_cliente')->on('facturas_clientes')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proveedores');
+        Schema::dropIfExists('perdidas_credito');
     }
 };

@@ -16,12 +16,13 @@ class ClientesController extends Controller
     }
     public function store(Request $request){
         $request->validate([
-            'nit_cedula' => 'required|max:20',
+            'nit_cedula' => 'required',
             'nombre_cliente' => 'required|max:120',
             'correo_cliente' => 'required|email|max:200',
             'telefono' => 'required|max:20',
 
         ]);
+
         $buscarNit = Clientes::where('nit_cedula','=',$request->nit_cedula)->get();
         if(count($buscarNit)>0){
             return redirect()->route('clientes.index')->with('alert','El Nit o Cedula ya está registrado en un cliente ya existente.');
@@ -37,6 +38,7 @@ class ClientesController extends Controller
         $nuevoCliente->correo = $request->correo_cliente;
         $nuevoCliente->telefono = strval($request->telefono);
         $nuevoCliente->save();
+        
         return redirect()->route('clientes.index');
     }
 

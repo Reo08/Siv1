@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('ganancias', function (Blueprint $table) {
             $table->id('id_ganancia');
-            $table->unsignedInteger('id_salida_venta');
-            $table->integer('total_venta');
+            $table->integer('id_factura_cliente');
             $table->integer('total_ganancia');
-            $table->foreign('id_salida_venta')->references('id_salida_venta')->on('salidas_ventas')->onDelete('cascade');
+            $table->foreign('id_factura_cliente')->references('id_factura_cliente')->on('facturas_clientes')->onDelete('cascade');
             $table->timestamps();
         });
     }

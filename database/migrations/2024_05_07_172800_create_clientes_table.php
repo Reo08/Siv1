@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clientes', function (Blueprint $table) {
-            $table->string('nit_cedula')->primary();
+            $table->integer('nit_cedula')->primary();
             $table->string('nombre_cliente');
             $table->string('correo')->unique();
             $table->string('telefono');

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('id_entrada');
             $table->string('referencia');
             $table->integer('cantidad_importe');
-            $table->integer('precio_compra_u');
+            $table->integer('costo_inversion');
             $table->foreign('referencia')->references('referencia')->on('productos')->onDelete('cascade');
             $table->timestamps();
         });

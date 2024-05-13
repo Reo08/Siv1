@@ -13,7 +13,7 @@
                 @csrf
                 <legend>Agregar Proveedor</legend>
                 <label for="nit_proveedor">Nit</label>
-                <input type="text" name="nit_proveedor" id="nit_proveedor" value="{{old('nit_proveedor')}}">
+                <input type="number" name="nit_proveedor" id="nit_proveedor" value="{{old('nit_proveedor')}}">
                 @error('nit_proveedor')
                     <small>*{{$message}}</small>
                 @enderror

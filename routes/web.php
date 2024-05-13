@@ -91,13 +91,24 @@ Route::middleware('auth')->group(function(){
     
     Route::controller(VentasController::class)->group(function(){
         Route::get('ventas', 'index')->name('ventas.index');
-        Route::get('ventas/agregar-venta', 'create')->name('ventas.create');
-    
-        Route::get('productos-categoria-ventas/{id}', 'productosCategoria'); // aqui es para enviarle datos a javascript por peticion
-        Route::get('proveedores-select-ventas/{id}', 'proveedoresSelect');// aqui es para enviarle datos a javascript por peticion
-    
-        Route::post('ventas', 'store')->name('ventas.store');
-        Route::delete('ventas/{id}', 'destroy')->name('ventas.delete');
+        Route::get('ventas/agregar-venta', 'create')->name('ventas.create');//ir al form para crear la factura
+        Route::post('ventas', 'store')->name('ventas.store');//creando factura
+        Route::get('ventas-abonar/{id_factura}', 'editAbonarFactura')->name('ventas.editAbonarFactura');//ir al form de de abonar a la factura
+        Route::put('ventas-abonar/{id_factura}', 'updateAbonarFactura')->name('ventas.updateAbonarFactura');
+
+        Route::delete('eliminar/{id_factura}', 'destroy')->name('ventas.delete');//destruir factura
+
+        // productos de factura
+        Route::get('ventas-productos/{id_factura}', 'indexProductos')->name('ventas.indexProductos');//index de productos de la factura
+        Route::get('ventas-productos-agg/{id_factura}', 'createProducto')->name('ventas.createProducto');//ir al form para agregar producto a factura
+
+        Route::get('categorias-select-ventas/{id}', 'categoriasSelect');// aqui es para enviarle datos a javascript por peticion
+        Route::get('productos-existencia-ventas/{id}', 'productosExistencia'); // aqui es para enviarle datos a javascript por peticion
+
+        Route::post('ventas-productos-agg/{id_factura}', 'storeProducto')->name('ventas.storeProducto');//Agregando producto a factura
+        Route::get('ventas-productos-agg/{id_factura}/{id_salida_venta}', 'editProducto')->name('ventas.editProducto');//ir al form para editar producto de la factura
+        Route::put('ventas-productos-agg/{id_factura}/{id_salida_venta}','updateProducto')->name('ventas.updateProducto');//Editando producto de la factura
+        Route::delete('eliminar-producto-factura/{id_factura}/{id_salida_venta}', 'destroyProducto')->name('ventas.deleteProducto');//Eliminando el producto de la factura
 
         Route::get('exportar-ventas', 'export')->name('ventas.export');
     });

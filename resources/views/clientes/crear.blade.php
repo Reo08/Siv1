@@ -13,7 +13,7 @@
                 @csrf
                 <legend>Agregar cliente</legend>
                 <label for="nit_cedula">Nit o cedula</label>
-                <input type="text" name="nit_cedula" id="nit_cedula" required value="{{old('nit_cedula')}}">
+                <input type="number" name="nit_cedula" id="nit_cedula" required value="{{old('nit_cedula')}}">
                 @error('nit_cedula')
                     <small>*{{$message}}</small>
                 @enderror

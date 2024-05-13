@@ -7,20 +7,19 @@
 
 @section('contenido')
 <section class="sec-ventas">
-    <h2>Lista de ventas</h2>
+    <h2>Lista de ventas (Facturas)</h2>
     <div class="cont-ventas">
-        <a href="{{route('ventas.create')}}">Agregar venta</a>
+        <a href="{{route('ventas.create')}}">Agregar factura</a>
         @if (Auth::user()->rol === "administrador")
         <a class="btn-exportar" href="{{route('ventas.export')}}">Exportar</a>
         @endif
         <div class="cont-inputs">
             <select name="buscar_categoria" class="buscar_categoria">
-                <option value="">Filtrar por categoria</option>
-            @foreach ($categorias as $categoria)
-                <option value="{{$categoria->nombre_categoria}}">{{$categoria->nombre_categoria}}</option>
+                <option value="">Filtrar por cliente</option>
+            @foreach ($clientes as $cliente)
+                <option value="{{$cliente->nit_cedula}}">{{$cliente->nombre_cliente}}</option>
             @endforeach
             </select>
-            <input type="text" name="buscar_productos" class="buscar_producto" placeholder="Buscar por producto">
         </div>
         <div class="cont-tabla-ventas">
             <table>
@@ -38,34 +37,36 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>categoria</th>
-                        <th>Cantidad</th>
-                        <th>Precio de venta / u</th>
-                        <th>Venta por</th>
-                        <th>Fecha de venta</th>
-                        <th>Fecha de registro</th>
-                        <th>Fecha actualizada</th>
+                        <th>ID Factura</th>
+                        <th>Fecha de factura</th>
+                        <th>Cliente</th>
+                        <th>Valor total</th>
+                        <th>Debe</th>
+                        <th>Pagado</th>
+                        <th>Fecha limite</th>
+                        <th>Ver contenido</th>
                         @if (Auth::user()->rol === "administrador")
+                        <th>Abonar/Pagar</th>
+                        <th>Modificar fecha limite</th>
                         <th>Eliminar</th>
                         @endif
                     </tr>
                 </thead>
                 <tbody>
-                @forelse ($ventas as $venta)
+                @forelse ($facturas as $factura)
                 <tr class="tr">
-                    <td class="td-menos">{{$venta->id_salida_venta}}</td>
-                    <td class="td-texto-center nombre">{{$venta->nombre_producto}}</td>
-                    <td class="td-texto-center categoria">{{$venta->nombre_categoria}}</td>
-                    <td class="td-texto-center">{{$venta->cantidad}}</td>
-                    <td class="td-texto-center">{{$venta->precio_venta}}</td>
-                    <td class="td-texto-center">{{$venta->nombre_usuario}}</td>
-                    <td>{{$venta->fecha_venta}}</td>
-                    <td>{{$venta->created}}</td>
-                    <td>{{$venta->updated}}</td>
+                    <td class="td-menos">{{$factura->id_factura_cliente}}</td>
+                    <td class="td-texto-center nombre">{{$factura->fecha_factura}}</td>
+                    <td class="td-texto-center categoria">{{$factura->nombre_cliente}}</td>
+                    <td class="td-texto-center">${{$factura->valor_total === null? 0:$factura->valor_total}}</td>
+                    <td class="td-texto-center">${{$factura->debe === null? 0 : $factura->debe }}</td>
+                    <td class="td-texto-center">${{$factura->pagado === null? 0 : $factura->pagado}}</td>
+                    <td>{{$factura->fecha_limite_pago}}</td>
                     @if (Auth::user()->rol === "administrador")
-                    <td><form class="form_eliminar" action="{{route('ventas.delete', $venta->id_salida_venta)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                    <td><a href="{{route('ventas.indexProductos',$factura->id_factura_cliente)}}"><img src="/img/ojo-rojo.png" alt="ojo"></a></td>
+                    <td><a href="{{route('ventas.editAbonarFactura',$factura->id_factura_cliente)}}"><img src="/img/dolar.png" alt="abonar"></a></td>
+                    <td><a href=""><img src="/img/fecha-limite.png" alt="fecha"></a></td>
+                    <td><form class="form_eliminar" action="{{route('ventas.delete', $factura->id_factura_cliente)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla"><img src="/img/basura.png" alt="basura"></button></form></td>
                     @endif
                 </tr>
                 @empty

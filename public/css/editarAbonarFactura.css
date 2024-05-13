@@ -12,10 +12,10 @@
     box-sizing: border-box;
 }
 
-.sec-crear-factura {
+.sec-crear-entrada {
     min-height: 80.3vh;
 }
-.sec-crear-factura h2 {
+.sec-crear-entrada h2 {
     font-size: 2.5rem;
 }
 
@@ -41,25 +41,26 @@
 
 .cont-form {
     width: 100%;
-    height: auto;
-    padding: 20px 0px;
+    min-height: 70vh;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.form_aggFactura {
+.form_editarCantidad {
     min-width: 300px;
     width: 40%;
     height: auto;
     padding: 20px;
-    padding-top: 100px;
+    padding-top: 120px;
     border: 1px solid #000;
     display: flex;
     flex-direction: column;
     position: relative;
 }
-.form_aggFactura legend {
+.form_editarCantidad legend {
     height: 100px;
+    padding: 0px 15px;
     background-color: var(--color-oscuro1);
     color: #fff;
     font-size: 2.2rem;
@@ -71,27 +72,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
-.form_aggFactura label {
+.form_editarCantidad label {
     font-size: 1.8rem;
     margin-bottom: 10px;
+}
+.form_editarCantidad label[for="pagado"]{
     margin-top: 10px;
 }
-.form_aggFactura select {
+.form_editarCantidad select {
     min-width: 230px;
     width: 100%;
     height: 40px;
     padding-left: 10px;
     border-radius: 10px;
-    border: 1px solid #5a5a5a;
-    margin-top: 20px;
     outline: none;
     font-size: 1.6rem;
+    border: 1px solid #5d5d5d;
 }
-.form_aggFactura select:focus {
+
+.form_editarCantidad select:focus {
     outline: 3px solid var(--letra-dorada);
 }
-.form_aggFactura input {
+.form_editarCantidad input {
     height: 40px;
     padding-left: 10px;
     border-radius: 10px;
@@ -100,11 +104,11 @@
     outline: none;
     font-size: 1.6rem;
 }
-.form_aggFactura input:focus {
+.form_editarCantidad input:focus {
     outline: 3px solid var(--letra-dorada);
 }
-.form_aggFactura .cont-btns {
-    margin-top: 30px;
+.form_editarCantidad .cont-btns {
+    margin-top: 35px;
     margin-bottom: 15px;
     display: flex;
     justify-content: center;
@@ -149,17 +153,17 @@
 }
 
 @media screen and (min-height: 640px) {
-    .sec-crear-factura {
+    .sec-crear-entrada {
         min-height: 86vh;
     }
 }
 @media screen and (min-height: 800px) {
-    .sec-crear-factura {
+    .sec-crear-entrada {
         min-height: 90vh;
     }
 }
 @media screen and (min-height: 1000px) {
-    .sec-crear-factura {
+    .sec-crear-entrada {
         min-height: 93vh;
     }
 }

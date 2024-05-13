@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id_salida_perdida');
             $table->string('referencia');
             $table->integer('cantidad');
-            $table->integer('precio_compra_u');
+            $table->integer('costo_inversion');
             $table->unsignedInteger('id_usuario');
             $table->string('fecha_perdida');
             $table->foreign('referencia')->references('referencia')->on('productos')->onDelete('cascade');
