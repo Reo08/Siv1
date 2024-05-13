@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('debe')->nullable();
             $table->integer('pagado')->nullable();
             $table->string('fecha_factura');
-            $table->string('fecha_limite_pago');
+            $table->string('fecha_limite_pago')->nullable();
             $table->foreign('nit_cedula')->references('nit_cedula')->on('clientes')->onDelete('cascade');
             $table->foreign('id_usuario')->references('id_usuario')->on('usuarios')->onDelete('cascade');
             $table->timestamps();

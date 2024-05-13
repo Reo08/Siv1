@@ -72,7 +72,6 @@ class VentasController extends Controller
             "id_factura" => "required",
             "fecha_factura" => "required",
             "selec_cliente" => "required",
-            "fecha_limite_pago" => "required"
         ]);
 
         $verificarFactura = FacturasClientes::where('id_factura_cliente','=', limpiar_cadena($request->id_factura))->get();
@@ -85,7 +84,6 @@ class VentasController extends Controller
         $nuevaFactura->nit_cedula = limpiar_cadena(intval($request->selec_cliente));
         $nuevaFactura->id_usuario = Auth::user()->id_usuario;
         $nuevaFactura->fecha_factura = limpiar_cadena($request->fecha_factura);
-        $nuevaFactura->fecha_limite_pago = limpiar_cadena($request->fecha_limite_pago);
         $nuevaFactura->save();
 
         return redirect()->route('ventas.index')->with('alert','Se ha agregado la factura con exito.');
@@ -161,10 +159,23 @@ class VentasController extends Controller
         }
 
     }
+    public function editFechaFactura(FacturasClientes $id_factura){
+        $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
+        return view('ventas.editarFechaLimite', compact('id_factura','cliente'));
+    }
+    public function updateFechaFactura(Request $request,FacturasClientes $id_factura){
+        $request->validate([
+            "fecha_limite_pago" => "required"
+        ]);
 
-    public function destroy(SalidasVentas $id_factura){
+        $id_factura->fecha_limite_pago = $request->fecha_limite_pago;
+        $id_factura->save();
+        return redirect()->route('ventas.index')->with('alert','Se ha modificado la fecha de pago con éxito.');
+    }
+
+    public function destroy(FacturasClientes $id_factura){
         $id_factura->delete();
-        return redirect()->route('ventas.index');
+        return redirect()->route('ventas.index')->with('alert','Se ha eliminado la factura con éxito.');
     }
 
 
@@ -175,8 +186,17 @@ class VentasController extends Controller
         ->select('salidas_ventas.*','productos.nombre_producto', 'productos.referencia')->where('salidas_ventas.id_factura_cliente','=',$id_factura->id_factura_cliente)->distinct()->get();
 
         $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
-        // return $facturaProductos;
-        return view('ventas.productos', compact('id_factura','facturaProductos','cliente'));
+
+        $pagosFactura = PagosFacturas::where('id_factura_cliente','=',$id_factura->id_factura_cliente)->get();
+        $hayPagos = "";
+        if(count($pagosFactura)>0){
+            $hayPagos = "si";
+        }else {
+            $hayPagos = "no";
+        }
+
+        
+        return view('ventas.productos', compact('id_factura','facturaProductos','cliente','hayPagos'));
     }
     public function createProducto(FacturasClientes $id_factura){
 

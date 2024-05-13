@@ -42,7 +42,9 @@
                         <th>Valor total</th>
                         @if (Auth::user()->rol === "administrador")
                         <th>Editar</th>
+                        @if ($hayPagos === "no")
                         <th>Eliminar</th>
+                        @endif
                         @endif
                     </tr>
                 </thead>
@@ -63,7 +65,9 @@
                             <td>${{$producto->valor_unidad}}</td>
                             <td>${{$producto->valor_total}}</td>
                             <td><a href="{{route('ventas.editProducto', ["id_factura" =>$id_factura->id_factura_cliente,"id_salida_venta"=>$producto->id_salida_venta])}}"><img src="/img/editar.png" alt="editar"></a></td>
+                            @if ($hayPagos === "no")
                             <td><form class="form_delete_producto_venta" action="{{route('ventas.deleteProducto', ["id_factura" =>$id_factura->id_factura_cliente,"id_salida_venta"=>$producto->id_salida_venta])}}" method="POST" >@csrf @method('delete')<button><img src="/img/basura.png" alt="eliminar"></button></form></td>
+                            @endif
                         </tr>
                     @empty
                         <tr class="tr"></tr>

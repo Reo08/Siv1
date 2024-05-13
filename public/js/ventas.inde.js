@@ -1,6 +1,6 @@
 document.addEventListener('submit', e=> {
     if(e.target.matches('.form_eliminar')){
-        let confirmacion = confirm('¿Está seguro que desea eliminar esta factura?')
+        let confirmacion = confirm('¿Está seguro que desea eliminar esta factura?\nLa cantidad de productos que hay en la factura no regresaran a las existencias.')
 
         if(!confirmacion){
             e.preventDefault();

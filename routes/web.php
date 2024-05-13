@@ -93,10 +93,12 @@ Route::middleware('auth')->group(function(){
         Route::get('ventas', 'index')->name('ventas.index');
         Route::get('ventas/agregar-venta', 'create')->name('ventas.create');//ir al form para crear la factura
         Route::post('ventas', 'store')->name('ventas.store');//creando factura
-        Route::get('ventas-abonar/{id_factura}', 'editAbonarFactura')->name('ventas.editAbonarFactura');//ir al form de de abonar a la factura
+        Route::get('ventas-abonar/{id_factura}', 'editAbonarFactura')->name('ventas.editAbonarFactura');//ir al form de abonar a la factura
         Route::put('ventas-abonar/{id_factura}', 'updateAbonarFactura')->name('ventas.updateAbonarFactura');
+        Route::get('ventas-editar-fecha/{id_factura}', 'editFechaFactura')->name('ventas.editFechaFactura');//ir al form de modificar fecha limite de pago
+        Route::put('ventas-editar-fecha/{id_factura}', 'updateFechaFactura')->name('ventas.updateFechaFactura');//Modificando la fecha limite de pago
 
-        Route::delete('eliminar/{id_factura}', 'destroy')->name('ventas.delete');//destruir factura
+        Route::delete('eliminar-factura/{id_factura}', 'destroy')->name('ventas.delete');//destruir factura
 
         // productos de factura
         Route::get('ventas-productos/{id_factura}', 'indexProductos')->name('ventas.indexProductos');//index de productos de la factura

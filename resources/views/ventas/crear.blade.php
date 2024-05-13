@@ -22,8 +22,6 @@
                     <option value="{{$cliente->nit_cedula}}">{{$cliente->nombre_cliente}}</option>
                 @endforeach
                 </select>
-                <label for="">Fecha limite de pago</label>
-                <input type="date" name="fecha_limite_pago" required value="{{old('fecha_limite_pago')}}">
                 <div class="cont-btns">
                     <button>Guardar</button>
                     <a href="{{route('ventas.index')}}">Cancelar</a>

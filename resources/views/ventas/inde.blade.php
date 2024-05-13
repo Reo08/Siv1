@@ -61,11 +61,11 @@
                     <td class="td-texto-center">${{$factura->valor_total === null? 0:$factura->valor_total}}</td>
                     <td class="td-texto-center">${{$factura->debe === null? 0 : $factura->debe }}</td>
                     <td class="td-texto-center">${{$factura->pagado === null? 0 : $factura->pagado}}</td>
-                    <td>{{$factura->fecha_limite_pago}}</td>
+                    <td>{{$factura->fecha_limite_pago === null? "Sin fecha":$factura->fecha_limite_pago}}</td>
                     @if (Auth::user()->rol === "administrador")
                     <td><a href="{{route('ventas.indexProductos',$factura->id_factura_cliente)}}"><img src="/img/ojo-rojo.png" alt="ojo"></a></td>
                     <td><a href="{{route('ventas.editAbonarFactura',$factura->id_factura_cliente)}}"><img src="/img/dolar.png" alt="abonar"></a></td>
-                    <td><a href=""><img src="/img/fecha-limite.png" alt="fecha"></a></td>
+                    <td><a href="{{route('ventas.editFechaFactura', $factura->id_factura_cliente)}}"><img src="/img/fecha-limite.png" alt="fecha"></a></td>
                     <td><form class="form_eliminar" action="{{route('ventas.delete', $factura->id_factura_cliente)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla"><img src="/img/basura.png" alt="basura"></button></form></td>
                     @endif
                 </tr>
