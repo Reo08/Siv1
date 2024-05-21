@@ -14,7 +14,7 @@
             @if (Auth::user()->rol === "administrador")
             <a class="btn-exportar" href="{{route('categorias.export')}}">Exportar</a>
             @endif
-            <input type="text" name="buscar_categorias" class="buscar_categoria" placeholder="Buscar por nombre">
+            <input type="text" name="buscar_categorias" class="buscar_categoria" placeholder="Buscar por nombre de categoria">
             <div class="cont-tabla-categorias">
                 <table>
                     <colgroup>
@@ -39,8 +39,8 @@
                             <td>{{$categoria->id_categoria}}</td>
                             <td class="td-texto-center nombre">{{$categoria->nombre_categoria}}</td>
                             @if (Auth::user()->rol === "administrador")
-                            <td><a href="{{route('categorias.edit', $categoria->id_categoria)}}" class="btn-editar-tabla">Editar</a></td>
-                            <td><form class="form_eliminar" action="{{route('categorias.delete', $categoria->id_categoria)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                            <td><a href="{{route('categorias.edit', $categoria->id_categoria)}}" class="btn-editar-tabla"><img src="/img/editar.png" alt="editar"></a></td>
+                            <td><form class="form_eliminar" action="{{route('categorias.delete', $categoria->id_categoria)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla"><img src="/img/basura.png" alt="basura"></button></form></td>
                             @endif
                         </tr>
                         @empty

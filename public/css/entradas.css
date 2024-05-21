@@ -120,7 +120,7 @@
 
 .cont-tabla-entradas table {
     border-collapse: collapse;
-    width: 1600px;
+    width: 1750px;
 }
 .cont-tabla-entradas tr, td {
     border: 1px solid #000;
@@ -167,17 +167,35 @@
     color: #fff;
     text-decoration: none;
     background-color: var(--letra-dorada);
-    padding: 4px 8px;
+    padding: 4px;
     font-size: 1.6rem;
     border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn-agregar-tabla img {
+    filter: invert(1);
 }
 .btn-editar-tabla {
     color: #fff;
     text-decoration: none;
     background-color: var(--color-claro1);
-    padding: 4px 8px;
+    padding: 4px;
     font-size: 1.6rem;
     border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn-editar-tabla img {
+    filter: invert(1);
 }
 .btn-eliminar-tabla {
     color: #fff;
@@ -187,6 +205,9 @@
     padding: 4px 8px;
     border-radius: 7px;
     cursor: pointer;
+}
+.btn-eliminar-tabla img {
+    filter: invert(1);
 }
 
 /* --script-- */

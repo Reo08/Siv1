@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Exports\GananciasExport;
 use App\Exports\ImportesExport;
+use App\Models\Clientes;
 use App\Models\Entradas;
+use App\Models\FacturasClientes;
 use App\Models\Ganancias;
 use App\Models\Importes;
 use App\Models\Perdidas;
+use App\Models\PerdidasCredito;
 use App\Models\Productos;
 use App\Models\Proveedor;
 use App\Models\SalidasVentas;
@@ -20,18 +23,26 @@ class InicioController extends Controller
     public function index() {
         $cantidadProveedores = count(Proveedor::all());
         $cantidadProductos = count(Productos::all());
+        $cantidadClientes = count(Clientes::all());
+        $cantidadFacturas = count(FacturasClientes::all());
+        $facturas = FacturasClientes::all();
         $entradas = Entradas::all();
-        $ventas = SalidasVentas::all();
+        $productosFactura = SalidasVentas::all();
         $importes = Importes::all();
-        $ganancias = Ganancias::all();
-        $perdidas = Perdidas::all();
+        $perdidasPorDano = Perdidas::all();
+        $perdidasPorPago = PerdidasCredito::all();
+        $productoCompleto = SalidasVentas::leftjoin('facturas_clientes','salidas_ventas.id_factura_cliente','=','facturas_clientes.id_factura_cliente')
+        ->select('facturas_clientes.*','salidas_ventas.*')->get();
+
+
 
         $totalCantidadEntradas = 0;
         $totalCantidadVentas = 0;
         $totalImporteVendido = 0;
         $totalImportePagado = 0;
-        $totalGanancias = 0;
-        $totalPerdidas = 0;
+        $totalSaldos = 0;
+        $totalPerdidasPorDano = 0;
+        $totalPerdidasPorPago = 0;
         $cantidadE = 0;
         $cantidadV = 0;
 
@@ -39,27 +50,35 @@ class InicioController extends Controller
         foreach ($entradas as $entrada) {
             $totalCantidadEntradas += $entrada->cantidad_entrada;
         }
-        foreach ($ventas as $venta) {
-            $totalCantidadVentas += $venta->cantidad;
-            $cantidadV = $venta->cantidad * $venta->precio_venta; 
-            $totalImporteVendido += $cantidadV;
+        foreach ($productosFactura as $producto) {
+            $totalCantidadVentas += $producto->cantidad_entregada;
+            if($producto->aplica_iva === "si"){
+
+            }else {
+
+            }
+        }
+        foreach($facturas as $factura){
+            $totalImporteVendido += $factura->valor_total;
+            $totalSaldos += $factura->debe;
         }
         foreach ($importes as $importe) {
-            $cantidadE = $importe->cantidad_importe * $importe->precio_compra;
+            $cantidadE = $importe->cantidad_importe * $importe->costo_inversion;
             $totalImportePagado += $cantidadE;
         }
-        foreach ($ganancias as $ganancia){
-            $totalGanancias += $ganancia->total_ganancia;
-        }
-        foreach ($perdidas as $perdida){
-            $totalPerdidas += $perdida->total_perdida;
-        }
-        $totalGanancias-=$totalPerdidas;
-        $totalVentas = $totalImporteVendido - $totalImportePagado;
 
-        // Falta calcular el total ganancias y el total perdidas
+        foreach ($perdidasPorDano as $perdida){
+            $totalPerdidasPorDano += $perdida->total_perdida;
+        }
+        foreach($perdidasPorPago as $perdida){
+            $totalPerdidasPorPago += $perdida->total_debe;
+        }
 
-        return view('inicio.inde', compact('cantidadProveedores', 'cantidadProductos', 'totalCantidadEntradas','totalCantidadVentas','totalImporteVendido','totalImportePagado','totalVentas','totalGanancias','totalPerdidas'));
+        $totalGanancias = $totalImporteVendido - $totalSaldos;
+
+        return view('inicio.inde', compact('cantidadProveedores', 'cantidadProductos','cantidadClientes','cantidadFacturas',
+        'totalCantidadEntradas','totalCantidadVentas','totalImporteVendido','totalImportePagado','totalSaldos',
+        'totalGanancias','totalPerdidasPorDano','totalPerdidasPorPago'));
     }
 
     public function exportImportes(){

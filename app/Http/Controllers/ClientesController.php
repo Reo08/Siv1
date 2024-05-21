@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ClientesExport;
 use App\Models\Clientes;
+use App\Models\FacturasClientes;
+use App\Models\SalidasVentas;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientesController extends Controller
 {
@@ -17,6 +21,7 @@ class ClientesController extends Controller
     public function store(Request $request){
         $request->validate([
             'nit_cedula' => 'required',
+            'selec_tipo_cliente' => 'required',
             'nombre_cliente' => 'required|max:120',
             'correo_cliente' => 'required|email|max:200',
             'telefono' => 'required|max:20',
@@ -37,6 +42,7 @@ class ClientesController extends Controller
         $nuevoCliente->nombre_cliente = $request->nombre_cliente;
         $nuevoCliente->correo = $request->correo_cliente;
         $nuevoCliente->telefono = strval($request->telefono);
+        $nuevoCliente->tipo_cliente = $request->selec_tipo_cliente;
         $nuevoCliente->save();
         
         return redirect()->route('clientes.index');
@@ -73,6 +79,25 @@ class ClientesController extends Controller
         return redirect()->route('clientes.index')->with('alert','Cliente actualizado con éxito.');
     }
 
+    //Ver estado cuenta
+
+    public function indexEstadoCuenta(Clientes $nit){
+
+        $facturas = FacturasClientes::where('nit_cedula','=', $nit->nit_cedula)->orderBy('id_factura_cliente','desc')->paginate(20);
+        $vrTotal = 0;
+        $retencionTotal = 0;
+        if(count($facturas)>0){
+            foreach($facturas as $factura){
+                $vrTotal += $factura->valor_total_sin_iva;
+                $retencionTotal += $factura->porcentaje_retencion;
+            }
+        }
+
+        return view('clientes.estadoCuenta', compact('facturas','nit','vrTotal','retencionTotal'));
+    }
+    public function export(){
+        return Excel::download(new ClientesExport, 'clientes.xlsx');
+    }
     public function destroy(Clientes $nit){
         $nit->delete();
         return redirect()->route('clientes.index')->with('alert','Cliente eliminado con éxito.');

@@ -13,7 +13,7 @@
                 @csrf
                 @method('put')
                 <legend>Pago factura N°{{$id_factura->id_factura_cliente}} de {{$cliente->nombre_cliente}}</legend>
-                <label for="">Debe: ${{$id_factura->debe === null ? 0 :$id_factura->debe}}</label>
+                <label for="">Debe: ${{$id_factura->debe === null ? 0 :number_format($id_factura->debe, 0, ',', '.')}}</label>
                 <label for="fecha_pago">Fecha de pago</label>
                 <input type="date" name="fecha_pago" required>
                 @error('fecha_pago')

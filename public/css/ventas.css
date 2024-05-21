@@ -117,7 +117,7 @@
 
 .cont-tabla-ventas table {
     border-collapse: collapse;
-    width: 1500px;
+    width: 1600px;
 }
 .cont-tabla-ventas tr, td {
     border: 1px solid #000;
@@ -145,28 +145,100 @@
     text-align: start;
     padding: 0px 5px;
 }
-.cont-tabla-ventas .terceraColumna {
+.cont-tabla-ventas .cuartaColumna {
     width: 200px;
 }
-
+.cont-tabla-ventas .quintaColumna {
+    width: 120px;
+}
+.cont-tabla-ventas .sextaColumna {
+    width: 120px;
+}
+.cont-tabla-ventas .septimaColumna {
+    width: 120px;
+}
 
 /*--------- botontes de la tabla------------- */
-.btn-agregar-tabla {
+.btn_ver_contenido {
     border: 1px solid #fff;
-    color: #fff;
     text-decoration: none;
     background-color: var(--letra-dorada);
-    padding: 4px 8px;
+    padding: 4px;
     font-size: 1.6rem;
     border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
 }
-.btn-editar-tabla {
-    color: #fff;
+.btn_ver_contenido img {
+    filter: invert(1);
+}
+.btn_imprimir {
     text-decoration: none;
     background-color: var(--color-claro1);
-    padding: 4px 8px;
+    padding: 4px;
     font-size: 1.6rem;
     border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn_imprimir img {
+    filter: invert(1);
+}
+.btn_abonar {
+    text-decoration: none;
+    background-color: var(--color-claro1);
+    padding: 4px;
+    font-size: 1.6rem;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn_abonar img {
+    filter: invert(1);
+}
+.btn_ver_pago {
+    text-decoration: none;
+    background-color: var(--color-claro1);
+    padding: 4px;
+    font-size: 1.6rem;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn_ver_pago img {
+    filter: invert(1);
+}
+.btn_fecha {
+    text-decoration: none;
+    background-color: var(--color-claro1);
+    padding: 4px;
+    font-size: 1.6rem;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn_fecha img {
+    filter: invert(1);
 }
 .btn-eliminar-tabla {
     color: #fff;
@@ -177,11 +249,19 @@
     border-radius: 7px;
     cursor: pointer;
 }
-
+.btn-eliminar-tabla img {
+    filter: invert(1);
+}
 
 /* --script-- */
 .addFiltrar{
     display: none;
+}
+.proximo_fecha_limite {
+    background-color: rgba(255, 132, 16, 0.856);
+}
+.fecha_vencida {
+    background-color: rgba(255, 0, 0, 0.87);
 }
 /* --fin script-- */
 

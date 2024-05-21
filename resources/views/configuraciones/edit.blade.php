@@ -8,7 +8,7 @@
 @section('contenido')
     <section class="sec-crear-categoria">
         <div class="cont-form">
-            <form class="form_contrasena" action="{{route('configuraciones.update', Auth::user()->identificacion)}}" method="POST">
+            <form class="form_contrasena" action="{{route('configuraciones.update', Auth::user()->id_usuario)}}" method="POST">
                 @csrf
                 @method('put')
                 <legend>Cambiar contraseña</legend>

@@ -11,12 +11,28 @@ document.addEventListener('DOMContentLoaded', e=> {
     const $inputCantidadOrden = document.querySelector(".cantidad_orden");
     let vpu;
     let vpt;
+    let $id_factura = document.querySelector(".id_factura");
+    let hay_factura;
+    let retencionUnidad = 0;
+    let unaVez = true;
+    let vuSinIva;
+    let vuSinIva2;
+    let cantidadTotal=0;
 
+    // Este fetch trae la factura
+    fetch(`/pedir-factura-electronica/${$id_factura.textContent}`)
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(dato => {
+        hay_factura = dato;
+    })
+    .catch(err => console.log(err))
 
     document.addEventListener("change", e=> {
         // select categoria
         if(e.target.matches(".sec_categoria")){
+            unaVez = true;
             $selectExistencia.innerHTML = `<option value="">Seleccione un producto</option>`
+            $inputValorUnidad.value = null;
             if(e.target.value){
                 
                 fetch(`/categorias-select-ventas/${e.target.value}`)
@@ -39,66 +55,75 @@ document.addEventListener('DOMContentLoaded', e=> {
         }
         // select existencia
         if(e.target === $selectExistencia){
+            unaVez = true;
             let valorSelectExistencia = e.target.value;
             if(valorSelectExistencia){
-                $inputCantidadOrden.value = 0;
-                document.querySelector(".n_descuento_recargo").value = 0;
+                $inputCantidadOrden.value = null;
+                document.querySelector(".n_descuento_recargo").value = null;
                 $inputValorTotal.value = null;
                 fetch(`/productos-existencia-ventas/${valorSelectExistencia}`)
                 .then(response => response.ok? response.json(): Promise.reject(response))
                 .then(dato => {
                     $inputValorUnidad.value = dato.precio_venta_distribuidor;
                     vu = dato.precio_venta_distribuidor;
-                    
-
-                    // let $array = Array.from(dato);
-                    // $array.forEach(el => {
-                    //     let $option = document.createElement("option");
-                    //     $option.value = el.id_producto;
-                    //     $option.innerHTML = el.nombre_producto;
-                    //     $frag.appendChild($option);
-                    // })
-                    // $selectProducto.innerHTML = $frag.innerHTML;
+                    vuSinIva = dato.precio_venta_distribuidor;
+                    vuSinIva2 = dato.precio_venta_distribuidor;
                 })
                 .catch(error => console.log(error));
             }else {
                 $inputCantidadOrden.value = null;
                 $inputValorUnidad.value = null;
+                document.querySelector(".n_descuento_recargo").value = null;
             }
+        }
+
+        //input descuento
+        if(e.target.matches(".n_descuento_recargo")){
+            unaVez = true;
+            //NOTA: el decuento o el recargo se hace en el precio sin iva y sin restar la retencion
+            $inputCantidadOrden.value = null;
+            if(e.target.value > 0){
+                //RECARGO +
+                let recargoVU = (vu * e.target.value)/100;
+                let recargoVUSinIva = (vuSinIva2 * e.target.value)/100;
+                vuSinIva = vuSinIva2 + recargoVUSinIva;
+                $inputValorUnidad.value = vu + recargoVU;
+            }else if(e.target.value < 0){
+                //DESCUENTO -
+                let descuentoVU = (vu * Math.abs(e.target.value))/100;
+                let descuentoVUSinIva = (vuSinIva2 * Math.abs(e.target.value))/100;
+                vuSinIva = vuSinIva2 - descuentoVUSinIva;
+                $inputValorUnidad.value = vu - descuentoVU;
+            }else {
+                //Si deja el 0
+                $inputValorUnidad.value = vu;
+                vuSinIva = vuSinIva2;
+            }
+
         }
 
         //input cantidad orden
         if(e.target === $inputCantidadOrden){
             if(e.target.value){
-                vt= vu * e.target.value
-                $inputValorTotal.value = vt;
-                document.querySelector(".n_descuento_recargo").value = 0;
-                $inputValorUnidad.value = vu;
-                
-            }
-        }
-        //input descuento
-        if(e.target.matches(".n_descuento_recargo")){
 
-            //NOTA: el decuento o el recargo se hace en el precio sin iva
-            if(e.target.value > 0){
-                //RECARGO +
-                let recargoVU = (vu * e.target.value)/100;
-                let recargoVT = (vt * e.target.value)/100;
-                $inputValorUnidad.value = vu + recargoVU;
-                $inputValorTotal.value = vt + recargoVT;
+                if(hay_factura === "no"){
+                    cantidadTotal = parseInt(e.target.value);
+                    vt= $inputValorUnidad.value * e.target.value
+                    $inputValorTotal.value = vt;
+                }else {
+                    // Si hay factura electronica
+                    if(unaVez){
+                        retencionUnidad = ($inputValorUnidad.value * 2.5) / 100;
+                        $inputValorUnidad.value -= retencionUnidad;
+                        vuSinIva-= retencionUnidad;
+                        unaVez = false;
+                    }
 
-            }else if(e.target.value < 0){
-                //DESCUENTO -
-                let descuentoVU = (vu * Math.abs(e.target.value))/100;
-                let descuentoVT = (vt * Math.abs(e.target.value))/100;
-                $inputValorUnidad.value = vu - descuentoVU;
-                $inputValorTotal.value = vt - descuentoVT;
-                
-            }else {
-                //SI DEJA EL 0
-                $inputValorUnidad.value = vu;
-                $inputValorTotal.value = vt;
+
+                    cantidadTotal = parseInt(e.target.value);
+                    vt= $inputValorUnidad.value * e.target.value
+                    $inputValorTotal.value = vt;
+                }
             }
         }
 
@@ -108,9 +133,7 @@ document.addEventListener('DOMContentLoaded', e=> {
         
             if(valorSelectIva === "si"){
                 document.querySelector(".n_descuento_recargo").disabled = true;
-                document.querySelector(".sec_categoria").disabled = true;
                 $inputCantidadOrden.disabled = true;
-                $selectExistencia.disabled = true;
                 vpu = $inputValorUnidad.value
                 vpt = $inputValorTotal.value
                 let iva = (vpu * 19)/100;
@@ -123,9 +146,7 @@ document.addEventListener('DOMContentLoaded', e=> {
 
             }else if(valorSelectIva === "no"){
                 document.querySelector(".n_descuento_recargo").disabled = false;
-                document.querySelector(".sec_categoria").disabled = false;
                 $inputCantidadOrden.disabled = false;
-                $selectExistencia.disabled = false;
 
                 let iva = (vpu * 19)/100;
                 $inputValorUnidad.value = $inputValorUnidad.value - iva;
@@ -137,11 +158,31 @@ document.addEventListener('DOMContentLoaded', e=> {
         }
     })
 
-    $form.addEventListener("submit", e=> {
-        document.querySelector(".n_descuento_recargo").disabled = false;
+    $form.addEventListener("submit", async e=> {
+        const datos = {
+            retencion: retencionUnidad,
+            precioVentaSinIva: vuSinIva,
+            cantidad: cantidadTotal
+        }
         $inputCantidadOrden.disabled = false;
-        $selectExistencia.disabled = false;
         $inputValorUnidad.disabled = false;
         $inputValorTotal.disabled = false;
+        document.querySelector(".n_descuento_recargo").disabled = false;
+        try {
+            const res = await fetch(`/enviar-retencion/${$id_factura.textContent}`,{
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(datos)
+            })
+            
+            let json = await res.json();
+            if(!res.ok) throw {status: res.status, statusText: res.statusText}
+        } catch (error) {
+            console.log(error);
+        }
     })
+
 });

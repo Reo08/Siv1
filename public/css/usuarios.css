@@ -110,7 +110,7 @@
 }
 .cont-tabla-usuarios tr, td {
     border: 1px solid #000;
-    width: 100px;
+    width: 70px;
 }
 .cont-tabla-usuarios th {
     height: 50px;
@@ -157,9 +157,17 @@
     color: #fff;
     text-decoration: none;
     background-color: var(--color-claro1);
-    padding: 4px 8px;
     font-size: 1.6rem;
     border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn-editar-tabla img, .btn-eliminar-tabla img {
+    filter: invert(1);
 }
 .btn-eliminar-tabla {
     color: #fff;

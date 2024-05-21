@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('pagos_facturas', function (Blueprint $table) {
             $table->increments('id_pago_factura');
             $table->integer('id_factura_cliente');
+            $table->integer('nit_cedula');
             $table->string('fecha_pago');
             $table->integer('monto');
             $table->foreign('id_factura_cliente')->references('id_factura_cliente')->on('facturas_clientes')->onDelete('cascade');
+            $table->foreign('nit_cedula')->references('nit_cedula')->on('clientes')->onDelete('cascade');
             $table->timestamps();
         });
     }

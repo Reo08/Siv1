@@ -1,30 +1,32 @@
 <table>
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>categoria</th>
+            <th>#</th>
+            <th>ID existencia</th>
+            <th>Referencia</th>
+            <th>Nombre producto</th>
+            <th>Categoria</th>
+            <th>Descripcion</th>
             <th>Cantidad</th>
-            <th>Precio de compra / u</th>
-            <th>Registro por</th>
-            <th>fecha de perdida</th>
+            <th>Costo inversion</th>
+            <th>Editar cantidad</th>
             <th>Fecha de registro</th>
             <th>Fecha actualizada</th>
-            <th>Eliminar</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($perdidas as $perdida)
             <tr>
                 <td>{{$perdida->id_salida_perdida}}</td>
+                <td>{{$perdida->id_entrada}}</td>
+                <td>{{$perdida->referencia}}</td>
                 <td>{{$perdida->nombre_producto}}</td>
-                <td>{{$perdida->nombre_categoria}}</td>
+                <td>{{$perdida->categoria}}</td>
+                <td>{{$perdida->descripcion}}</td>
                 <td>{{$perdida->cantidad}}</td>
-                <td>{{$perdida->precio_compra}}</td>
-                <td>{{$perdida->nombre_usuario}}</td>
-                <td>{{$perdida->fecha_perdida}}</td>
-                <td>{{$perdida->created}}</td>
-                <td>{{$perdida->updated}}</td>
+                <td>${{number_format($perdida->costo_inversion,0,',','.')}}</td>
+                <td>{{$perdida->created_at}}</td>
+                <td>{{$perdida->updated_at}}</td>
             </tr>
         @endforeach
     </tbody>

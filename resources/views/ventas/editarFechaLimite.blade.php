@@ -13,7 +13,7 @@
                 @csrf
                 @method('put')
                 <legend>Modificar fecha limite de {{$cliente->nombre_cliente}}</legend>
-                <label for="">Debe: ${{$id_factura->debe === null ? 0 :$id_factura->debe}}</label>
+                <label for="">Debe: ${{$id_factura->debe === null ? 0 :number_format($id_factura->debe, 0, ',', '.')}}</label>
                 <label for="fecha_limite_pago">Fecha limite de pago</label>
                 <input type="date" name="fecha_limite_pago" required value="{{old('fecha_limite_pago',$id_factura->fecha_limite_pago)}}">
                 @error('fecha_pago')

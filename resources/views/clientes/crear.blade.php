@@ -17,6 +17,15 @@
                 @error('nit_cedula')
                     <small>*{{$message}}</small>
                 @enderror
+                <label for="">Tipo</label>
+                <select name="selec_tipo_cliente" required>
+                    <option value="">Seleccione tipo de persona</option>
+                    <option value="natural">Natural</option>
+                    <option value="juridica">Jurídica</option>
+                </select>
+                @error('selec_tipo_cliete')
+                    <small>*{{$message}}</small>
+                @enderror
                 <label for="nombre_cliente">Nombre</label>
                 <input type="text" name="nombre_cliente" id="nombre_cliente" required value="{{old('nombre_cliente')}}">
                 @error('precio_compra')

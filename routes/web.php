@@ -35,6 +35,11 @@ Route::middleware('auth')->group(function(){
         Route::post('clientes', 'store')->name('clientes.store');
         Route::get('clientes/{nit}/editar-cliente','edit')->name('clientes.edit');
         Route::put('clientes/{nit}', 'update')->name('clientes.update');
+
+        // Ver estado de cuenta
+        Route::get('clientes/{nit}/estado-cuenta', 'indexEstadoCuenta')->name('clientes.estadoCuenta');
+        
+        Route::get('exportar-clientes', 'export')->name('clientes.export');
         Route::delete('clientes/{nit}', 'destroy')->name('clientes.destroy');
     });
     
@@ -60,16 +65,16 @@ Route::middleware('auth')->group(function(){
         Route::get('exportar-categorias', 'export')->name('categorias.export');
     });
     
-    Route::controller(ProductosController::class)->group(function(){
-        Route::get('productos', 'index')->name('productos.index');
-        Route::get('productos/agregar-producto', 'create')->name('productos.create');
-        Route::post('productos', 'store')->name('productos.store');
-        Route::get('productos/{id}/editar-producto','edit')->name('productos.edit');
-        Route::put('productos/{id}', 'update')->name('productos.update');
-        Route::delete('productos/{id}', 'destroy')->name('productos.delete');
+    // Route::controller(ProductosController::class)->group(function(){
+    //     Route::get('productos', 'index')->name('productos.index');
+    //     Route::get('productos/agregar-producto', 'create')->name('productos.create');
+    //     Route::post('productos', 'store')->name('productos.store');
+    //     Route::get('productos/{id}/editar-producto','edit')->name('productos.edit');
+    //     Route::put('productos/{id}', 'update')->name('productos.update');
+    //     Route::delete('productos/{id}', 'destroy')->name('productos.delete');
 
-        Route::get('exportar-productos', 'export')->name('productos.export');
-    });
+    //     Route::get('exportar-productos', 'export')->name('productos.export');
+    // });
     
     Route::controller(EntradasController::class)->group(function(){
         Route::get('entradas-stock', 'index')->name('entradas.index');
@@ -95,8 +100,14 @@ Route::middleware('auth')->group(function(){
         Route::post('ventas', 'store')->name('ventas.store');//creando factura
         Route::get('ventas-abonar/{id_factura}', 'editAbonarFactura')->name('ventas.editAbonarFactura');//ir al form de abonar a la factura
         Route::put('ventas-abonar/{id_factura}', 'updateAbonarFactura')->name('ventas.updateAbonarFactura');
+        Route::get('ventas-ver-pagos/{id_factura}', 'indexPagos')->name('ventas.indexPagos');// Aqui vemos los pagos
+        Route::delete('eliminar-pago/{id_pago}','destroyPago')->name('ventas.detelePagos');
         Route::get('ventas-editar-fecha/{id_factura}', 'editFechaFactura')->name('ventas.editFechaFactura');//ir al form de modificar fecha limite de pago
         Route::put('ventas-editar-fecha/{id_factura}', 'updateFechaFactura')->name('ventas.updateFechaFactura');//Modificando la fecha limite de pago
+
+        Route::get('ventas-datos-empresa/{id_factura}','createFacturaPdf')->name('ventas.createDescargarFactura');
+        Route::post('ventas-datos-empresa/{id_factura}','storeFacturaPdf')->name('ventas.storeDescargarFactura');
+        Route::get('descargar-factura/{id_factura}', 'facturaPdf')->name('ventas.descargarFactura');// Ruta para imprimir la factura
 
         Route::delete('eliminar-factura/{id_factura}', 'destroy')->name('ventas.delete');//destruir factura
 
@@ -106,26 +117,41 @@ Route::middleware('auth')->group(function(){
 
         Route::get('categorias-select-ventas/{id}', 'categoriasSelect');// aqui es para enviarle datos a javascript por peticion
         Route::get('productos-existencia-ventas/{id}', 'productosExistencia'); // aqui es para enviarle datos a javascript por peticion
+        Route::get('pedir-factura-electronica/{id}', 'pedirFacturaElectronica'); // aqui es para enviarle datos a javascript por peticion
+        Route::post('enviar-retencion/{id}', 'enviarRetencion');
 
         Route::post('ventas-productos-agg/{id_factura}', 'storeProducto')->name('ventas.storeProducto');//Agregando producto a factura
         Route::get('ventas-productos-agg/{id_factura}/{id_salida_venta}', 'editProducto')->name('ventas.editProducto');//ir al form para editar producto de la factura
         Route::put('ventas-productos-agg/{id_factura}/{id_salida_venta}','updateProducto')->name('ventas.updateProducto');//Editando producto de la factura
         Route::delete('eliminar-producto-factura/{id_factura}/{id_salida_venta}', 'destroyProducto')->name('ventas.deleteProducto');//Eliminando el producto de la factura
 
-        Route::get('exportar-ventas', 'export')->name('ventas.export');
+        Route::get('exportar-ventas', 'exportFacturas')->name('ventas.exportFacturas');
     });
     
     Route::controller(PerdidasController::class)->group(function(){
-        Route::get('perdidas', 'index')->name('perdidas.index');
+        Route::get('perdidas-total', 'index')->name('perdidas.index');
         Route::get('perdidas/agregar-perdida', 'create')->name('perdidas.create');
     
         Route::get('productos-categoria-perdidas/{id}', 'productosCategoria'); // aqui es para enviarle datos a javascript por peticion
         Route::get('proveedores-select-perdidas/{id}', 'proveedoresSelect');// aqui es para enviarle datos a javascript por peticion
     
-        Route::post('perdidas', 'store')->name('perdidas.store');
-        Route::delete('perdidas/{id}', 'destroy')->name('perdidas.delete');
 
-        Route::get('exportar-perdidas', 'export')->name('perdidas.export');
+
+
+        // Perdias por daño
+        Route::get('perdidas-total/por-dano','indexPorDano')->name('perdidas.porDano');
+        Route::get('perdidas-total/por-dano/{id_perdida}/editar', 'editPorDano')->name('perdidas.porDanoEditar');
+        Route::put('perdidas-total/por-dano/{id_perdida}', 'updatePorDano')->name('perdidas.porDanoupdate');
+        Route::delete('perdidas-total/eliminar/{id_perdida}', 'destroyPorDano')->name('perdidas.porDanoDelete');
+
+        // Perdidas por falta de pago
+        Route::get('perdidas-total/por-pago','indexPorPago')->name('perdidas.porPago');
+        Route::get('perdidas-total/por-pago/agregar', 'createPorPago')->name('perdidas.porPagoCreate');
+        Route::post('perdidas-total/por-pago', 'storePorPago')->name('perdidas.porPagoStore');
+        Route::delete('eliminar-por-pago/{id_porPago}', 'destroyPorPago')->name('perdidas.porPagoDestroy');
+
+        Route::get('exportar-perdidas', 'exportPorDano')->name('perdidas.exportPorDano');
+        Route::get('exportar-perdidas-por-pago', 'exportPorPago')->name('perdidas.exportPorDago');
     });
     
     
@@ -134,10 +160,10 @@ Route::middleware('auth')->group(function(){
         Route::get('usuarios/agregar-usuario', 'create')->name('usuarios.create');
         Route::post('usuarios', 'store')->name('usuarios.store');
 
-        Route::get('usuarios/{identificacion}/editar-usuario', 'edit')->name('usuarios.edit');
-        Route::put('usuarios/{identificacion}', 'update')->name('usuarios.update');
+        Route::get('usuarios/{id_usuario}/editar-usuario', 'edit')->name('usuarios.edit');
+        Route::put('usuarios/{id_usuario}', 'update')->name('usuarios.update');
 
-        Route::delete('usuarios/{identificacion}', 'destroy')->name('usuarios.delete');
+        Route::delete('usuarios/{id_usuario}', 'destroy')->name('usuarios.delete');
 
         Route::get('exportar-usuarios','export')->name('usuarios.export');
     });
@@ -145,7 +171,7 @@ Route::middleware('auth')->group(function(){
     // Tengo que empezar a hacer la programacion de las busquedas
     Route::controller(ConfiguracionesController::class)->group(function(){
         Route::get('configuraciones/cambiar-contrasena', 'edit')->name('configuraciones.edit');
-        Route::put('configuraciones/{identificacion}', 'update')->name('configuraciones.update');
+        Route::put('configuraciones/{id_usuario}', 'update')->name('configuraciones.update');
         Route::get('madeby', 'hello')->name('helloword');
     });
 

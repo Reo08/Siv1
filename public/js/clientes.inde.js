@@ -1,6 +1,6 @@
 document.addEventListener('submit', e=> {
     if(e.target.matches('.form_eliminar')){
-        let confirmacion = confirm('¿Está seguro que desea eliminar esta venta?')
+        let confirmacion = confirm('¿Está seguro que desea eliminar el cliente?\nSe eliminarán todas las facturas relacionadas a este cliente.')
 
         if(!confirmacion){
             e.preventDefault();
@@ -10,37 +10,22 @@ document.addEventListener('submit', e=> {
 
 const $filas = document.querySelectorAll(".tr")
 const $nombres = document.querySelectorAll(".nombre")
+
 document.addEventListener('keyup', e=> {
-    if(e.target.matches(".buscar_producto")){
+    if(e.target.matches(".buscar_cliente")){
         let valor = e.target.value.toLowerCase()
         let i = 0;
         $nombres.forEach(el => {
             if(el.textContent.toLowerCase().includes(valor)){
+                // $filas[i].style.visibilo = "block";
                 $filas[i].classList.remove("addFiltrar")
                 i++
             }else {
                 $filas[i].classList.add("addFiltrar")
-
+                // $filas[i].style.display = "none";
                 i++
             }
         })
 
-    }
-})
-
-const $categorias = document.querySelectorAll('.categoria')
-document.addEventListener('change', e=> {
-    if(e.target.matches(".buscar_categoria")){
-
-        let j = 0;
-        $categorias.forEach(el  => {
-            if(el.textContent.toLowerCase().includes(e.target.value.toLowerCase())){
-                $filas[j].classList.remove("addFiltrar")
-                j++
-            }else {
-                $filas[j].classList.add("addFiltrar")
-                j++
-            }
-        })
     }
 })

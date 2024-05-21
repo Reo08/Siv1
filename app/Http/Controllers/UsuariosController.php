@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\UserExport;
 use App\Models\User;
+use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -41,7 +42,7 @@ function limpiar_cadena($cadena){
 class UsuariosController extends Controller
 {
     public function index() {
-        $usuarios = User::orderBy('identificacion', 'desc')->paginate(15);
+        $usuarios = User::orderBy('id_usuario', 'desc')->paginate(15);
         return view('usuarios.inde', compact('usuarios'));
     }
     public function create() {
@@ -49,11 +50,10 @@ class UsuariosController extends Controller
     }
 
     public function store(Request $request){
-        $buscarUsuario = User::where('identificacion','=',limpiar_cadena($request->identificacion))->get();
+        $buscarUsuario = User::where('id_usuario','=',limpiar_cadena($request->id_usuario))->get();
         $request->validate([
             "rol" => "required",
             "nombre" => "required|max:50",
-            "identificacion" => "required|max:20",
             "correo" => "required|email",
             "contrasena" => "required|min:4"
         ]);
@@ -73,7 +73,6 @@ class UsuariosController extends Controller
         }
 
         $nuevoUsuario = new User();
-        $nuevoUsuario->identificacion = $request->identificacion;
         $nuevoUsuario->nombre = limpiar_cadena($request->nombre);
         $nuevoUsuario->correo = $request->correo;
         $nuevoUsuario->contrasena = Hash::make(limpiar_cadena($request->contrasena));
@@ -82,20 +81,17 @@ class UsuariosController extends Controller
         return redirect()->route('usuarios.index')->with('alert','Se ha agregado el usuario con éxito.');
     }
 
-    public function edit($identificacion){
-        $usuario = User::where('identificacion','=',$identificacion)->first();
-
+    public function edit($id_usuario){
+        $usuario = User::where('id_usuario','=',limpiar_cadena($id_usuario))->first();
         return view('usuarios.actualizar', compact('usuario'));
     }
-    public function update(Request $request, $identificacion){
-        $usuario = User::where('identificacion','=',limpiar_cadena($identificacion))->first();
+    public function update(Request $request,$id_usuario){
+        $usuario = User::where('id_usuario','=',limpiar_cadena($id_usuario))->first();
         $request->validate([
             "rol" => "required",
             "nombre" => "required|max:50",
-            "identificacion" => "required|max:20",
             "correo" => "required|email"
         ]);
-        $usuario->identificacion = $request->identificacion;
         $usuario->nombre = limpiar_cadena($request->nombre);
         $usuario->correo = limpiar_cadena($request->correo);
 
@@ -111,8 +107,8 @@ class UsuariosController extends Controller
         }
     }
 
-    public function destroy($identificacion){
-        $usuario = User::where('identificacion','=',$identificacion)->first();
+    public function destroy($id_usuario){
+        $usuario = User::where('identificacion','=',$id_usuario)->first();
         $usuario->delete();
         return redirect()->route('usuarios.index')->with('alert', 'Usuario eliminado con exito');
     }

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('id_perdida');
             $table->unsignedInteger('id_salida_perdida');
             $table->integer('total_perdida');
-            $table->string('fecha_perdida');
             $table->foreign('id_salida_perdida')->references('id_salida_perdida')->on('salidas_perdidas')->onDelete('cascade');
             $table->timestamps();
         });

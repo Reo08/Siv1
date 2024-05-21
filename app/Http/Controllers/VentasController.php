@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FacturasExport;
 use App\Exports\VentasExport;
 use App\Models\Categorias;
 use App\Models\Clientes;
@@ -11,7 +12,9 @@ use App\Models\Ganancias;
 use App\Models\PagosFacturas;
 use App\Models\Productos;
 use App\Models\Proveedor;
+use App\Models\SalidasPerdidasCredito;
 use App\Models\SalidasVentas;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -73,58 +76,50 @@ class VentasController extends Controller
             "fecha_factura" => "required",
             "selec_cliente" => "required",
         ]);
-
         $verificarFactura = FacturasClientes::where('id_factura_cliente','=', limpiar_cadena($request->id_factura))->get();
         if(count($verificarFactura)>0){
-            return redirect()->route('ventas.index')->with('alert','Ya existe una factura con ese ID.');
+            return redirect()->route('ventas.create')->with('alert','Ya existe una factura con ese ID.');
+        }
+        $verficarFacturaPerdida = SalidasPerdidasCredito::where('id_factura_cliente','=',$request->id_factura)->get();
+        if(count($verficarFacturaPerdida)>0){
+            return redirect()->route('ventas.create')->with('alert','Ya existe una factura con ese ID en la sección Pérdidas por falta de pago.');
         }
 
-        $nuevaFactura = new FacturasClientes();
-        $nuevaFactura->id_factura_cliente = limpiar_cadena($request->id_factura);
-        $nuevaFactura->nit_cedula = limpiar_cadena(intval($request->selec_cliente));
-        $nuevaFactura->id_usuario = Auth::user()->id_usuario;
-        $nuevaFactura->fecha_factura = limpiar_cadena($request->fecha_factura);
-        $nuevaFactura->save();
+        if($request->factura_electronica === "no"){
 
-        return redirect()->route('ventas.index')->with('alert','Se ha agregado la factura con exito.');
+            $nuevaFactura = new FacturasClientes();
+            $nuevaFactura->id_factura_cliente = limpiar_cadena($request->id_factura);
+            $nuevaFactura->nit_cedula = limpiar_cadena(intval($request->selec_cliente));
+            $nuevaFactura->id_usuario = Auth::user()->id_usuario;
+            $nuevaFactura->fecha_factura = limpiar_cadena($request->fecha_factura);
+            $nuevaFactura->save();
 
-        // $entrada = Entradas::where('id_producto','=',intval(limpiar_cadena($request->sec_producto)))->get();
-
-        // $request->validate([
-        //     "sec_categoria" => "required",
-        //     "sec_producto" => "required",
-        //     "fecha_venta" => "required",
-        //     "precio_venta" => "required|numeric",
-        //     "cantidad_venta" => "required|numeric"
-        // ]);
-
-        // if(count($entrada) != 0){//Esta validacion es por que si va a hacer una venta y no hay una existencia en entrada.
-        //     $entrada = Entradas::where('id_producto','=',intval(limpiar_cadena($request->sec_producto)))->first();
-        //     if($request->cantidad_venta > $entrada->cantidad_entrada){
-        //         return redirect()->route('ventas.index')->with('alert','La cantidad que quiere vender es mayor a la cantidad que tiene en existencias.');
-        //     }
-        //     $nuevaVenta = new SalidasVentas();
-        //     $nuevaVenta->id_producto = intval(limpiar_cadena($request->sec_producto));
-        //     $nuevaVenta->cantidad = limpiar_cadena($request->cantidad_venta);
-        //     $nuevaVenta->precio_venta = limpiar_cadena($request->precio_venta);
-        //     $nuevaVenta->precio_compra = $entrada->precio_compra_entrada;
-        //     $nuevaVenta->fecha_venta = limpiar_cadena($request->fecha_venta);
-        //     $nuevaVenta->identificacion = Auth::user()->identificacion;//IMPORTANTE: Poner la identificacion de la sesion del usuario
-        //     $nuevaVenta->save();
-
-        //     $entrada->cantidad_entrada = $entrada->cantidad_entrada - intval(limpiar_cadena($request->cantidad_venta));
-        //     $entrada->save();
-
-        //     $nuevaGanancia = new Ganancias();
-        //     $nuevaGanancia->id_salida_venta = $nuevaVenta->id_salida_venta;
-        //     $nuevaGanancia->total_venta = limpiar_cadena($request->cantidad_venta) * limpiar_cadena($request->precio_venta);
-        //     $nuevaGanancia->total_ganancia =  ($request->cantidad_venta * $request->precio_venta) - ($request->cantidad_venta * $entrada->precio_compra_entrada);
-        //     $nuevaGanancia->save();
+            $nuevaGanancia = new Ganancias();
+            $nuevaGanancia->id_factura_cliente = limpiar_cadena($request->id_factura);
+            $nuevaGanancia->total_ganancia = 0;
+            $nuevaGanancia->save();
     
-        //     return redirect()->route('ventas.index')->with('alert','Se ha agregado la venta con exito.');
-        // }else {
-        //     return redirect()->route('ventas.index')->with("alert","No hay una existencia creada de este producto en Entradas.");
-        // }
+            return redirect()->route('ventas.index')->with('alert','Se ha agregado la factura con exito.');
+        }else if($request->factura_electronica === "si"){
+            $verificarFacturaElectronica = FacturasClientes::where('factura_electronica','=',$request->num_factura_electronica)->get();
+            if(count($verificarFacturaElectronica)>0){
+                return redirect()->route('ventas.create')->with('alert','Ese numero de factura electronica ya esta registrado.');
+            }
+            $nuevaFactura = new FacturasClientes();
+            $nuevaFactura->id_factura_cliente = limpiar_cadena($request->id_factura);
+            $nuevaFactura->nit_cedula = limpiar_cadena(intval($request->selec_cliente));
+            $nuevaFactura->id_usuario = Auth::user()->id_usuario;
+            $nuevaFactura->fecha_factura = limpiar_cadena($request->fecha_factura);
+            $nuevaFactura->factura_electronica = limpiar_cadena($request->num_factura_electronica);
+            $nuevaFactura->save();
+
+            $nuevaGanancia = new Ganancias();
+            $nuevaGanancia->id_factura_cliente = limpiar_cadena($request->id_factura);
+            $nuevaGanancia->total_ganancia = 0;
+            $nuevaGanancia->save();
+
+            return redirect()->route('ventas.index')->with('alert','Se ha agregado la factura con exito.');
+        }
 
     }
     public function editAbonarFactura(FacturasClientes $id_factura){
@@ -151,14 +146,44 @@ class VentasController extends Controller
 
             $nuevoPagoFactura = new PagosFacturas();
             $nuevoPagoFactura->id_factura_cliente = $id_factura->id_factura_cliente;
+            $nuevoPagoFactura->nit_cedula = $id_factura->nit_cedula;
             $nuevoPagoFactura->fecha_pago = $request->fecha_pago;
             $nuevoPagoFactura->monto = $request->pagado;
             $nuevoPagoFactura->save();
+
+            $Ganancia = Ganancias::where('id_factura_cliente','=', $id_factura->id_factura_cliente)->first();
+            $Ganancia->total_ganancia = $id_factura->pagado;
+            $Ganancia->save();
+  
     
             return redirect()->route('ventas.index')->with('alert','Se ha agregado el pago con éxito.');
         }
 
     }
+
+    // PAGOS
+    public function indexPagos(FacturasClientes $id_factura){
+
+        $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
+
+        $pagos = PagosFacturas::where('id_factura_cliente','=',$id_factura->id_factura_cliente)->where('nit_cedula','=',$id_factura->nit_cedula)->orderBy('id_pago_factura','desc')->paginate(25);
+
+        return view('ventas.verPagos', compact('cliente','id_factura','pagos'));
+    }
+    public function destroyPago(PagosFacturas $id_pago){
+        $factura = FacturasClientes::where('id_factura_cliente','=',$id_pago->id_factura_cliente)->first();
+        $factura->pagado -= $id_pago->monto;
+        $factura->debe += $id_pago->monto;
+        $factura->save();
+
+        $Ganancia = Ganancias::where('id_factura_cliente','=', $id_pago->id_factura_cliente)->first();
+        $Ganancia->total_ganancia -= $id_pago->monto;
+        $Ganancia->save();
+
+        $id_pago->delete();
+        return redirect()->route('ventas.index')->with('alert','Se ha eliminado el pago con éxito.');
+    }
+    // Fin PAGOS
     public function editFechaFactura(FacturasClientes $id_factura){
         $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
         return view('ventas.editarFechaLimite', compact('id_factura','cliente'));
@@ -178,12 +203,69 @@ class VentasController extends Controller
         return redirect()->route('ventas.index')->with('alert','Se ha eliminado la factura con éxito.');
     }
 
+    public function createFacturaPdf(FacturasClientes $id_factura){
+        return view('ventas.formFacturaCrear',compact('id_factura'));
+    }
+    public function storeFacturaPdf(Request $request, FacturasClientes $id_factura){
+
+        $request->validate([
+            "razon_social" => "required|max:50",
+            "nit_cedula" => "required|numeric",
+            "direccion" => "required|max:50",
+            "celular" => "required|numeric",
+            "codigo_ciuu" => "required|numeric"
+        ]);
+
+        $facturaProductos = SalidasVentas::leftjoin('entradas','salidas_ventas.id_entrada','=','entradas.id_entrada')
+        ->leftjoin('productos','entradas.referencia','=','productos.referencia')
+        ->select('salidas_ventas.*','productos.nombre_producto', 'productos.referencia')->where('salidas_ventas.id_factura_cliente','=',$id_factura->id_factura_cliente)->distinct()->get();
+        $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
+        $fecha = date("Y-m-d");
+
+        $datos = [
+            "cliente" => $cliente,
+            "id_factura" => $id_factura,
+            "facturaProductos" => $facturaProductos,
+            "fecha" => $fecha,
+            "razon_social" => $request->razon_social,
+            "nit_cedula" => $request->nit_cedula,
+            "direccion" => $request->direccion,
+            "celular" => $request->celular,
+            "codigo_ciuu" => $request->codigo_ciuu
+        ];
+        $pdf = Pdf::loadView('ventas.facturaPdf', $datos);
+        return $pdf->stream();
+    }
+    public function facturaPdf(FacturasClientes $id_factura){
+
+        $facturaProductos = SalidasVentas::leftjoin('entradas','salidas_ventas.id_entrada','=','entradas.id_entrada')
+        ->leftjoin('productos','entradas.referencia','=','productos.referencia')
+        ->select('salidas_ventas.*','productos.nombre_producto', 'productos.referencia')->where('salidas_ventas.id_factura_cliente','=',$id_factura->id_factura_cliente)->distinct()->get();
+        $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
+        $fecha = date("Y-m-d");
+
+        $datos = [
+            "cliente" => $cliente,
+            "id_factura" => $id_factura,
+            "facturaProductos" => $facturaProductos,
+            "fecha" => $fecha
+        ];
+
+        $pdf = Pdf::loadView('ventas.facturaPdf', $datos);
+        return $pdf->stream();
+
+        // $pdf = Pdf::loadView('ventas.facturaPdf', $datos);
+        // return $pdf->download('Factura.pdf');
+        // return view('ventas.facturaPdf',compact('cliente','id_factura','facturaProductos','fecha'));
+    }
+
 
     // Productos de factura
     public function indexProductos(FacturasClientes $id_factura){
         $facturaProductos = SalidasVentas::leftjoin('entradas','salidas_ventas.id_entrada','=','entradas.id_entrada')
         ->leftjoin('productos','entradas.referencia','=','productos.referencia')
         ->select('salidas_ventas.*','productos.nombre_producto', 'productos.referencia')->where('salidas_ventas.id_factura_cliente','=',$id_factura->id_factura_cliente)->distinct()->get();
+        $cantidadTotalEntregadas = 0;
 
         $cliente = Clientes::where('nit_cedula','=',$id_factura->nit_cedula)->first();
 
@@ -195,8 +277,11 @@ class VentasController extends Controller
             $hayPagos = "no";
         }
 
-        
-        return view('ventas.productos', compact('id_factura','facturaProductos','cliente','hayPagos'));
+        foreach ($facturaProductos as $producto) {
+            $cantidadTotalEntregadas += $producto->cantidad_entregada;
+        }
+
+        return view('ventas.productos', compact('id_factura','facturaProductos','cliente','hayPagos','cantidadTotalEntregadas'));
     }
     public function createProducto(FacturasClientes $id_factura){
 
@@ -219,6 +304,28 @@ class VentasController extends Controller
         $entrada = Entradas::where('id_entrada','=',$id)->first();
         // return response()->json($productos);
         return json_encode($entrada);
+    }
+    public function pedirFacturaElectronica($id){
+        $factura = FacturasClientes::where('id_factura_cliente','=',$id)->first();
+        $tieneFacturaElectronica = "";
+
+        if($factura->factura_electronica === null){
+            $tieneFacturaElectronica = "no";
+        }else {
+            $tieneFacturaElectronica = "si";
+
+        }
+        return json_encode($tieneFacturaElectronica);
+    }
+    public function enviarRetencion(Request $request, $id){
+        // Aqui se agregaro el valor del porcentaje de retencion y el valor total sin iva(por si agregar el iva)
+        $factura = FacturasClientes::where('id_factura_cliente','=',$id)->first();
+        $factura->porcentaje_retencion += $request->retencion * $request->cantidad;
+        $factura->valor_total_sin_iva += ($request->precioVentaSinIva * $request->cantidad) + ($request->retencion * $request->cantidad);
+        $factura->save();
+
+        return json_encode($factura);
+
     }
     public function storeProducto(Request $request,FacturasClientes $id_factura){
         $request->validate([
@@ -325,6 +432,8 @@ class VentasController extends Controller
     public function destroyProducto(FacturasClientes $id_factura, SalidasVentas $id_salida_venta){
         $id_factura->valor_total -= $id_salida_venta->valor_total;
         $id_factura->debe -= $id_salida_venta->valor_total;
+        $id_factura->porcentaje_retencion = null;
+        $id_factura->valor_total_sin_iva = null;
         $id_factura->save();
 
         $entrada = Entradas::where('id_entrada','=',$id_salida_venta->id_entrada)->first();
@@ -337,7 +446,7 @@ class VentasController extends Controller
     }
 
 
-    public function export(){
-        return Excel::download( new VentasExport, 'ventas.xlsx');
+    public function exportFacturas(){
+        return Excel::download( new FacturasExport, 'Facturas.xlsx');
     }
 }

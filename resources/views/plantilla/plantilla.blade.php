@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @yield('token')
     <title>Sistem de inventarios - @yield('titulo')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,15 +22,15 @@
         <div class="nav">
             <a href="{{route('inicio.index')}}" class="{{request()->routeIs('inicio.*')?'active': ''}}"><img src="/img/icono_inicio.png" alt="icono_inicio"> Inicio</a>
             <a href="{{route('clientes.index')}}" class="{{request()->routeIs('clientes.*')?'active': ''}}"><img src="/img/personas.png" alt="icono_clientes"> Clientes</a>
-            <div class="nav-item {{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? 'active' : '' }} "><img src="/img/icono_gestion-de-productos.png" alt=""> Gestion de productos <span class="{{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? '' : 'desactive' }} nav-span" ><</span></div>
+            <div class="nav-item {{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? 'active' : '' }} "><img src="/img/icono_gestion-de-productos.png" alt=""> Gestion de categorias <span class="{{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('proveedores.*', 'categorias.*', 'productos.*') ? '' : 'desactive' }}" >
                 <a href="{{route('proveedores.index')}}" class="{{request()->routeIs('proveedores.*')?'active': ''}}">Proveedores</a>
                 <a href="{{route('categorias.index')}}"class="{{request()->routeIs('categorias.*')?'active':''}}">Categorias</a>
             </div>
             <div class="nav-item {{ request()->routeIs('entradas.*', 'ventas.*', 'perdidas.*') ? 'active' : '' }}" ><img src="/img/icono_gestion-de-existencias.png" alt=""> Gestion de existencias <span class="{{ request()->routeIs('entradas.*', 'ventas.*', 'perdidas.*') ? '' : 'desactive' }} nav-span" ><</span></div>
             <div class="nav-item-cont {{ request()->routeIs('entradas.*', 'ventas.*', 'perdidas.*') ? '' : 'desactive' }}" >
-                <a href="{{route('entradas.index')}}" class="{{request()->routeIs('entradas.*')?'active': ''}}">Entradas</a>
-                <a href="{{route('ventas.index')}}" class="{{request()->routeIs('ventas.*')?'active': ''}}">Ventas</a>
+                <a href="{{route('entradas.index')}}" class="{{request()->routeIs('entradas.*')?'active': ''}}">Produtos</a>
+                <a href="{{route('ventas.index')}}" class="{{request()->routeIs('ventas.*')?'active': ''}}">Ventas/Factura</a>
                 <a href="{{route('perdidas.index')}}" class="{{request()->routeIs('perdidas.*')?'active': ''}}">Pérdidas</a>
             </div>
             @if (Auth::user()->rol === "administrador")

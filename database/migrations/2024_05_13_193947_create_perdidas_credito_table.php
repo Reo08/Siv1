@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('perdidas_credito', function (Blueprint $table) {
             $table->id('id_perdida_credito');
-            $table->integer('id_factura_cliente');
+            $table->integer('id_salida_perdida_credito');
             $table->integer('total_debe');
-            $table->foreign('id_factura_cliente')->references('id_factura_cliente')->on('facturas_clientes')->onDelete('cascade');
+            $table->foreign('id_salida_perdida_credito')->references('id_salida_perdida_credito')->on('salidas_perdidas_credito')->onDelete('cascade');
             $table->timestamps();
         });
     }

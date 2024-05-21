@@ -49,7 +49,7 @@
                         <th>Costo de inversion</th>
                         <th>Precio de venta distribuidor</th>
                         <th>Registrado por</th>
-                        <th>Fecha de ingreso</th>
+                        <th>Fecha de fabricación</th>
                         <th>Agregar</th>
                         @if (Auth::user()->rol === "administrador")
                         <th>Editar</th>
@@ -64,16 +64,16 @@
                     <td class="td-menos">{{$entrada->referencia}}</td>
                     <td class="td-texto-center nombre">{{$entrada->nombre_producto}}</td>
                     <td class="td-texto-center categoria">{{$entrada->nombre_categoria}}</td>
-                    <td class="td-texto-center categoria">{{$entrada->descripcion_producto}}</td>
+                    <td class="td-texto-center">{{$entrada->descripcion_producto}}</td>
                     <td class="td-texto-center">{{$entrada->cantidad_entrada}}</td>
-                    <td class="td-texto-center">${{$entrada->costo_inversion}}</td>
-                    <td class="td-texto-center">${{$entrada->precio_venta_distribuidor}}</td>
+                    <td class="td-texto-center">${{number_format($entrada->costo_inversion,0,',','.')}}</td>
+                    <td class="td-texto-center">${{number_format($entrada->precio_venta_distribuidor,0,',','.')}}</td>
                     <td class="td-texto-center">{{$entrada->nombre_usuario}}</td>
                     <td>{{$entrada->fecha_ingreso}}</td>
-                    <td><a href="{{route('entradas.edit.cantidad', $entrada->id_entrada)}}" class="btn-agregar-tabla">Agregar</a></td>
+                    <td><a href="{{route('entradas.edit.cantidad', $entrada->id_entrada)}}" class="btn-agregar-tabla"><img src="/img/agregar.png" alt="agregar"></a></td>
                     @if (Auth::user()->rol === "administrador")
-                    <td><a href="{{route('entradas.edit', $entrada->id_entrada)}}" class="btn-editar-tabla">Editar</a></td>
-                    <td><form class="form_eliminar" action="{{route('entradas.delete', $entrada->id_entrada)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                    <td><a href="{{route('entradas.edit', $entrada->id_entrada)}}" class="btn-editar-tabla"><img src="/img/editar.png" alt="editar"></a></td>
+                    <td><form class="form_eliminar" action="{{route('entradas.delete', $entrada->id_entrada)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla"><img src="/img/basura.png" alt="basura"></button></form></td>
                     @endif
                 </tr>
                 @empty
@@ -82,6 +82,7 @@
                 </tbody>
             </table>
         </div>
+        {{$entradas->links()}}
     </div>
 </section>
 @if (session('alert'))

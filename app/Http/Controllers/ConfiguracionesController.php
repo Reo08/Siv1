@@ -42,13 +42,13 @@ class ConfiguracionesController extends Controller
         return view('configuraciones.edit');
     }
 
-    public function update(Request $request,$identificacion){
+    public function update(Request $request,$id_usuario){
         $request->validate([
             "contrasena_nueva1" => "required|min:4",
             "contrasena_nueva2" => "required|min:4"
         ]);
         
-        $usuario = User::where('identificacion','=',$identificacion)->first();
+        $usuario = User::where('identificacion','=',$id_usuario)->first();
         $usuario->contrasena = Hash::make(limpiar_cadena($request->contrasena_nueva1));
         $usuario->save();
         

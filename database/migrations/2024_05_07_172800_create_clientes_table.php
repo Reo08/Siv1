@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre_cliente');
             $table->string('correo')->unique();
             $table->string('telefono');
+            $table->string('tipo_cliente');
             $table->timestamps();
         });
     }

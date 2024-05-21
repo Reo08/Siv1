@@ -5,13 +5,11 @@ let i = 0;
 const menuActivo = ()=> {
     d.body.classList.remove('body')
     i = 1;
-    localStorage.setItem('activeMenu','active');
 }
 
 const menuDesactivo = ()=> {
     d.body.classList.add('body')
     i = 0;
-    localStorage.setItem('activeMenu','desactive');
 }
 d.addEventListener("click", e => {
     if(e.target.matches('.cont-menu') || e.target.matches('.cont-menu *')){

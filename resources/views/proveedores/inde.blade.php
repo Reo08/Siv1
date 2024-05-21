@@ -45,8 +45,8 @@
                         <td class="td-texto-center">{{$proveedor->correo_proveedor}}</td>
                         <td class="td-texto-center">{{$proveedor->telefono}}</td>
                         @if (Auth::user()->rol === "administrador")
-                        <td class="td-menos"><a href="{{route('proveedores.edit', $proveedor->nit_proveedor)}}" class="btn-editar-tabla">Editar</a></td>
-                        <td class="td-menos"><form class="form_eliminar" action="{{route('proveedores.destroy',$proveedor->nit_proveedor)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                        <td class="td-menos"><a href="{{route('proveedores.edit', $proveedor->nit_proveedor)}}" class="btn-editar-tabla"><img src="/img/editar.png" alt="editar"></a></td>
+                        <td class="td-menos"><form class="form_eliminar" action="{{route('proveedores.destroy',$proveedor->nit_proveedor)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla"><img src="/img/basura.png" alt="basura"></button></form></td>
                         @endif
                     </tr>
                     @empty

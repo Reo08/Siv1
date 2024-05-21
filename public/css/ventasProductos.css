@@ -36,6 +36,7 @@
 }
 .sec-ventas h2 {
     font-size: 2.5rem;
+    margin-bottom: 20px;
 }
 .cont-ventas {
     width: 100%;
@@ -102,7 +103,7 @@
 
 .cont-tabla-ventas {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 40px;
     overflow: auto;
 }
 /* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
@@ -137,7 +138,7 @@
 
 .cont-tabla-ventas table {
     border-collapse: collapse;
-    width: 1500px;
+    width: 1800px;
 }
 .cont-tabla-ventas tr, td {
     border: 1px solid #000;
@@ -165,16 +166,19 @@
     text-align: start;
     padding: 0px 5px;
 }
-.cont-tabla-ventas .segundaColumna {
-    width: 300px;
+.cont-tabla-ventas .quintaColumna {
+    width: 200px;
 }
-.cont-tabla-ventas .terceraColumna {
-    width: 180px;
-}
-.cont-tabla-ventas .sextaColumna {
+.cont-tabla-ventas .quintaColumna {
     width: 200px;
 }
 
+.cont-tabla-ventas .doceavaColumna {
+    width: 130px;
+}
+.cont-tabla-ventas .treceavaColumna {
+    width: 130px;
+}
 /*--------- botontes de la tabla------------- */
 .btn-agregar-tabla {
     border: 1px solid #fff;
@@ -185,13 +189,22 @@
     font-size: 1.6rem;
     border-radius: 7px;
 }
-.btn-editar-tabla {
+.btn_editar {
     color: #fff;
     text-decoration: none;
     background-color: var(--color-claro1);
-    padding: 4px 8px;
+    padding: 4px;
     font-size: 1.6rem;
     border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    width: 40px;
+    margin: 0px auto;
+}
+.btn_editar img {
+    filter: invert(1);
 }
 .btn-eliminar-tabla {
     color: #fff;
@@ -202,6 +215,9 @@
     border-radius: 7px;
     cursor: pointer;
 }
+.btn-eliminar-tabla img {
+    filter: invert(1);
+}
 
 .cont_tabla_dos {
     margin-top: 30px;
@@ -210,7 +226,7 @@
 }
 .cont_tabla_dos table {
     border-collapse: collapse;
-    width: 400px;
+    width: 500px;
 }
 .cont_tabla_dos tr, td {
     border: 1px solid #000;

@@ -20,6 +20,9 @@ return new class extends Migration
             $table->integer('pagado')->nullable();
             $table->string('fecha_factura');
             $table->string('fecha_limite_pago')->nullable();
+            $table->string('factura_electronica')->nullable();
+            $table->integer('porcentaje_retencion')->nullable();
+            $table->integer('valor_total_sin_iva')->nullable();
             $table->foreign('nit_cedula')->references('nit_cedula')->on('clientes')->onDelete('cascade');
             $table->foreign('id_usuario')->references('id_usuario')->on('usuarios')->onDelete('cascade');
             $table->timestamps();

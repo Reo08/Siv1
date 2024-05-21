@@ -1,5 +1,9 @@
 @extends('plantilla.plantilla')
 
+@section('token')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @section('titulo', 'Ventas')
 @section('links')
     <link rel="stylesheet" href="/css/ventasProductosAgregar.css">
@@ -7,10 +11,10 @@
 
 @section('contenido')
 <section class="sec-ventas">
-    <a href="{{route('ventas.indexProductos',$id_factura->id_factura_cliente)}}" class="btn-atras">Atras</a>
+    <a href="{{route('ventas.indexProductos',$id_factura->id_factura_cliente)}}" class="btn-atras btn_atras_fetch">Atras</a>
     <form class="cont-ventas" action="{{route('ventas.storeProducto',$id_factura->id_factura_cliente)}}" method="POST">
         @csrf
-        <legend>Agregar producto a factura N°{{$id_factura->id_factura_cliente}} de {{$cliente->nombre_cliente}}</legend>
+        <legend>Agregar producto a factura N° <strong class="id_factura">{{$id_factura->id_factura_cliente}}</strong> de {{$cliente->nombre_cliente}}</legend>
             @if ($errors->any())
                 <ul>
                     @foreach ($errors->all() as $error)
@@ -38,11 +42,11 @@
                         <th>Fecha de entrega</th>
                         <th>Categoria</th>
                         <th>Producto</th>
-                        <th>Cantidad orden</th>
+                        <th>Descuento o recargo</th>
                         <th>Estado de pedido</th>
                         <th>Cantidad elaborada</th>
                         <th>Cantidad entregada</th>
-                        <th>Descuento o recargo</th>
+                        <th>Cantidad orden</th>
                         <th>Aplica iva</th>
                         <th>Valor unidad</th>
                         <th>Valor total</th>
@@ -65,19 +69,19 @@
                                 <option value="">Seleccione un producto</option>
                             </select>
                         </td>
-                        <td><input type="number" name="cantidad_orden" class="n_cantidad cantidad_orden" required></td>
+                        <td><input type="number" name="n_descuento_recargo" class="n_descuento_recargo" required placeholder="%%%">%</td>
                         <td>
                             <select name="sec_estado_pedido">
                                 <option value="">Seleccione estado</option>
-                                <option value="entregadas">Entregadas</option>
-                                <option value="en fabricacion">En fabricacion</option>
-                                <option value="listas">Listas para entregar</option>
+                                <option value="Entregadas">Entregadas</option>
+                                <option value="En fabricacion">En fabricacion</option>
+                                <option value="Listas para entregar">Listas para entregar</option>
                             </select>
                         </td>
                         <td><input type="number" name="cantidad_elaborada"class="n_cantidad" required></td>
                         <td><input type="number" name="cantidad_entregada"class="n_cantidad" required></td>
                         <td>
-                            <input type="number" name="n_descuento_recargo" class="n_descuento_recargo" required placeholder="%%%">%
+                            <input type="number" name="cantidad_orden" class="n_cantidad cantidad_orden" required>
                         </td>
                         <td>
                             <select name="aplica_iva" class="aplica_iva" required>
@@ -92,8 +96,8 @@
             </table>
         </div>
         <div class="cont-btns">
-            <button>Guardar</button>
-            <a href="{{route('ventas.indexProductos',$id_factura->id_factura_cliente)}}">Cancelar</a>
+            <button class="btn_guardar">Guardar</button>
+            <a href="{{route('ventas.indexProductos',$id_factura->id_factura_cliente)}}" class="btn_atras_fetch">Cancelar</a>
         </div>
     </form>
     @if (session('alert'))

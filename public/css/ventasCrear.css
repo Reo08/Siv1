@@ -103,6 +103,25 @@
 .form_aggFactura input:focus {
     outline: 3px solid var(--letra-dorada);
 }
+.cont_radio_imput {
+    padding-left: 10px;
+}
+.form_aggFactura .label_no_factura {
+    margin-right: 10px;
+}
+.form_aggFactura #no_factura {
+    height: auto;
+}
+.form_aggFactura #no_factura {
+    outline: none;
+}
+.form_aggFactura #si_factura {
+    height: auto;
+}
+.form_aggFactura #si_factura:focus {
+    outline: none;
+}
+
 .form_aggFactura .cont-btns {
     margin-top: 30px;
     margin-bottom: 15px;

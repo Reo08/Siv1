@@ -26,11 +26,6 @@
                 @error('nombre')
                     <small>*{{$message}}</small>
                 @enderror
-                <label for="identificacion">Identificación</label>
-                <input type="text" name="identificacion" id="identificacion" value="{{old('identificacion')}}" required>
-                @error('identificacion')
-                    <small>*{{$message}}</small>
-                @enderror
                 <label for="correo">Correo</label>
                 <input type="email" name="correo" id="correo" value="{{old('correo')}}" required>
                 @error('correo')

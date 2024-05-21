@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PerdidasExport;
+use App\Exports\PerdidasPorPagoExport;
 use App\Models\Categorias;
 use App\Models\Entradas;
+use App\Models\FacturasClientes;
 use App\Models\Perdidas;
+use App\Models\PerdidasCredito;
 use App\Models\Productos;
 use App\Models\SalidasPerdidas;
+use App\Models\SalidasPerdidasCredito;
+use App\Models\SalidasVentas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -45,13 +50,7 @@ function limpiar_cadena($cadena){
 class PerdidasController extends Controller
 {
     public function index(){
-        $perdidas = SalidasPerdidas::leftjoin('productos','salidas_perdidas.id_producto','=','productos.id_producto')
-        ->leftjoin('categorias','productos.id_categoria','=','categorias.id_categoria')
-        ->leftjoin('proveedor','productos.id_proveedor','=','proveedor.id_proveedor')
-        ->leftjoin('usuarios','salidas_perdidas.identificacion','=','usuarios.identificacion')
-        ->select('salidas_perdidas.*','salidas_perdidas.created_at as created','salidas_perdidas.updated_at as updated', 'productos.*', 'categorias.*','proveedor.*','usuarios.nombre as nombre_usuario')->distinct()->orderBy('id_salida_perdida', 'desc')->paginate(20);
-        $categorias = Categorias::all();
-        return view('perdidas.inde', compact('perdidas','categorias'));
+        return view('perdidas.inde');
     }
     public function create(){
         $categorias = Categorias::all();
@@ -71,56 +70,143 @@ class PerdidasController extends Controller
         return json_encode($res);
     }
     
-    public function store(Request $request){
-        $entrada = Entradas::where('id_producto','=',intval(limpiar_cadena($request->sec_producto)))->get();
 
+
+    // Perdidas por daño
+    public function indexPorDano(){
+        // $perdidas = SalidasPerdidas::leftjoin('entradas','salidas_perdidas.id_entrada','=','entradas.id_entrada')
+        // ->leftjoin('productos','entradas.referencia','=','productos.referencia')
+        // ->leftjoin('categorias','productos.id_categoria','=','categorias.id_categoria')
+        // ->select('salidas_perdidas.*','entradas.*','productos.*','categorias.*')->get();
+        $perdidas = SalidasPerdidas::orderBy('id_salida_perdida','desc')->paginate(20);
+        return view('perdidas.porDano',compact('perdidas'));
+    }
+    public function editPorDano(SalidasPerdidas $id_perdida){
+        $entrada = Entradas::where('id_entrada','=',$id_perdida->id_entrada)->first();
+
+        $verificarEntrada = Entradas::where('id_entrada','=',$id_perdida->id_entrada)->get();
+        if(count($verificarEntrada)>0){
+            $producto = Productos::where('referencia','=',$entrada->referencia)->first();
+            return view('perdidas.porDanoEditar',compact('id_perdida','producto'));
+        }else {
+            return redirect()->route('perdidas.porDano')->with('alert','No se puede editar porque la existencia fue eliminada.');
+        }
+
+    }
+
+    public function updatePorDano(Request $request, SalidasPerdidas $id_perdida){
         $request->validate([
-            "sec_categoria" => "required",
-            "sec_producto" => "required",
-            "fecha_perdida" => "required",
-            "precio_compra" => "required|numeric",
+            "sec_operacion" => "required",
             "cantidad_perdida" => "required|numeric"
         ]);
+        if($request->sec_operacion == 1){
+            // SUMA
+            // Si suma aqui en perdida entonces resta en entradas
+            // $importe->cantidad_importe = $importe->cantidad_importe + intval(limpiar_cadena($request->cantidad_entrada));
+            // $importe->save();
 
-        if(count($entrada) != 0){//Esta validacion es por que si va a hacer una perdida y no hay una existencia en entrada.
-            $entrada = Entradas::where('id_producto','=',intval($request->sec_producto))->first();
-            if($request->cantidad_perdida > $entrada->cantidad_entrada){
-                return redirect()->route('ventas.index')->with('alert','La cantidad que quiere registrar como pérdida es mayor a la cantidad que tiene en existencias');
-            }
-            $nuevaPerdida = new SalidasPerdidas();
-            $nuevaPerdida->id_producto = intval($request->sec_producto);
-            $nuevaPerdida->cantidad = limpiar_cadena($request->cantidad_perdida);
-            $nuevaPerdida->precio_compra = limpiar_cadena($request->precio_compra);
-            $nuevaPerdida->fecha_perdida = limpiar_cadena($request->fecha_perdida);
-            $nuevaPerdida->identificacion = Auth::user()->identificacion;//IMPORTANTE: Poner la identificacion de la sesion del usuario
-            $nuevaPerdida->save();
-
-            $entrada->cantidad_entrada = $entrada->cantidad_entrada - $request->cantidad_perdida;
+            $id_perdida->cantidad = $id_perdida->cantidad + intval(limpiar_cadena($request->cantidad_perdida));
+            $id_perdida->save();
+            
+            $entrada = Entradas::where('id_entrada','=', $id_perdida->id_entrada)->first();
+            $entrada->cantidad_entrada -= intval(limpiar_cadena($request->cantidad_perdida));
             $entrada->save();
 
-            $perdida = new Perdidas();
-            $perdida->id_salida_perdida = $nuevaPerdida->id_salida_perdida;
-            $perdida->total_perdida = $request->cantidad_perdida * $request->precio_compra;
+            // Tabla de perdidas totales
+            $perdida = Perdidas::where('id_salida_perdida','=',$id_perdida->id_salida_perdida)->first();
+            $perdida->total_perdida = $entrada->costo_inversion * $id_perdida->cantidad;
             $perdida->save();
-    
-            return redirect()->route('perdidas.index')->with('alert','Se ha agregado la pérdida con éxito.');
-        }else {
-            return redirect()->route('perdidas.index')->with("alert","No hay una existencia creada de este producto en Entradas.");
+
+
+            return redirect()->route('perdidas.porDano')->with('alert','Pérdidas agregadas con éxito.');
+
+        }else if($request->sec_operacion == 0){
+            if($request->cantidad_perdida > $id_perdida->cantidad){
+                return redirect()->route('perdidas.porDanoEditar',$id_perdida->id_salida_perdida)->with('alert','Error, la cantidad que quiere quitar es mayor a la cantidad que tiene en pérdidas.');
+            }else {
+                // RESTA
+                // Si resta aqui en perdida entonces suma en entradas
+                $id_perdida->cantidad = $id_perdida->cantidad - intval(limpiar_cadena($request->cantidad_perdida));
+                $id_perdida->save();
+
+                $entrada = Entradas::where('id_entrada','=', $id_perdida->id_entrada)->first();
+                $entrada->cantidad_entrada += intval(limpiar_cadena($request->cantidad_perdida));
+                $entrada->save();
+
+                // Tabla de perdidas totales
+                $perdida = Perdidas::where('id_salida_perdida','=',$id_perdida->id_salida_perdida)->first();
+                $perdida->total_perdida = $entrada->costo_inversion * $id_perdida->cantidad;
+                $perdida->save();
+
+                // $importe->cantidad_importe = $importe->cantidad_importe - intval(limpiar_cadena($request->cantidad_entrada));
+                // $importe->save();
+
+                return redirect()->route('perdidas.porDano')->with('alert','Perdidas eliminadas con éxito.');
+            }
         }
+
+    }
+    public function destroyPorDano(SalidasPerdidas $id_perdida){
+        $buscarEntrada = Entradas::where('id_entrada','=', $id_perdida->id_entrada)->get();
+        if(count($buscarEntrada)>0){
+            $entrada = Entradas::where('id_entrada','=', $id_perdida->id_entrada)->first();
+            if($id_perdida->cantidad>0){
+                $entrada->cantidad_entrada += $id_perdida->cantidad;
+                $entrada->save();
+            }
+
+        }
+        $id_perdida->delete();
+        return redirect()->route('perdidas.porDano')->with('alert','Se ha eliminado la pérdida con éxito.');
     }
 
-    public function destroy(SalidasPerdidas $id){
-        $entradas = Entradas::where('id_producto','=',$id->id_producto)->first();
-        $entradas->cantidad_entrada = $entradas->cantidad_entrada + $id->cantidad;
-        $entradas->save();
-        if($id->precio_compra != $entradas->precio_compra_entrada){
-            return redirect()->route('perdidas.index')->with('alert','La venta no se puede eliminar, ya que el precio de compra es diferente al actual.');
+    // Perdidas por pago
+    public function indexPorPago(){
+        $perdidasFacturas = SalidasPerdidasCredito::leftjoin('clientes','salidas_perdidas_credito.nit_cedula','=','clientes.nit_cedula')->orderBy('id_salida_perdida_credito', 'desc')->paginate(20);
+        return view('perdidas.porPago',compact('perdidasFacturas'));
+    }
+    public function createPorPago(){
+        return view('perdidas.porPagoCrear');
+    }
+    public function storePorPago(Request $request){
+        $request->validate([
+            "id_factura" => "required|numeric"
+        ]);
+
+        $buscarFactura = FacturasClientes::where('id_factura_cliente','=',limpiar_cadena($request->id_factura))->get();
+        if(count($buscarFactura) === 0){
+            return redirect()->route('perdidas.porPagoCreate')->with('alert','No exite una factura con ese ID.');
         }
-        $id->delete();
-        return redirect()->route('perdidas.index')->with('alert','Se ha eliminado la perdida con éxito.');
+
+        $nuevaFacturaPerdida =  new SalidasPerdidasCredito(); 
+        $nuevaFacturaPerdida->id_salida_perdida_credito = $buscarFactura[0]->id_factura_cliente;
+        $nuevaFacturaPerdida->id_factura_cliente = $buscarFactura[0]->id_factura_cliente;
+        $nuevaFacturaPerdida->nit_cedula = $buscarFactura[0]->nit_cedula;
+        $nuevaFacturaPerdida->id_usuario = $buscarFactura[0]->id_usuario;
+        $nuevaFacturaPerdida->valor_total = $buscarFactura[0]->valor_total;
+        $nuevaFacturaPerdida->debe = $buscarFactura[0]->debe;
+        $nuevaFacturaPerdida->pagado = $buscarFactura[0]->pagado === null ? 0 : $buscarFactura[0]->pagado;
+        $nuevaFacturaPerdida->fecha_factura = $buscarFactura[0]->fecha_factura;
+        $nuevaFacturaPerdida->fecha_limite_pago = $buscarFactura[0]->fecha_limite_pago === null ? "Sin fecha" : $buscarFactura[0]->fecha_limite_pago;
+        $nuevaFacturaPerdida->factura_electronica = $buscarFactura[0]->factura_electronica === null ? "Sin factura" : $buscarFactura[0]->factura_electronica;
+        $nuevaFacturaPerdida->save();
+
+        $nuevaPerdidaCredito = new PerdidasCredito();
+        $nuevaPerdidaCredito->id_salida_perdida_credito = $buscarFactura[0]->id_factura_cliente;
+        $nuevaPerdidaCredito->total_debe = $nuevaFacturaPerdida->debe;
+        $nuevaPerdidaCredito->save();
+
+        return redirect()->route('perdidas.porPago')->with('alert','Se ha agregado la factura a pérdidas con éxito.');
+    }
+    public function destroyPorPago(SalidasPerdidasCredito $id_porPago){
+        $id_porPago->delete();
+        return redirect()->route('perdidas.porPago')->with('alert','Se ha eliminado la pérdida con éxito.');
     }
 
-    public function export(){
-        return Excel::download(new PerdidasExport, 'perdidas.xlsx');
+    public function exportPorDano(){
+        return Excel::download(new PerdidasExport, 'perdidas_por_daño.xlsx');
+    }
+    public function exportPorPago(){
+        return Excel::download(new PerdidasPorPagoExport, 'Perdidas_por_pago.xlsx');
     }
 }

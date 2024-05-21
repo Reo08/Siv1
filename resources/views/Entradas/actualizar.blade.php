@@ -13,11 +13,7 @@
                 @csrf
                 @method('put')
                 <legend>Actualizar existencia de {{$entradas->nombre_producto}}</legend>
-                <label for="referencia">N° de referencia</label>
-                <input type="text" name="referencia" id="referencia" required value="{{old('referencia',$entradas->referencia)}}">
-                @error('referencia')
-                    <small>*{{$message}}</small>
-                @enderror
+                <label for="referencia">N° de referencia: {{$entradas->referencia}}</label>
                 <label for="nombre_producto">Nombre producto</label>
                 <input type="text" name="nombre_producto" id="nombre_producto" required value="{{old('nombre_producto',ucfirst($entradas->nombre_producto))}}">
                 @error('nombre_producto')
@@ -38,16 +34,6 @@
                 <label for="fecha_entrada">Fecha de ingreso</label>
                 <input type="date" name="fecha_entrada" id="fecha_entrada" required value="{{old('fecha_ingreso',$entradas->fecha_ingreso)}}">
                 @error('fecha_entrada')
-                    <small>*{{$message}}</small>
-                @enderror
-                <label for="costo_inversion">Costo de inversion</label>
-                <input type="number" name="costo_inversion" id="costo_inversion" required value="{{old('costo_inversion',$entradas->costo_inversion)}}">
-                @error('costo_inversion')
-                    <small>*{{$message}}</small>
-                @enderror
-                <label for="precio_venta_distribuidor">Precio de venta a distribuidor</label>
-                <input type="number" name="precio_venta_distribuidor" id="precio_venta_distribuidor" required value="{{old('precio_venta_distribuidor',$entradas->precio_venta_distribuidor)}}">
-                @error('precio_venta_distribuidor')
                     <small>*{{$message}}</small>
                 @enderror
                 <div class="cont-btns">

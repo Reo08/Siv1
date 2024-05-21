@@ -48,15 +48,15 @@
                         <td>
                             <select name="sec_estado_pedido">
                                 <option value="{{$id_salida_venta->estado_pedido}}">{{$id_salida_venta->estado_pedido}}</option>
-                                @if ($id_salida_venta->estado_pedido === "en fabricacion")
-                                    <option value="entregadas">Entregadas</option>
-                                    <option value="listas">Listas para entregar</option>
-                                @elseif ($id_salida_venta->estado_pedido === "entregadas")
-                                    <option value="en fabricacion">En fabricacion</option>
-                                    <option value="listas">Listas para entregar</option>
+                                @if ($id_salida_venta->estado_pedido === "En fabricacion")
+                                    <option value="Entregadas">Entregadas</option>
+                                    <option value="Listas para entregar">Listas para entregar</option>
+                                @elseif ($id_salida_venta->estado_pedido === "Entregadas")
+                                    <option value="En fabricacion">En fabricación</option>
+                                    <option value="Listas para entregar">Listas para entregar</option>
                                 @else 
-                                    <option value="entregadas">Entregadas</option>
-                                    <option value="en fabricacion">En fabricacion</option>
+                                    <option value="Entregadas">Entregadas</option>
+                                    <option value="En fabricacion">En fabricación</option>
                                 @endif
                             </select>
                         </td>

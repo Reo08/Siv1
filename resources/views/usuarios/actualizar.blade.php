@@ -9,7 +9,7 @@
     <section class="sec-crear-usuario">
         <a href="{{route('usuarios.index')}}" class="btn-atras">Atras</a>
         <div class="cont-form">
-            <form class="form_crear_usuario" action="{{route('usuarios.update', $usuario->identificacion)}}" method="POST">
+            <form class="form_crear_usuario" action="{{route('usuarios.update', $usuario->id_usuario)}}" method="POST">
                 @csrf
                 @method('put')
                 <legend>Actualizar usuario de {{$usuario->nombre}}</legend>
@@ -25,11 +25,6 @@
                 <label for="nombre">Nombre completo</label>
                 <input type="text" name="nombre" id="nombre" value="{{old('nombre',$usuario->nombre)}}" required>
                 @error('nombre')
-                    <small>*{{$message}}</small>
-                @enderror
-                <label for="identificacion">Identificación</label>
-                <input type="text" name="identificacion" id="identificacion" value="{{old('identificacion',$usuario->identificacion)}}" required>
-                @error('identificacion')
                     <small>*{{$message}}</small>
                 @enderror
                 <label for="correo">Correo</label>

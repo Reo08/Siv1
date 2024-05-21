@@ -27,7 +27,7 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Identificación</th>
+                        <th>ID</th>
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Rol</th>
@@ -38,12 +38,12 @@
                 <tbody>
                 @foreach ($usuarios as $usuario)
                     <tr class="tr">
-                        <td class="td-texto-center">{{$usuario->identificacion}}</td>
+                        <td class="td-texto-center">{{$usuario->id_usuario}}</td>
                         <td class="td-texto-center nombre">{{$usuario->nombre}}</td>
                         <td class="td-texto-center correo">{{$usuario->correo}}</td>
                         <td class="td-texto-center">{{$usuario->rol}}</td>
-                        <td><a href="{{route('usuarios.edit',$usuario->identificacion)}}" class="btn-editar-tabla">Editar</a></td>
-                        <td><form class="form_eliminar" action="{{route('usuarios.delete', $usuario->identificacion)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla">Eliminar</button></form></td>
+                        <td><a href="{{route('usuarios.edit',$usuario->id_usuario)}}" class="btn-editar-tabla"><img src="/img/editar.png" alt="editar"></a></td>
+                        <td><form class="form_eliminar" action="{{route('usuarios.delete', $usuario->id_usuario)}}" method="POST">@csrf @method('delete')<button class="btn-eliminar-tabla"><img src="/img/basura.png" alt="basura"></button></form></td>
                     </tr>
                 @endforeach
                 </tbody>
